@@ -60,7 +60,7 @@ export const config = {
   instanceName: process.env.INSTANCE_NAME ?? "La Tanière",
   baseUrl: process.env.BASE_URL ?? "http://localhost:8099",
   dataDir,
-  mediaDir: path.join(root, "data", "media"),
+  mediaDir: process.env.MEDIA_DIR ? path.resolve(process.env.MEDIA_DIR) : path.join(root, "data", "media"),
   dbFile: path.join(root, "data", "clipvault.db"),
   maxUploadBytes: Number(process.env.MAX_UPLOAD_GB ?? 4) * 1024 * 1024 * 1024,
   sessionSecret: sessionSecret(),

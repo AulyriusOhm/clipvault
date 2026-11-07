@@ -2465,3 +2465,41 @@ a.brand {
     transition: none;
   }
 }
+
+/* ---------- Stockage (réglages) ---------- */
+.storage-line {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.storage-line__bar {
+  flex: 1;
+  height: 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.storage-line__bar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.storage-line__text {
+  font: 400 var(--fs-meta) / 1.4 var(--font-ui);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.field__hint--warn {
+  color: var(--danger, #b03a3a);
+}
+
+@media (max-width: 760px) {
+  .storage-line__text {
+    white-space: normal;
+  }
+}

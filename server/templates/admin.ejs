@@ -46,6 +46,19 @@
               </div>
 
               <div class="field mt4">
+                <label>Stockage des vidéos</label>
+                <div class="storage-line">
+                  <span class="storage-line__bar" aria-hidden="true"><span style="width: <%= Math.min(100, storage.percent) %>%"></span></span>
+                  <span class="storage-line__text"><%= storage.free %> libres sur <%= storage.total %> · <%= storage.percent %>% occupé</span>
+                </div>
+                <% if (storage.saturated) { %>
+                <span class="field__hint field__hint--warn">quota atteint : les dépôts sont refusés jusqu'à libération d'espace</span>
+                <% } else { %>
+                <span class="field__hint">lecture directe du système de fichiers — c'est le quota du volume qui fait foi</span>
+                <% } %>
+              </div>
+
+              <div class="field mt4">
                 <label for="default_tags">Tags par défaut</label>
                 <div class="tag-editor" data-tag-editor="default_tags">
                   <% var actifs = settings.default_tags.split(',').map(function (t) { return t.trim().toLowerCase(); }).filter(Boolean); %>

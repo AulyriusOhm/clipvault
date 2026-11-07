@@ -10,6 +10,17 @@ import { extractThumbnail, probe } from "../media.ts";
 
 const ALLOWED = new Set([".mp4", ".mkv", ".mov", ".webm"]);
 
+function freeBytes(dir: string): number {
+  const stats = fs.statfsSync(dir);
+  return Number(stats.bavail) * Number(stats.bsize);
+}
+
+function gigabytes(value: number): string {
+  return `${Math.round(value / 1024 ** 3)} Go`;
+}
+
+
+
 function slugify(title: string, code: number): string {
   const base = title
     .normalize("NFD")
@@ -121,6 +132,12 @@ export async function uploadRoutes(app: FastifyInstance): Promise<void> {
 
     const jobId = crypto.randomUUID();
     const tmpPath = path.join(config.mediaDir, `.incoming-${jobId}${ext}`);
+    const free = freeBytes(config.mediaDir);
+    if (free < config.maxUploadBytes) {
+      return reply.redirect(
+        `/upload?error=${encodeURIComponent(`stockage saturé : ${gigabytes(free)} libres, un dépôt peut demander jusqu'à ${gigabytes(config.maxUploadBytes)}`)}`,
+      );
+    }
     recordJob(jobId, data.filename, "running", 12, "réception du fichier…", request.user!.id);
 
     await pipeline(data.file, fs.createWriteStream(tmpPath));

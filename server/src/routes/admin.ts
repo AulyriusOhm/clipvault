@@ -1,6 +1,9 @@
 import crypto from "node:crypto";
+import fs from "node:fs";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { baseContext } from "../context.ts";
+import { config } from "../config.ts";
+import { bytes } from "../format.ts";
 import { DEFAULT_THEME, THEMES } from "../theme.ts";
 import {
   createInvite,
@@ -56,6 +59,14 @@ function requireAdmin(request: FastifyRequest, reply: FastifyReply, done: (err?:
   done();
 }
 
+function storageUsage(): { free: string; total: string; percent: number; saturated: boolean } {
+  const stats = fs.statfsSync(config.mediaDir);
+  const free = Number(stats.bavail) * Number(stats.bsize);
+  const total = Number(stats.blocks) * Number(stats.bsize);
+  const percent = total > 0 ? Math.round(((total - free) / total) * 100) : 0;
+  return { free: bytes(free), total: bytes(total), percent, saturated: free < config.maxUploadBytes };
+}
+
 export async function adminRoutes(app: FastifyInstance): Promise<void> {
   app.get("/admin", { preHandler: requireAdmin }, async (request, reply) => {
     const query = request.query as Record<string, string | undefined>;
@@ -64,6 +75,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       title: "Réglages — ClipVault",
       active: "admin",
       settings: getSettings(),
+      storage: storageUsage(),
       members: listMembers(),
       invites: listInvites(),
       flash: query.ok === "settings" ? "Réglages enregistrés." : query.ok === "invite" ? "Invitation créée." : query.ok === "revoke" ? "Invitation révoquée." : query.ok === "role" ? "Rôle mis à jour." : null,

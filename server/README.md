@@ -96,19 +96,27 @@ le compte est créé au premier login si `invite_only` est actif.
 Tout est dans `data/` (ignoré par git) : `clipvault.db`, `media/`, `.session-secret`.
 Sauvegarde = copier ce dossier.
 
-## Déploiement : CT GammaClips
+## Déploiement : CT GammaClips (production)
 
-L'instance de référence tourne sur le CT `GammaClips` (`192.168.1.243`),
-à côté des fichiers de l'ancien FireShare.
+L'instance publique tourne sur le CT 143 `GammaClips` de NASa, à la place de
+FireShare, sur le domaine **https://clip.lanro.eu**.
 
 | Élément | Valeur |
 | --- | --- |
 | Code | `/opt/clipvault` |
-| Conteneur | `clipvault` (image `clipvault:dev`, policy `unless-stopped`) |
-| Port | `8099` publié sur toutes les interfaces du CT |
-| Données | `/opt/clipvault/data` (`clipvault.db`, `media/`, `.session-secret`) |
-| Médias | `/srv/fireshare/videos/uploads` monté **en lecture seule** sur `/media-src` |
-| Accès LAN | **http://192.168.5.100:8099** |
+| Conteneur | `clipvault` (image `clipvault:latest`, policy `unless-stopped`) |
+| Port | `8099`, atteint par le WAF ; le CT n'est **pas** exposé directement |
+| Données | `/opt/clipvault/data` (`clipvault.db`, `.session-secret`) |
+| Médias | `/srv/fireshare/clipvault/media` monté sur `/media` (`MEDIA_DIR=/media`) |
+| Quota du volume | **150 Go** (`refquota` ZFS de `HDD_POOL/subvol-143-disk-0`) |
+| Entrée publique | `clip.lanro.eu` → WAF BunkerWeb (`194.164.201.13`) → `192.168.1.243:8099` |
+| Certificat | wildcard `*.lanro.eu` (Let's Encrypt), terminé par le WAF |
+| Authentification | Authentik OIDC (`https://auth.lanro.eu/application/o/clipvault/`), groupe admin `clipvault-admins` |
+| Accès LAN | `http://192.168.1.243:8099` depuis le site SLP ; `http://192.168.5.100:8099` par DNAT depuis Grenoble |
+
+Derrière un proxy qui termine le TLS, trois variables sont obligatoires :
+`BASE_URL=https://clip.lanro.eu`, `TRUST_PROXY=true` (IP réelle des clients dans
+les journaux et la limitation de débit) et `COOKIE_SECURE=true`.
 
 ### Mise à jour
 
@@ -119,47 +127,40 @@ scp /tmp/clipvault-src.tar.gz root@192.168.1.243:/root/
 ssh root@192.168.1.243 'cd /opt/clipvault && tar -xzf /root/clipvault-src.tar.gz --strip-components=1 && docker compose up -d --build'
 ```
 
+### Stockage et quota
+
+Les vidéos vivent sur le volume du CT, pas sur le disque système (24 Go). Le
+quota est un `refquota` ZFS, posé côté hôte :
+
+```bash
+pct set 143 -mp0 HDD_POOL:subvol-143-disk-0,mp=/srv/fireshare,size=150G
+zfs set refquota=150G HDD_POOL/subvol-143-disk-0   # pct set ne touche pas au refquota
+```
+
+`/admin` affiche l'espace libre réel du volume. Le dépôt est refusé avec un
+message explicite quand l'espace libre tombe sous `MAX_UPLOAD_GB`, pour éviter
+un `ENOSPC` en cours d'écriture.
+
 ### Import des vidéos existantes
 
 `src/import.ts` parcourt un dossier, sonde chaque fichier avec `ffprobe`,
-extrait une miniature, devine le jeu d'après le nom, et crée un **lien
-symbolique** dans `data/media` plutôt qu'une copie. Aucun octet n'est dupliqué,
-mais **si `/srv/fireshare/videos/uploads` est déplacé, les liens cassent**.
+extrait une miniature, devine le jeu d'après le nom et crée un **lien
+symbolique** vers la source. Sur ce déploiement les neuf clips importés ont été
+remplacés par de vraies copies dans le volume (les liens pointaient vers le
+montage `/media-src` de FireShare, supprimé depuis) ; vérifiées identiques à
+l'octet près par `cmp` avant bascule.
 
 ```bash
-docker compose exec -T clipvault npx tsx src/import.ts /media-src <membre>
+docker compose exec -T clipvault npx tsx src/import.ts /media <membre>
 ```
 
-L'import est idempotent (`source_path` en base) : relancer ne crée pas de doublon.
+### Ancien FireShare
 
-### Accès depuis le LAN
-
-`192.168.1.0/24` n'est joignable que par gammaWTR, via WireGuard. Le LAN passe
-donc par un DNAT sur gammaWTR (règles persistées par `netfilter-persistent`) :
-
-```
-navigateur -> http://192.168.5.100:8099
-  -> DNAT vmbr0:8099 -> 192.168.1.243:8099 (MASQUERADE vers wg0)
-    -> conteneur clipvault
-```
-
-Retour à l'ancienne cible (instance de dev sur plasmasrv) :
-
-```bash
-iptables -t nat -D PREROUTING -i vmbr0 -p tcp --dport 8099 -j DNAT --to-destination 192.168.1.243:8099
-iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 8099 -j DNAT --to-destination 10.10.10.1:8099
-iptables -t nat -A POSTROUTING -d 10.10.10.1/32 -o wg0 -p tcp --dport 8099 -j MASQUERADE
-netfilter-persistent save
-```
-
-### FireShare
-
-Les conteneurs sont arrêtés, les fichiers intacts (`/srv/fireshare`, 5,0 Go, 9 vidéos).
-Pour le remettre en service :
-
-```bash
-cd /opt/fireshare && docker compose start
-```
+Retiré le 07/11/2026 : conteneurs `fireshare`, `fireshare-caddy` et `wud`
+supprimés, `/opt/fireshare` archivé dans `/root/fireshare-config-*.tar.gz`,
+application et provider proxy retirés d'Authentik. Les fichiers d'origine
+restent dans `/srv/fireshare/videos/uploads` (5 Go, doublons des copies
+vérifiées) : les supprimer rend 5 Go quand on le souhaite.
 
 ### Limites connues sur ce déploiement
 
@@ -167,7 +168,8 @@ cd /opt/fireshare && docker compose start
   est servi tel quel (lecture par `Range`, donc pas de téléchargement complet)
 - les titres importés viennent des noms de fichiers (`IMG 1090`,
   `2025.08.27 — 23.14`) : il n'existe pas encore d'édition de métadonnées
-- HTTP en clair sur le LAN, aucune exposition publique
+- pas de sauvegarde automatisée de `clipvault.db` (le CT n'est pas dans un job
+  PBS pour l'instant)
 
 ## Sécurité
 
