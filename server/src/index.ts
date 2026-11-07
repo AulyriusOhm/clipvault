@@ -11,6 +11,7 @@ import ejs from "ejs";
 import { currentUser } from "./auth.ts";
 import { config } from "./config.ts";
 import { baseContext } from "./context.ts";
+import { getSettings } from "./db.ts";
 import * as fmt from "./format.ts";
 import { adminRoutes } from "./routes/admin.ts";
 import { authRoutes } from "./routes/auth.ts";
@@ -89,6 +90,33 @@ app.addHook("onSend", async (request, reply, payload) => {
 
 app.addHook("onRequest", async (request) => {
   request.user = currentUser(request);
+});
+
+/**
+ * SameSite=Lax arrête un POST venu d'un autre site, mais pas d'un autre
+ * sous-domaine du même site : une page servie depuis *.lanro.eu posterait avec
+ * le cookie de session. On refuse donc toute méthode qui écrit si l'origine
+ * déclarée n'est pas celle de l'instance.
+ */
+app.addHook("onRequest", async (request, reply) => {
+  if (request.method === "GET" || request.method === "HEAD" || request.method === "OPTIONS") {
+    return;
+  }
+  const origine = request.headers.origin;
+  if (!origine) {
+    return;
+  }
+  let hote: string;
+  try {
+    hote = new URL(origine).host;
+  } catch {
+    return reply.code(403).send({ error: "origine invalide" });
+  }
+  const attendu = new URL(getSettings().public_url || config.baseUrl).host;
+  if (hote !== attendu) {
+    request.log.warn({ origine, attendu }, "requête d'écriture refusée : origine étrangère");
+    return reply.code(403).send({ error: "origine refusée" });
+  }
 });
 
 await app.register(pageRoutes);

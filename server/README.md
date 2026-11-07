@@ -203,6 +203,31 @@ vérifiées) : les supprimer rend 5 Go quand on le souhaite.
 - pas de sauvegarde automatisée de `clipvault.db` (le CT n'est pas dans un job
   PBS pour l'instant)
 
+## CSRF : ce qui protège, et ce qui protège pas
+
+Deux couches, vérifiées par l'expérience le 07/11/2026 (page hostile servie
+depuis une autre origine, formulaire auto-soumis vers `/admin/invites`) :
+
+| Origine de la page hostile | Cookie envoyé | Effet |
+| --- | --- | --- |
+| `attaquant.example` | non (`SameSite=Lax`) | aucun |
+| `autre.lanro.eu` | **oui** (même site) | écriture acceptée avant correctif |
+
+`SameSite` raisonne sur le **site** (eTLD+1), donc tout sous-domaine de
+`lanro.eu` est de confiance. Un `onRequest` refuse désormais toute méthode qui
+écrit si l'en-tête `Origin` ne correspond pas à l'hôte de `public_url` /
+`BASE_URL` — une dizaine de lignes, aucun jeton, aucun formulaire à modifier.
+
+Sans en-tête `Origin` (clients qui n'en envoient pas), la requête passe : c'est
+`SameSite` qui couvre ce cas. Ne pas remplacer ce contrôle par des jetons CSRF :
+ils n'empêcheraient pas le scénario « même site » ci-dessus et obligeraient à
+toucher les neuf formulaires, dépôt multipart compris.
+
+Les seules routes `GET` qui écrivent sont `/watch/:slug` et `/c/:slug`
+(compteur de vues, via `incrementViews`) et `/join/:token` (mémorise le jeton
+d'invitation dans la session, consommé uniquement à la création d'un compte
+quand `invite_only` est actif). Aucune action destructrice ne passe par un `GET`.
+
 ## Sécurité
 
 Mesures en place : `@fastify/static` à jour (CVE de traversée de chemin corrigée),
