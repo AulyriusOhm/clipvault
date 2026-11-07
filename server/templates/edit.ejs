@@ -43,8 +43,14 @@
                 </div>
                 <div class="field">
                   <label for="tags">Tags</label>
-                  <input class="input" id="tags" name="tags" type="text" value="<%= tags %>" placeholder="clutch, ace, ranked">
+                  <input class="input" id="tags" name="tags" type="text" value="<%= tagsValue %>" placeholder="clutch, ace, ranked">
                   <span class="field__hint">séparés par des virgules<% if (settings.default_tags) { %> — défaut de l'instance : <%= settings.default_tags %><% } %></span>
+                  <div class="tag-palette" data-tag-palette="tags">
+                    <% tagPalette.forEach(function (tag) { %>
+                    <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
+                    <% }); %>
+                  </div>
+
                 </div>
               </div>
 
@@ -121,5 +127,7 @@
       </div>
       </form>
     </div>
+
+<script src="/assets/tags.js" defer></script>
 
 <%- include('partials/shell-end') %>

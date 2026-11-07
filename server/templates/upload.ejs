@@ -53,6 +53,12 @@
                   <label for="tags">Tags</label>
                   <input class="input" id="tags" type="text" name="tags" value="<%= settings.default_tags %>" placeholder="clutch, ace, ranked">
                   <span class="field__hint">séparés par des virgules<% if (settings.default_tags) { %> — les tags par défaut de l'instance sont pré-remplis<% } %></span>
+                  <div class="tag-palette" data-tag-palette="tags">
+                    <% tagPalette.forEach(function (tag) { %>
+                    <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
+                    <% }); %>
+                  </div>
+
                 </div>
               </div>
               <div class="field mt4">
@@ -120,5 +126,7 @@
       </form>
 
     </div>
+
+<script src="/assets/tags.js" defer></script>
 
 <%- include('partials/shell-end') %>

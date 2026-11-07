@@ -121,7 +121,7 @@ export async function clipRoutes(app: FastifyInstance): Promise<void> {
       title: `Modifier — ${clip.title}`,
       active: "library",
       clip,
-      tags: clip.tags.split(" ").filter(Boolean).join(", "),
+      tagsValue: clip.tags.split(" ").filter(Boolean).join(", "),
       flash: query.ok ? "Modifications enregistrées." : null,
     });
   });

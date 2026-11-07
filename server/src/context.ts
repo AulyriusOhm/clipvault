@@ -2,6 +2,7 @@ import type { FastifyRequest } from "fastify";
 import { config } from "./config.ts";
 import { getSettings, listGames, listTags, stats } from "./db.ts";
 import { THEMES, resolveTheme } from "./theme.ts";
+import { tagSuggestions } from "./tags.ts";
 
 export function baseContext(request: FastifyRequest): Record<string, unknown> {
   const settings = getSettings();
@@ -14,6 +15,7 @@ export function baseContext(request: FastifyRequest): Record<string, unknown> {
     settings,
     theme,
     themes: THEMES,
+    tagPalette: tagSuggestions(listTags()),
     baseUrl,
     instance: settings.instance_name || config.instanceName,
     games: listGames(request.user?.id),

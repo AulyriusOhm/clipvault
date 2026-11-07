@@ -2320,3 +2320,48 @@ a.brand {
     font-size: 11px;
   }
 }
+
+/* ---------- Palette de tags cliquables (dépôt, édition) ---------- */
+.tag-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s2);
+}
+
+.tag--chip {
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  font-family: inherit;
+  transition: border-color var(--dur) linear, color var(--dur) linear;
+}
+
+.tag--chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.tag--chip.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+
+.tag--chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .tag-palette {
+    gap: 6px;
+  }
+
+  .tag--chip {
+    height: 30px;
+    padding: 0 12px;
+  }
+}
