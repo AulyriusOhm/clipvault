@@ -39,41 +39,47 @@
     }
 
     function values() {
-      return hidden.value.split(",").map(function (v) { return v.trim(); }).filter(Boolean);
+      return hidden.value.split(",").map(function (v) { return v.trim().toLowerCase(); }).filter(Boolean);
     }
 
-    function paint() {
-      list.innerHTML = "";
-      values().forEach(function (tag) {
-        var chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = "tag tag--chip is-active";
-        chip.setAttribute("data-remove-tag", tag);
-        chip.textContent = tag + " ";
-        var icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        icon.setAttribute("class", "ic ic--sm");
-        icon.setAttribute("aria-hidden", "true");
-        var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-        use.setAttribute("href", "#i-x");
-        icon.appendChild(use);
-        chip.appendChild(icon);
-        list.appendChild(chip);
+    function refresh() {
+      var current = values();
+      list.querySelectorAll("[data-toggle-tag]").forEach(function (chip) {
+        var on = current.indexOf(chip.getAttribute("data-toggle-tag")) >= 0;
+        chip.classList.toggle("is-active", on);
+        chip.setAttribute("aria-pressed", on ? "true" : "false");
+        var hasIcon = chip.querySelector("svg");
+        if (on && !hasIcon) {
+          var icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          icon.setAttribute("class", "ic ic--sm");
+          icon.setAttribute("aria-hidden", "true");
+          var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+          use.setAttribute("href", "#i-x");
+          icon.appendChild(use);
+          chip.insertBefore(icon, chip.firstChild);
+        } else if (!on && hasIcon) {
+          hasIcon.remove();
+        }
       });
-    }
-
-    function commit(next) {
-      hidden.value = next.join(", ");
-      paint();
+      hidden.value = current.join(", ");
     }
 
     list.addEventListener("click", function (event) {
-      var chip = event.target.closest("[data-remove-tag]");
+      var chip = event.target.closest("[data-toggle-tag]");
       if (!chip) {
         return;
       }
       event.preventDefault();
-      var tag = chip.getAttribute("data-remove-tag").toLowerCase();
-      commit(values().filter(function (value) { return value.toLowerCase() !== tag; }));
+      var tag = chip.getAttribute("data-toggle-tag");
+      var current = values();
+      var index = current.indexOf(tag);
+      if (index >= 0) {
+        current.splice(index, 1);
+      } else if (current.length < 10) {
+        current.push(tag);
+      }
+      hidden.value = current.join(", ");
+      refresh();
     });
 
     input.addEventListener("keydown", function (event) {
@@ -81,21 +87,28 @@
         return;
       }
       event.preventDefault();
-      var tag = input.value.trim().toLowerCase().replace(/\s+/g, "-");
+      var tag = input.value.trim().toLowerCase().replace(/\s+/g, "-").slice(0, 24);
+      input.value = "";
       if (!tag) {
         return;
       }
       var current = values();
-      if (current.some(function (value) { return value.toLowerCase() === tag; })) {
-        input.value = "";
-        return;
+      if (current.indexOf(tag) < 0 && current.length < 10) {
+        current.push(tag);
+        hidden.value = current.join(", ");
+        if (!list.querySelector('[data-toggle-tag="' + tag + '"]')) {
+          var chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "tag tag--chip";
+          chip.setAttribute("data-toggle-tag", tag);
+          chip.textContent = tag;
+          list.appendChild(chip);
+        }
       }
-      current.push(tag);
-      commit(current.slice(0, 10));
-      input.value = "";
+      refresh();
     });
 
-    paint();
+    refresh();
   });
 
   document.querySelectorAll("[data-tag-palette]").forEach(function (group) {

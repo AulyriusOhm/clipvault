@@ -49,16 +49,19 @@
                 <label for="default_tags">Tags par défaut</label>
                 <div class="tag-editor" data-tag-editor="default_tags">
                   <span class="tag-editor__list">
-                    <% settings.default_tags.split(',').map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (tag) { %>
-                    <button class="tag tag--chip is-active" type="button" data-remove-tag="<%= tag %>">
-                      <%= tag %><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg>
+                    <% var actifs = settings.default_tags.split(',').map(function (t) { return t.trim().toLowerCase(); }).filter(Boolean); %>
+                    <% var proposes = baseTagChoices.concat(actifs.filter(function (t) { return baseTagChoices.indexOf(t) < 0; })); %>
+                    <% proposes.forEach(function (tag) { %>
+                    <% var on = actifs.indexOf(tag) >= 0; %>
+                    <button class="tag tag--chip<%= on ? ' is-active' : '' %>" type="button" data-toggle-tag="<%= tag %>" aria-pressed="<%= on ? 'true' : 'false' %>">
+                      <% if (on) { %><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg><% } %><%= tag %>
                     </button>
                     <% }); %>
                   </span>
-                  <input class="input tag-editor__input" type="text" id="tag-ajout" placeholder="ajouter un tag puis Entrée" aria-label="Ajouter un tag par défaut">
+                  <input class="input tag-editor__input" type="text" id="tag-ajout" placeholder="autre tag…" aria-label="Ajouter un tag par défaut">
                 </div>
                 <input type="hidden" id="default_tags" name="default_tags" value="<%= settings.default_tags %>">
-                <span class="field__hint">cliquez la croix pour retirer un tag — ils sont pré-remplis dans chaque nouveau dépôt</span>
+                <span class="field__hint">pastilles pleines = appliquées par défaut ; cliquez-en une pour la retirer, une pastille vide pour l'ajouter</span>
               </div>
 
               <div class="field mt4">

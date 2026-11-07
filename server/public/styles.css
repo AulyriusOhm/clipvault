@@ -2400,6 +2400,11 @@ a.brand {
 }
 
 .tag-editor .tag--chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tag-editor .tag--chip.is-active:hover {
   background: var(--danger, #b03a3a);
   border-color: var(--danger, #b03a3a);
   color: #fff;
