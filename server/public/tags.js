@@ -36,6 +36,15 @@
       return;
     }
     group.addEventListener("click", function (event) {
+      var clearer = event.target.closest("[data-clear]");
+      if (clearer) {
+        event.preventDefault();
+        input.value = "";
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.focus();
+        refresh(group, input);
+        return;
+      }
       var chip = event.target.closest("[data-tag]");
       if (!chip) {
         return;

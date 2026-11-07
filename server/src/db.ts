@@ -392,6 +392,7 @@ export const DEFAULT_SETTINGS = {
   theme: "ember",
   public_url: "",
   default_tags: "",
+  tag_palette: "",
   default_visibility: "link",
   link_expiry_days: "0",
   invite_only: "false",

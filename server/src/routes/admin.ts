@@ -82,6 +82,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       theme: THEMES.some((t) => t.key === body.theme) ? body.theme! : DEFAULT_THEME,
       public_url: normaliseUrl(body.public_url),
       default_tags: normaliseTags(body.default_tags),
+      tag_palette: normaliseTags(body.tag_palette),
     });
     return reply.redirect("/admin?ok=settings");
   });

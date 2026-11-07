@@ -53,6 +53,18 @@
                   <% tagPalette.forEach(function (tag) { %>
                   <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
                   <% }); %>
+                  <button class="tag tag--chip tag--clear" type="button" data-clear="default_tags">Vider</button>
+                </div>
+
+              <div class="field mt4">
+                <label for="tag_palette">Tags proposés dans les formulaires</label>
+                <input class="input" id="tag_palette" name="tag_palette" type="text" value="<%= settings.tag_palette %>" placeholder="liste par défaut : <%= baseTagChoices.slice(0, 6).join(', ') %>…">
+                <span class="field__hint">laisser vide pour la liste livrée avec l'application — cliquez les pastilles pour composer la vôtre, « Vider » pour tout retirer</span>
+                <div class="tag-palette" data-tag-palette="tag_palette">
+                  <% baseTagChoices.forEach(function (tag) { %>
+                  <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
+                  <% }); %>
+                  <button class="tag tag--chip tag--clear" type="button" data-clear="tag_palette">Vider</button>
                 </div>
               </div>
 

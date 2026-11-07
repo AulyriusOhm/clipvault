@@ -2350,6 +2350,17 @@ a.brand {
   font-weight: 600;
 }
 
+.tag--clear {
+  background: transparent;
+  border-style: dashed;
+  color: var(--text-faint);
+}
+
+.tag--clear:hover {
+  color: var(--danger, #b03a3a);
+  border-color: var(--danger, #b03a3a);
+}
+
 .tag--chip:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
