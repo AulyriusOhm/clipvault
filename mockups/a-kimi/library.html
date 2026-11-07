@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr" data-theme="ember">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bibliothèque — ClipVault</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="theme.js"></script>
+</head>
+<body>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-library" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M9 4v16M13 9h3M13 13h3"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 15v4h14v-4"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.1 1.1M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.1-1.1"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+      <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <a class="brand" href="library.html" aria-label="ClipVault, bibliothèque">
+      <svg class="brand-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M3 3h22v22H3z" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h12v12H8z" stroke="currentColor" stroke-width="1.5"/><path d="m12 11 6 3-6 3z" fill="currentColor"/></svg>
+      <span class="brand-name">CLIP<span>VAULT</span></span>
+    </a>
+    <div class="instance-status"><span class="status-dot"></span><span>vault.squad-07.fr</span><span>·</span><span>12 membres connectés cette semaine</span></div>
+    <div class="topbar-actions">
+      <label class="theme-control"><span>Thème</span>
+        <select data-theme-select aria-label="Choisir le thème">
+          <option value="ember">Ember</option><option value="tide">Tide</option><option value="moss">Moss</option><option value="aurora">Aurora</option><option value="paper">Paper</option>
+        </select>
+      </label>
+      <a class="user-chip" href="upload.html" aria-label="Profil de NoxVega"><span class="avatar">NV</span><span class="user-name">NoxVega</span></a>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <p class="nav-label">Coffre</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="library.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-library"/></svg>Bibliothèque<span class="nav-count">248</span></a></li>
+          <li><a class="nav-link" href="upload.html"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Déposer des clips</a></li>
+        </ul>
+        <p class="nav-label">Vues</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="library.html"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Mes clips<span class="nav-count">37</span></a></li>
+          <li><a class="nav-link" href="watch.html"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>Dernier partage<span class="nav-count">01</span></a></li>
+        </ul>
+        <div class="storage">
+          <div class="storage-heading"><span>Stockage</span><span>34 %</span></div>
+          <div class="storage-track"><span></span></div>
+          <div class="storage-figures"><span>41,8 Go utilisés</span><span>120 Go</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">Index principal / 248 enregistrements</p>
+          <h1>Bibliothèque</h1>
+          <p class="page-description">Les clips du squad, classés du plus récent au plus ancien.</p>
+        </div>
+        <div class="heading-actions">
+          <a class="button button--primary" href="upload.html"><svg class="icon icon--small" aria-hidden="true"><use href="#i-plus"/></svg>Déposer un clip</a>
+        </div>
+      </div>
+
+      <form class="library-toolbar" role="search">
+        <div class="search-field">
+          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input" type="search" placeholder="Rechercher un titre, un joueur…" aria-label="Rechercher dans les clips">
+        </div>
+        <select class="select" aria-label="Filtrer par jeu"><option>Tous les jeux</option><option>Valorant</option><option>Apex Legends</option><option>Elden Ring</option><option>Counter-Strike 2</option></select>
+        <select class="select" aria-label="Filtrer par tag"><option>Tous les tags</option><option>clutch</option><option>ranked</option><option>boss</option><option>fun</option></select>
+        <select class="select" aria-label="Filtrer par date"><option>Toutes les dates</option><option>Aujourd’hui</option><option>7 derniers jours</option><option>30 derniers jours</option><option>Cette année</option></select>
+        <select class="select" aria-label="Filtrer par durée"><option>Toute durée</option><option>Moins de 30 s</option><option>30 s – 1 min</option><option>Plus d’1 min</option></select>
+        <select class="select" aria-label="Trier les clips"><option>Plus récents</option><option>Plus anciens</option><option>Durée croissante</option><option>Durée décroissante</option><option>Titre A–Z</option></select>
+      </form>
+
+      <div class="results-bar">
+        <span class="results-count"><strong>248 clips</strong> · 41,8 Go</span>
+        <div class="filter-chips"><span class="filter-chip">Squad uniquement<svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></span></div>
+        <div class="view-switch" aria-label="Mode d’affichage">
+          <button class="icon-button" type="button" aria-label="Vue grille" aria-pressed="true"><svg class="icon icon--small" aria-hidden="true"><use href="#i-grid"/></svg></button>
+          <button class="icon-button" type="button" aria-label="Vue liste" aria-pressed="false"><svg class="icon icon--small" aria-hidden="true"><use href="#i-list"/></svg></button>
+        </div>
+      </div>
+
+      <section class="clip-grid" aria-label="Clips récents">
+        <article class="clip-card">
+          <a class="thumb thumb--valorant" href="watch.html" aria-label="Lire Clutch 1v4 sur Lotus">
+            <svg class="thumb-art" viewBox="0 0 480 270" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 208 102 127l58 37 74-97 76 80 54-37 116 92v68H0Z"/><path class="art-line" d="M0 208 102 127l58 37 74-97 76 80 54-37 116 92M53 270l107-106 74 97 76-114 112 123M240 0v270M0 135h480"/><path class="art-accent" d="M197 105h84v62h-84zM218 126h43M239 105v62"/></svg>
+            <span class="clip-index">CV–0248 / 01</span><span class="resolution-badge">1440p60</span><span class="thumb-game">Valorant · Lotus</span><span class="duration">00:38</span><span class="play-mark"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          </a>
+          <div class="clip-info"><a class="clip-title" href="watch.html">Clutch 1v4 sur Lotus</a><div class="clip-byline"><span>NoxVega</span><span>il y a 18 min</span></div><div class="clip-specs"><span>#clutch&nbsp; #ranked</span><span>84,2 Mo</span></div></div>
+        </article>
+
+        <article class="clip-card">
+          <a class="thumb thumb--apex" href="watch.html" aria-label="Lire Le rotate qui gagne la manche">
+            <svg class="thumb-art" viewBox="0 0 480 270" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="m0 190 91-53 55 21 90-91 72 68 67-30 105 65v100H0Z"/><path class="art-line" d="m0 190 91-53 55 21 90-91 72 68 67-30 105 65M60 45h360M91 137v133M236 67v203M375 105v165"/><path class="art-accent" d="m160 186 76-119 72 68M236 67l-9 22M236 67l18 13"/></svg>
+            <span class="clip-index">CV–0247 / 02</span><span class="resolution-badge">1080p60</span><span class="thumb-game">Apex Legends · World’s Edge</span><span class="duration">01:12</span><span class="play-mark"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          </a>
+          <div class="clip-info"><a class="clip-title" href="watch.html">Le rotate qui gagne la manche</a><div class="clip-byline"><span>Kelm</span><span>il y a 2 h</span></div><div class="clip-specs"><span>#ranked&nbsp; #squad</span><span>136,7 Mo</span></div></div>
+        </article>
+
+        <article class="clip-card">
+          <a class="thumb thumb--cod" href="watch.html" aria-label="Lire Triple collat à Rust">
+            <svg class="thumb-art" viewBox="0 0 480 270" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 60h480v150H0zM50 90h120v120H50zM300 82h120v128H300z"/><path class="art-line" d="M0 60h480M0 210h480M50 90h120v120H50zM300 82h120v128H300zM240 0v270M0 135h480"/><path class="art-accent" d="M215 110h50v50h-50zM240 90v90M195 135h90"/></svg>
+            <span class="clip-index">CV–0246 / 03</span><span class="resolution-badge">1440p60</span><span class="thumb-game">Call of Duty · Rust</span><span class="duration">00:24</span><span class="play-mark"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          </a>
+          <div class="clip-info"><a class="clip-title" href="watch.html">Triple collat à Rust</a><div class="clip-byline"><span>Mira</span><span>il y a 5 h</span></div><div class="clip-specs"><span>#multi&nbsp; #snipe</span><span>62,1 Mo</span></div></div>
+        </article>
+
+        <article class="clip-card">
+          <a class="thumb thumb--elden" href="watch.html" aria-label="Lire Premier kill sur Malenia">
+            <svg class="thumb-art" viewBox="0 0 480 270" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 230c90-80 146-36 215-133 67 102 172 28 265 133v40H0Z"/><path class="art-line" d="M0 230c90-80 146-36 215-133 67 102 172 28 265 133M215 97v173M82 270l133-173 138 173M0 230h480"/><path class="art-accent" d="M192 120h46M215 97v46M196 201l19-104 21 104"/></svg>
+            <span class="clip-index">CV–0245 / 04</span><span class="resolution-badge">2160p60</span><span class="thumb-game">Elden Ring · Haligtree</span><span class="duration">01:46</span><span class="play-mark"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          </a>
+          <div class="clip-info"><a class="clip-title" href="watch.html">Premier kill sur Malenia</a><div class="clip-byline"><span>Orbe</span><span>il y a 2 jours</span></div><div class="clip-specs"><span>#boss&nbsp; #no-hit</span><span>412,9 Mo</span></div></div>
+        </article>
+
+        <article class="clip-card">
+          <a class="thumb thumb--trackmania" href="watch.html" aria-label="Lire Le passage à 9,8 secondes">
+            <svg class="thumb-art" viewBox="0 0 480 270" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 220c88 0 95-141 193-141 119 0 87 150 287 150v41H0Z"/><path class="art-line" d="M0 220c88 0 95-141 193-141 119 0 87 150 287 150M0 246h480M62 0v270M418 0v270M0 56h480"/><path class="art-accent" d="M28 195h74M378 195h74M160 79h66M362 229h66"/></svg>
+            <span class="clip-index">CV–0244 / 05</span><span class="resolution-badge">1440p120</span><span class="thumb-game">Trackmania · A07-Race</span><span class="duration">00:19</span><span class="play-mark"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          </a>
+          <div class="clip-info"><a class="clip-title" href="watch.html">Le passage à 9,8 secondes</a><div class="clip-byline"><span>Syd</span><span>il y a 3 jours</span></div><div class="clip-specs"><span>#pb&nbsp; #campaign</span><span>71,4 Mo</span></div></div>
+        </article>
+
+        <article class="clip-card">
+          <a class="thumb thumb--cs" href="watch.html" aria-label="Lire Double smoke, triple entry">
+            <svg class="thumb-art" viewBox="0 0 480 270" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 0h178v270H0zM302 0h178v270H302zM178 155h124v115H178z"/><path class="art-line" d="M178 0v270M302 0v270M0 76h178M302 76h178M178 155h124v115H178zM0 230h480"/><path class="art-accent" d="m186 139 54-54 54 54M240 85v110M225 101l15-16 15 16"/></svg>
+            <span class="clip-index">CV–0243 / 06</span><span class="resolution-badge">1080p60</span><span class="thumb-game">Counter-Strike 2 · Mirage</span><span class="duration">00:42</span><span class="play-mark"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          </a>
+          <div class="clip-info"><a class="clip-title" href="watch.html">Double smoke, triple entry</a><div class="clip-byline"><span>NoxVega</span><span>il y a 4 jours</span></div><div class="clip-specs"><span>#execute&nbsp; #premier</span><span>91,8 Mo</span></div></div>
+        </article>
+      </section>
+
+      <details class="state-drawer">
+        <summary>Aperçu d’état · recherche sans résultat</summary>
+        <div class="empty-state">
+          <svg class="icon icon--large" aria-hidden="true"><use href="#i-search"/></svg>
+          <div><h2>Aucun clip pour « ace haven »</h2><p>Essayez un autre titre ou retirez les filtres de jeu et de durée.</p></div>
+          <button class="button button--small" type="button">Réinitialiser les filtres</button>
+        </div>
+      </details>
+
+      <nav class="pagination" aria-label="Pagination de la bibliothèque">
+        <span class="pagination-note">1–6 sur 248 clips</span>
+        <ul class="page-list">
+          <li><a class="page-number" href="library.html" aria-label="Page précédente"><svg class="icon icon--small" aria-hidden="true"><use href="#i-left"/></svg></a></li>
+          <li><a class="page-number" href="library.html" aria-current="page">01</a></li>
+          <li><a class="page-number" href="library.html">02</a></li>
+          <li><a class="page-number" href="library.html">03</a></li>
+          <li><span class="page-number">…</span></li>
+          <li><a class="page-number" href="library.html">42</a></li>
+          <li><a class="page-number" href="library.html" aria-label="Page suivante"><svg class="icon icon--small" aria-hidden="true"><use href="#i-right"/></svg></a></li>
+        </ul>
+        <span class="pagination-note">6 clips / page</span>
+      </nav>
+    </main>
+  </div>
+</body>
+</html>

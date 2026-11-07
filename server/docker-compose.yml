@@ -1,0 +1,16 @@
+services:
+  clipvault:
+    build: .
+    image: clipvault:dev
+    container_name: clipvault
+    restart: unless-stopped
+    ports:
+      - "8099:8099"
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - /srv/fireshare/videos/uploads:/media-src:ro
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true

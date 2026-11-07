@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="ember">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121010">
+<title>Bibliothèque — ClipVault</title>
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <symbol id="i-vault" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3.2"/><path d="M3 9h2.2M18.8 9H21M3 15h2.2M18.8 15H21"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M12 4 8 8M12 4l4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h8M18 7h2M4 17h4M12 17h8"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 5.2v13.6L20 12 8.5 5.2Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M12 15l-4-4M12 15l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.5 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.4-1.4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.8h5V7M6.2 7l.9 13h9.8l.9-13"/><path d="M10 11v5.5M14 11v5.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 20 6.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 20h18.4L12 4Z"/><path d="M12 10v4.2M12 17.2h.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 4.5 16.5 12 9 19.5"/></symbol>
+  <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M4.5 9 12 16.5 19.5 9"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"/><path d="M16 9a4.2 4.2 0 0 1 0 6"/></symbol>
+  <symbol id="i-cc" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M10.5 10.4a2.2 2.2 0 1 0 0 3.2M17.5 10.4a2.2 2.2 0 1 0 0 3.2"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9.5 4H4v5.5M14.5 4H20v5.5M14.5 20H20v-5.5M9.5 20H4v-5.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3.2 2"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8"/><path d="M17.5 8 21.5 12l-4 4M10 12h11"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1"/><path d="M7.5 4.5v15M16.5 4.5v15M3 9.5h4.5M3 14.5h4.5M16.5 9.5H21M16.5 14.5H21"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.4 3.2 7.7 7.5 9 4.3-1.3 7.5-4.6 7.5-9V6L12 3Z"/><path d="M8.8 12.2 11 14.4l4.4-4.4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+</svg>
+
+<div class="app">
+
+  <aside class="rail">
+    <a class="brand" href="library.html">
+      <svg class="icon icon--20 brand-mark" aria-hidden="true"><use href="#i-vault"/></svg>
+      <span class="brand-name">ClipVault</span>
+      <span class="brand-ver">0.4.2</span>
+    </a>
+
+    <nav class="nav" aria-label="Navigation principale">
+      <a class="nav-item" href="library.html" aria-current="page">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-grid"/></svg>
+        <span>Bibliothèque</span>
+        <span class="nav-count">142</span>
+      </a>
+      <a class="nav-item" href="upload.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-upload"/></svg>
+        <span>Déposer</span>
+      </a>
+      <a class="nav-item" href="library.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-tag"/></svg>
+        <span>Tags</span>
+        <span class="nav-count">26</span>
+      </a>
+      <a class="nav-item" href="library.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-sliders"/></svg>
+        <span>Réglages</span>
+      </a>
+    </nav>
+
+    <div class="rail-sec rail-sec--grow">
+      <div class="storage-head">
+        <span class="eyebrow">Stockage</span>
+        <span class="mono faint">38 %</span>
+      </div>
+      <div class="storage-bar"><i style="width:38.4%"></i></div>
+      <div class="mono faint" style="margin-top:6px">38,4 Go / 100 Go</div>
+    </div>
+
+    <div class="rail-sec">
+      <div class="eyebrow" style="margin-bottom:6px">Thème</div>
+      <div data-theme-mount="rail"></div>
+    </div>
+
+    <div class="rail-user">
+      <span class="avatar">NL</span>
+      <span class="who">
+        <b>nils</b>
+        <span>nils@ares-01</span>
+      </span>
+      <a class="btn btn--ghost btn--icon btn--sm" href="login.html" title="Se déconnecter" aria-label="Se déconnecter">
+        <svg class="icon icon--16" aria-hidden="true"><use href="#i-logout"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <header class="topbar">
+      <div class="crumb">
+        <span>clipvault.local</span>
+        <span class="sep">/</span>
+        <b>bibliothèque</b>
+      </div>
+      <div class="topbar-actions">
+        <span class="mono faint">index synchronisé · il y a 12 s</span>
+        <a class="btn btn--primary" href="upload.html">
+          <svg class="icon icon--16" aria-hidden="true"><use href="#i-upload"/></svg>
+          Déposer un clip
+        </a>
+      </div>
+    </header>
+
+    <main class="page">
+
+      <div class="page-head">
+        <div class="titles">
+          <h1 class="page-title">Bibliothèque</h1>
+          <div class="page-sub">
+            <span>18 résultats</span>
+            <span class="faint">·</span>
+            <span class="faint">142 clips</span>
+            <span class="faint">·</span>
+            <span class="faint">38,4 Go</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="search" style="flex:1;min-width:240px">
+          <svg class="icon icon--16" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" value="extraction" placeholder="Titre, joueur, tag…" aria-label="Rechercher un clip">
+          <kbd>/</kbd>
+        </div>
+
+        <div class="select-wrap" style="width:200px">
+          <select class="select" aria-label="Filtrer par jeu">
+            <option>Hunt: Showdown 1896</option>
+            <option>Tous les jeux</option>
+            <option>Helldivers 2</option>
+            <option>Deep Rock Galactic</option>
+            <option>Elden Ring</option>
+            <option>Sea of Thieves</option>
+          </select>
+        </div>
+
+        <div class="select-wrap" style="width:150px">
+          <select class="select" aria-label="Filtrer par période">
+            <option>7 derniers jours</option>
+            <option>Aujourd'hui</option>
+            <option>30 derniers jours</option>
+            <option>Cette année</option>
+          </select>
+        </div>
+
+        <div class="select-wrap" style="width:140px">
+          <select class="select" aria-label="Filtrer par durée">
+            <option>&lt; 1 min</option>
+            <option>Toutes durées</option>
+            <option>1 – 3 min</option>
+            <option>&gt; 3 min</option>
+          </select>
+        </div>
+
+        <span class="grow"></span>
+
+        <div class="seg" role="group" aria-label="Tri">
+          <button type="button" aria-pressed="true"><span class="dot"></span>Récents</button>
+          <button type="button" aria-pressed="false"><span class="dot"></span>Vus</button>
+          <button type="button" aria-pressed="false"><span class="dot"></span>Durée</button>
+        </div>
+      </div>
+
+      <div class="filters" style="border-top:0;padding-top:0">
+        <span class="eyebrow">Filtres actifs</span>
+        <button class="chip" type="button" aria-pressed="true">
+          Jeu : Hunt: Showdown 1896
+          <svg class="icon icon--16 x" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+        <button class="chip" type="button" aria-pressed="true">
+          #clutch
+          <svg class="icon icon--16 x" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+        <button class="chip" type="button" aria-pressed="true">
+          &lt; 1 min
+          <svg class="icon icon--16 x" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+        <button class="chip" type="button">+ Ajouter un filtre</button>
+        <span class="grow"></span>
+        <button class="btn btn--ghost btn--sm" type="button">Tout effacer</button>
+      </div>
+
+      <div class="sheet sheet--4">
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:18">
+              <span class="thumb-idx">01</span>
+              <span class="thumb-leader">42</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">00:42</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Extraction sous les 90 secondes</h3>
+              <p class="clip-sub">Hunt: Showdown 1896 <span class="dot">·</span> nils</p>
+              <div class="clip-foot">
+                <span>218 Mo</span>
+                <span class="dot">·</span>
+                <span>1440p</span>
+                <span class="right">il y a 2 h</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:280">
+              <span class="thumb-idx">02</span>
+              <span class="thumb-leader">38</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">12:38</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Trois boss d'affilée, run sans dégâts</h3>
+              <p class="clip-sub">Elden Ring <span class="dot">·</span> mora</p>
+              <div class="clip-foot">
+                <span>1,84 Go</span>
+                <span class="dot">·</span>
+                <span>1440p</span>
+                <span class="right">il y a 5 h</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:200">
+              <span class="thumb-idx">03</span>
+              <span class="thumb-leader">19</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">00:19</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Le bus qui décolle à vingt mètres</h3>
+              <p class="clip-sub">Helldivers 2 <span class="dot">·</span> tweek</p>
+              <div class="clip-foot">
+                <span>96 Mo</span>
+                <span class="dot">·</span>
+                <span>1080p</span>
+                <span class="right">hier</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:40">
+              <span class="thumb-idx">04</span>
+              <span class="thumb-leader">31</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">00:31</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Dernier tick, victoire 4–3</h3>
+              <p class="clip-sub">Rocket League <span class="dot">·</span> brou</p>
+              <div class="clip-foot">
+                <span>142 Mo</span>
+                <span class="dot">·</span>
+                <span>1440p</span>
+                <span class="right">hier</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:120">
+              <span class="thumb-idx">05</span>
+              <span class="thumb-leader">07</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">01:07</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Chute de 340 m dans le puits de Hoxes</h3>
+              <p class="clip-sub">Deep Rock Galactic <span class="dot">·</span> kaz</p>
+              <div class="clip-foot">
+                <span>372 Mo</span>
+                <span class="dot">·</span>
+                <span>1080p</span>
+                <span class="right">il y a 2 j</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:150">
+              <span class="thumb-idx">06</span>
+              <span class="thumb-leader">14</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">02:14</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Le cave-in à quatre, personne ne remonte</h3>
+              <p class="clip-sub">Deep Rock Galactic <span class="dot">·</span> sigrid</p>
+              <div class="clip-foot">
+                <span>640 Mo</span>
+                <span class="dot">·</span>
+                <span>1080p</span>
+                <span class="right">il y a 2 j</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:25">
+              <span class="thumb-idx">07</span>
+              <span class="thumb-leader">24</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">00:24</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Trois poursuivants, une seule balle</h3>
+              <p class="clip-sub">Hunt: Showdown 1896 <span class="dot">·</span> olli</p>
+              <div class="clip-foot">
+                <span>128 Mo</span>
+                <span class="dot">·</span>
+                <span>1440p</span>
+                <span class="right">il y a 3 j</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:195">
+              <span class="thumb-idx">08</span>
+              <span class="thumb-leader">47</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">03:47</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">On a vendu le vaisseau pendant le saut</h3>
+              <p class="clip-sub">Sea of Thieves <span class="dot">·</span> wren</p>
+              <div class="clip-foot">
+                <span>1,24 Go</span>
+                <span class="dot">·</span>
+                <span>1440p</span>
+                <span class="right">il y a 4 j</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:300">
+              <span class="thumb-idx">09</span>
+              <span class="thumb-leader">52</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">05:52</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Dernier étage, boss final, un point de vie</h3>
+              <p class="clip-sub">Baldur's Gate 3 <span class="dot">·</span> dax</p>
+              <div class="clip-foot">
+                <span>2,10 Go</span>
+                <span class="dot">·</span>
+                <span>1440p</span>
+                <span class="right">il y a 5 j</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:330">
+              <span class="thumb-idx">10</span>
+              <span class="thumb-leader">41</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">01:41</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Le monstre ne nous a jamais vus</h3>
+              <p class="clip-sub">Lethal Company <span class="dot">·</span> perceval</p>
+              <div class="clip-foot">
+                <span>486 Mo</span>
+                <span class="dot">·</span>
+                <span>1080p</span>
+                <span class="right">il y a 1 sem</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:60">
+              <span class="thumb-idx">11</span>
+              <span class="thumb-leader">37</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">00:37</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Mur de roquettes à la sortie du tunnel</h3>
+              <p class="clip-sub">Helldivers 2 <span class="dot">·</span> nils</p>
+              <div class="clip-foot">
+                <span>190 Mo</span>
+                <span class="dot">·</span>
+                <span>1440p</span>
+                <span class="right">il y a 1 sem</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="clip">
+          <a class="clip-link" href="watch.html">
+            <div class="thumb" style="--h:100">
+              <span class="thumb-idx">12</span>
+              <span class="thumb-leader">12</span>
+              <span class="thumb-play"><svg class="icon icon--18" aria-hidden="true"><use href="#i-play"/></svg></span>
+              <span class="thumb-dur">04:12</span>
+            </div>
+            <div class="clip-body">
+              <h3 class="clip-title">Satisfactory : la cascade de 2,4 km</h3>
+              <p class="clip-sub">Satisfactory <span class="dot">·</span> mora</p>
+              <div class="clip-foot">
+                <span>1,52 Go</span>
+                <span class="dot">·</span>
+                <span>3440×1440</span>
+                <span class="right">il y a 2 sem</span>
+              </div>
+            </div>
+          </a>
+        </article>
+
+      </div>
+
+      <div class="pager">
+        <span class="count">1 – 12 sur 18 clips · 4,2 Go</span>
+        <div class="pages">
+          <span aria-current="page">1</span>
+          <a href="library.html">2</a>
+          <a href="library.html" aria-label="Page suivante"><svg class="icon icon--16" aria-hidden="true"><use href="#i-chev-r"/></svg></a>
+        </div>
+      </div>
+
+      <section class="states">
+        <div class="states-head">
+          <span class="eyebrow">États</span>
+          <span class="note">rendus réels, pas des vignettes décoratives</span>
+        </div>
+        <div class="states-row">
+
+          <div class="panel">
+            <div class="panel-head">
+              <svg class="icon icon--16 faint" aria-hidden="true"><use href="#i-film"/></svg>
+              <span class="mono faint">état vide · 0 résultat</span>
+            </div>
+            <div class="empty">
+              <svg class="icon icon--24 empty-icon" aria-hidden="true"><use href="#i-film"/></svg>
+              <h3>Aucun clip ne correspond</h3>
+              <p>« extraction » + jeu Hunt: Showdown 1896 + durée &lt; 1 min — 0 clip sur 142.</p>
+              <button class="btn btn--sm" type="button">Réinitialiser les filtres</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <svg class="icon icon--16 faint" aria-hidden="true"><use href="#i-clock"/></svg>
+              <span class="mono faint">chargement · squelette</span>
+            </div>
+            <div class="sheet sheet--3" style="border:0;border-top:1px solid var(--border)">
+              <div class="skel">
+                <div class="skel-box"></div>
+                <div class="skel-line skel-line--w60"></div>
+                <div class="skel-line skel-line--w40"></div>
+              </div>
+              <div class="skel">
+                <div class="skel-box"></div>
+                <div class="skel-line skel-line--w60"></div>
+                <div class="skel-line skel-line--w40"></div>
+              </div>
+              <div class="skel">
+                <div class="skel-box"></div>
+                <div class="skel-line skel-line--w60"></div>
+                <div class="skel-line skel-line--w40"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

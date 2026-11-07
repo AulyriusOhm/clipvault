@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr" data-theme="ember">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clutch 1v4 sur Lotus — ClipVault</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="theme.js"></script>
+</head>
+<body>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-library" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M9 4v16M13 9h3M13 13h3"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 15v4h14v-4"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.1 1.1M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.1-1.1"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="1"/><path d="M16 8V5H5v11h3"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 19h14"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><path d="M5 10v4h4l5 4V6l-5 4ZM17 9c1.4 1.7 1.4 4.3 0 6M19 6c3.2 3.3 3.2 8.7 0 12"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 13.5v-3l-2-.7-.6-1.4.9-1.9-2.1-2.1-1.9.9-1.4-.6-.7-2h-3l-.7 2-1.4.6-1.9-.9-2.1 2.1.9 1.9-.6 1.4-2 .7v3l2 .7.6 1.4-.9 1.9 2.1 2.1 1.9-.9 1.4.6.7 2h3l.7-2 1.4-.6 1.9.9 2.1-2.1-.9-1.9.6-1.4Z"/></symbol>
+      <symbol id="i-maximize" viewBox="0 0 24 24"><path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4"/></symbol>
+      <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <a class="brand" href="library.html" aria-label="ClipVault, bibliothèque">
+      <svg class="brand-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M3 3h22v22H3z" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h12v12H8z" stroke="currentColor" stroke-width="1.5"/><path d="m12 11 6 3-6 3z" fill="currentColor"/></svg>
+      <span class="brand-name">CLIP<span>VAULT</span></span>
+    </a>
+    <div class="instance-status"><span class="status-dot"></span><span>vault.squad-07.fr</span><span>·</span><span>Lecture privée · membre du squad</span></div>
+    <div class="topbar-actions">
+      <label class="theme-control"><span>Thème</span>
+        <select data-theme-select aria-label="Choisir le thème">
+          <option value="ember">Ember</option><option value="tide">Tide</option><option value="moss">Moss</option><option value="aurora">Aurora</option><option value="paper">Paper</option>
+        </select>
+      </label>
+      <a class="user-chip" href="upload.html" aria-label="Profil de NoxVega"><span class="avatar">NV</span><span class="user-name">NoxVega</span></a>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <p class="nav-label">Coffre</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="library.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-library"/></svg>Bibliothèque<span class="nav-count">248</span></a></li>
+          <li><a class="nav-link" href="upload.html"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Déposer des clips</a></li>
+        </ul>
+        <p class="nav-label">Vues</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="library.html"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Mes clips<span class="nav-count">37</span></a></li>
+          <li><a class="nav-link" href="watch.html"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>Dernier partage<span class="nav-count">01</span></a></li>
+        </ul>
+        <div class="storage"><div class="storage-heading"><span>Stockage</span><span>34 %</span></div><div class="storage-track"><span></span></div><div class="storage-figures"><span>41,8 Go utilisés</span><span>120 Go</span></div></div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <nav class="breadcrumbs" aria-label="Fil d’Ariane"><a href="library.html">Bibliothèque</a><svg class="icon" aria-hidden="true"><use href="#i-right"/></svg><a href="library.html">Valorant</a><svg class="icon" aria-hidden="true"><use href="#i-right"/></svg><span>CV–0248</span></nav>
+
+      <div class="watch-layout">
+        <div class="watch-main">
+          <div class="video-stage thumb--valorant" role="group" aria-label="Lecteur du clip Clutch 1v4 sur Lotus">
+            <svg class="thumb-art" viewBox="0 0 960 540" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 416 204 254l116 74 148-194 152 160 108-74 232 184v136H0Z"/><path class="art-line" d="M0 416 204 254l116 74 148-194 152 160 108-74 232 184M106 540l214-212 148 194 152-228 224 246M480 0v540M0 270h960"/><path class="art-accent" d="M394 210h168v124H394zM436 252h86M478 210v124"/></svg>
+            <div class="video-topline"><span>CV–0248 / LOTUS / ROUND 19</span><span>SOURCE · 2560 × 1440 · 60 FPS</span></div>
+            <button class="video-center-play" type="button" aria-label="Lire le clip"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></button>
+            <div class="player-controls">
+              <div class="player-progress" aria-label="Progression : 13 secondes sur 38"><span></span></div>
+              <div class="player-control-row">
+                <button class="player-button" type="button" aria-label="Lire"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></button>
+                <button class="player-button" type="button" aria-label="Volume"><svg class="icon" aria-hidden="true"><use href="#i-volume"/></svg></button>
+                <span class="player-time">00:13 / 00:38</span><span class="player-spacer"></span>
+                <button class="player-button" type="button" aria-label="Réglages"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg></button>
+                <button class="player-button" type="button" aria-label="Plein écran"><svg class="icon" aria-hidden="true"><use href="#i-maximize"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="watch-heading">
+            <p class="eyebrow">Valorant / Lotus / Compétition</p>
+            <h1>Clutch 1v4 sur Lotus</h1>
+            <p class="watch-byline">Partagé par <strong>NoxVega</strong> · aujourd’hui à 21:42 · 14 vues</p>
+          </div>
+
+          <div class="watch-actions" aria-label="Actions sur le clip">
+            <button class="button button--primary" type="button"><svg class="icon icon--small" aria-hidden="true"><use href="#i-copy"/></svg>Copier le lien</button>
+            <button class="button" type="button"><svg class="icon icon--small" aria-hidden="true"><use href="#i-download"/></svg>Télécharger <span class="mono">84,2 Mo</span></button>
+            <button class="button button--quiet button--danger" type="button"><svg class="icon icon--small" aria-hidden="true"><use href="#i-trash"/></svg>Supprimer</button>
+          </div>
+
+          <section class="metadata-section" aria-labelledby="metadata-title">
+            <h2 class="section-title" id="metadata-title">Informations du fichier</h2>
+            <dl class="metadata-grid">
+              <div><dt>Jeu</dt><dd>Valorant</dd></div>
+              <div><dt>Joueur</dt><dd>NoxVega</dd></div>
+              <div><dt>Capturé le</dt><dd>18 juin 2025, 21:39</dd></div>
+              <div><dt>Durée</dt><dd class="mono">00:38,240</dd></div>
+              <div><dt>Résolution</dt><dd class="mono">2560 × 1440 · 60 fps</dd></div>
+              <div><dt>Taille du fichier</dt><dd class="mono">84,2 Mo</dd></div>
+              <div><dt>Vidéo</dt><dd class="mono">H.264 · 17,6 Mb/s</dd></div>
+              <div><dt>Audio</dt><dd class="mono">AAC stéréo · 192 kb/s</dd></div>
+              <div><dt>Visibilité</dt><dd>Membres de l’instance</dd></div>
+            </dl>
+            <div class="tag-list" aria-label="Tags"><a class="tag" href="library.html">#clutch</a><a class="tag" href="library.html">#ranked</a><a class="tag" href="library.html">#lotus</a><a class="tag" href="library.html">#1v4</a></div>
+          </section>
+
+          <div class="share-strip">
+            <svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>
+            <input class="input" value="https://vault.squad-07.fr/w/cv-0248" readonly aria-label="Lien de partage">
+            <button class="button button--small" type="button"><svg class="icon icon--small" aria-hidden="true"><use href="#i-copy"/></svg>Copier</button>
+          </div>
+        </div>
+
+        <aside class="up-next" aria-labelledby="next-title">
+          <div class="up-next-header"><div><h2 id="next-title">À suivre</h2><p>Dans le même coffre</p></div><div class="autoplay"><span>Auto</span><span class="toggle" aria-hidden="true"></span></div></div>
+          <ol class="next-list">
+            <li class="next-item">
+              <a class="thumb thumb--cs" href="watch.html" aria-label="Lire Double smoke, triple entry"><svg class="thumb-art" viewBox="0 0 240 135" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 0h89v135H0zM151 0h89v135h-89zM89 78h62v57H89z"/><path class="art-line" d="M89 0v135M151 0v135M0 38h89M151 38h89M89 78h62v57H89z"/><path class="art-accent" d="m93 70 27-28 27 28M120 42v55"/></svg><span class="duration">00:42</span></a>
+              <div class="next-copy"><h3><a href="watch.html">Double smoke, triple entry</a></h3><p>NoxVega · Counter-Strike 2</p><p>il y a 4 jours</p></div>
+            </li>
+            <li class="next-item">
+              <a class="thumb thumb--apex" href="watch.html" aria-label="Lire Le rotate qui gagne la manche"><svg class="thumb-art" viewBox="0 0 240 135" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="m0 95 46-27 27 11 46-46 35 34 34-15 52 33v50H0Z"/><path class="art-line" d="m0 95 46-27 27 11 46-46 35 34 34-15 52 33M46 68v67M119 33v102"/><path class="art-accent" d="m73 90 46-57 35 34"/></svg><span class="duration">01:12</span></a>
+              <div class="next-copy"><h3><a href="watch.html">Le rotate qui gagne la manche</a></h3><p>Kelm · Apex Legends</p><p>il y a 2 heures</p></div>
+            </li>
+            <li class="next-item">
+              <a class="thumb thumb--valorant" href="watch.html" aria-label="Lire L’ace retour sur Haven"><svg class="thumb-art" viewBox="0 0 240 135" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 108 51 64l29 18 37-48 38 40 27-18 58 46v33H0Z"/><path class="art-line" d="M0 108 51 64l29 18 37-48 38 40 27-18 58 46M120 0v135M0 68h240"/><path class="art-accent" d="M99 53h42v31H99z"/></svg><span class="duration">00:51</span></a>
+              <div class="next-copy"><h3><a href="watch.html">L’ace retour sur Haven</a></h3><p>Mira · Valorant</p><p>il y a 5 jours</p></div>
+            </li>
+            <li class="next-item">
+              <a class="thumb thumb--helldivers" href="watch.html" aria-label="Lire Extraction à trois secondes"><svg class="thumb-art" viewBox="0 0 240 135" preserveAspectRatio="none" aria-hidden="true"><path class="art-fill" d="M0 116 58 74l40 17 50-65 92 96v13H0Z"/><path class="art-line" d="M0 116 58 74l40 17 50-65 92 96M148 26v109M0 116h240"/><path class="art-accent" d="M128 58h40v42h-40zM148 42v16"/></svg><span class="duration">00:47</span></a>
+              <div class="next-copy"><h3><a href="watch.html">Extraction à trois secondes</a></h3><p>Orbe · Helldivers 2</p><p>il y a 1 semaine</p></div>
+            </li>
+          </ol>
+        </aside>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

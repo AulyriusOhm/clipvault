@@ -1,0 +1,125 @@
+<%- include('partials/shell-start', { title: title, active: 'library' }) %>
+
+    <header class="topbar">
+      <div>
+        <p class="micro"><a href="/library">Bibliothèque</a> · <a href="/watch/<%= clip.slug %>">clip</a> · modification</p>
+        <h1 class="page-title mt2">Modifier le clip</h1>
+        <p class="page-sub">#<%= String(clip.code).padStart(4, '0') %> — <%= clip.slug %> · <%= fmt.duration(clip.duration_s) %> · <%= fmt.bytes(clip.size_bytes) %></p>
+      </div>
+      <div class="topbar__actions">
+        <a class="btn" href="/watch/<%= clip.slug %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-left"></use></svg>Retour au clip</a>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <% if (flash) { %>
+      <div class="alert alert--ok mb4" role="status">
+        <svg aria-hidden="true" focusable="false" class="ic"><use href="#i-check"></use></svg>
+        <div><p><%= flash %></p></div>
+      </div>
+      <% } %>
+
+      <form method="post" action="/clips/<%= clip.slug %>">
+      <div class="upload-cols">
+
+        <div class="stack">
+          <section>
+            <div class="rule-label"><span>Métadonnées</span></div>
+            <div class="panel">
+              <div class="field">
+                <label for="title">Titre</label>
+                <input class="input" id="title" name="title" type="text" maxlength="90" value="<%= clip.title %>" required>
+                <span class="field__hint">90 caractères maximum</span>
+              </div>
+
+              <div class="form-grid mt4">
+                <div class="field">
+                  <label for="game">Jeu</label>
+                  <input class="input" id="game" name="game" type="text" value="<%= clip.game_name || '' %>" list="jeux">
+                  <datalist id="jeux">
+                    <% games.forEach(function (game) { %><option value="<%= game.name %>"><% }); %>
+                  </datalist>
+                </div>
+                <div class="field">
+                  <label for="tags">Tags</label>
+                  <input class="input" id="tags" name="tags" type="text" value="<%= tags %>" placeholder="clutch, ace, ranked">
+                  <span class="field__hint">séparés par des virgules</span>
+                </div>
+              </div>
+
+              <div class="field mt4">
+                <label for="description">Description</label>
+                <textarea class="textarea" id="description" name="description" rows="4"><%= clip.description %></textarea>
+              </div>
+
+              <div class="row-actions mt5">
+                <button class="btn btn--primary" type="submit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-check"></use></svg>Enregistrer</button>
+                <a class="btn btn--ghost" href="/watch/<%= clip.slug %>">Annuler</a>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="rule-label"><span>Fichier</span></div>
+            <div class="panel">
+              <div class="dl">
+                <div><span class="dl__k">Résolution</span><span class="dl__v"><%= fmt.resolution(clip.width, clip.height) %></span></div>
+                <div><span class="dl__k">Images/s</span><span class="dl__v"><%= Math.round(clip.fps) %> fps</span></div>
+                <div><span class="dl__k">Codec</span><span class="dl__v"><%= clip.codec || '—' %></span></div>
+                <div><span class="dl__k">Durée</span><span class="dl__v"><%= fmt.duration(clip.duration_s) %></span></div>
+                <div><span class="dl__k">Taille</span><span class="dl__v"><%= fmt.bytes(clip.size_bytes) %></span></div>
+                <div><span class="dl__k">Déposé par</span><span class="dl__v"><%= clip.uploader || '—' %></span></div>
+                <div><span class="dl__k">Le</span><span class="dl__v"><%= fmt.dateLong(clip.created_at) %></span></div>
+                <% if (clip.source_path) { %>
+                <div><span class="dl__k">Source</span><span class="dl__v mono"><%= clip.source_path %></span></div>
+                <% } %>
+              </div>
+              <p class="mono mt3">Le fichier vidéo lui-même n'est pas remplaçable : supprime le clip et redépose une version corrigée.</p>
+              <form method="post" action="/clips/<%= clip.slug %>/delete" onsubmit="return confirm('Supprimer définitivement ce clip et ses dérivés ?')">
+                <button class="btn btn--danger btn--sm" type="submit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-trash"></use></svg>Supprimer le clip</button>
+              </form>
+            </div>
+          </section>
+        </div>
+
+        <div class="stack">
+          <section>
+            <div class="rule-label"><span>Visibilité</span></div>
+            <div class="panel">
+              <div class="radio-list">
+                <label class="radio<%= clip.visibility === 'link' ? ' is-checked' : '' %>">
+                  <input type="radio" name="visibility" value="link"<%= clip.visibility === 'link' ? ' checked' : '' %>>
+                  <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-lock"></use></svg>
+                  <span>Accès par lien</span>
+                  <span class="num">non listé</span>
+                </label>
+                <label class="radio<%= clip.visibility === 'members' ? ' is-checked' : '' %>">
+                  <input type="radio" name="visibility" value="members"<%= clip.visibility === 'members' ? ' checked' : '' %>>
+                  <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-user"></use></svg>
+                  <span>Membres de l'instance</span>
+                  <span class="num"><%= counting.members %></span>
+                </label>
+                <label class="radio<%= clip.visibility === 'public' ? ' is-checked' : '' %>">
+                  <input type="radio" name="visibility" value="public"<%= clip.visibility === 'public' ? ' checked' : '' %>>
+                  <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-globe"></use></svg>
+                  <span>Public</span>
+                  <span class="num">sans compte</span>
+                </label>
+              </div>
+              <div class="field mt4">
+                <label for="expiry_days">Expiration du lien</label>
+                <input class="input" id="expiry_days" name="expiry_days" type="number" min="0" max="365"
+                       value="<%= clip.share_expires ? Math.max(0, Math.ceil((new Date(clip.share_expires.replace(' ', 'T') + 'Z').getTime() - Date.now()) / 86400000)) : 0 %>">
+                <span class="field__hint">en jours — 0 = aucune expiration</span>
+              </div>
+              <p class="mono mt4 faint">Le bouton « Enregistrer » de la colonne de gauche applique aussi la visibilité.</p>
+            </div>
+          </section>
+        </div>
+
+      </div>
+      </form>
+    </div>
+
+<%- include('partials/shell-end') %>

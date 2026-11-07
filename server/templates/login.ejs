@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="<%= theme.key %>">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %></title>
+<meta name="theme-color" content="<%= theme.background %>">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<%- include('partials/sprite') %>
+
+<div class="auth">
+
+  <aside class="auth__aside">
+    <a class="auth__head" href="/" aria-label="Retour à l'accueil">
+      <svg aria-hidden="true" focusable="false" class="brand__mark"><use href="#i-logo"></use></svg>
+      <div>
+        <div class="brand__name">CLIP<span>VAULT</span></div>
+        <div class="brand__sub">instance <%= instance %> · v0.1</div>
+      </div>
+    </a>
+
+    <div class="auth__figure">
+      <h2 class="page-title">Les clips du groupe,<br>rangés chez vous.</h2>
+      <p class="dim mt3">Un dépôt simple pour les captures de jeux vidéo : on dépose, on partage un lien,
+        c'est tout.</p>
+
+      <% if (showcase.length) { %>
+      <div class="flex mt4">
+        <% showcase.forEach(function (clip) { %>
+        <a class="thumb thumb--hoverable" href="/c/<%= clip.slug %>" style="width:150px;border:1px solid var(--border);border-radius:2px" title="<%= clip.title %>">
+          <% if (clip.thumb_path) { %>
+          <img class="thumb__img" src="/media/<%= clip.slug %>/thumb" alt="<%= clip.title %>" loading="lazy">
+          <% } %>
+          <span class="thumb__code">#<%= String(clip.code).padStart(4, '0') %></span>
+          <span class="thumb__dur"><%= fmt.duration(clip.duration_s) %></span>
+        </a>
+        <% }); %>
+      </div>
+      <p class="mono mt3 faint"><%= showcase.length %> clip<%= showcase.length > 1 ? 's' : '' %> en accès libre sur cette instance</p>
+      <% } %>
+    </div>
+
+    <div>
+      <div class="auth__statline">
+        <div class="auth__stat"><div class="v"><%= counting.clips %></div><div class="k micro">Clips</div></div>
+        <div class="auth__stat"><div class="v"><%= fmt.bytes(counting.bytes) %></div><div class="k micro">Stockés</div></div>
+        <div class="auth__stat"><div class="v"><%= counting.members %></div><div class="k micro">Membres</div></div>
+        <div class="auth__stat"><div class="v"><%= counting.games %></div><div class="k micro">Jeux</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="auth__main" id="contenu">
+
+    <div class="auth__card">
+      <div class="rule-label"><span>Connexion</span></div>
+      <h1 class="section-title">Se connecter à <%= instance %></h1>
+      <p class="dim">L'authentification passe par Authentik (OpenID Connect).
+        ClipVault ne stocke aucun mot de passe.</p>
+
+      <% if (error) { %>
+      <div class="alert" role="alert">
+        <svg aria-hidden="true" focusable="false" class="ic"><use href="#i-alert"></use></svg>
+        <div>
+          <p><strong>Connexion refusée</strong> — <%= error %></p>
+          <p class="mono mt2">demandez une invitation à un administrateur</p>
+        </div>
+      </div>
+      <% } %>
+
+      <% if (authMode === 'dev') { %>
+      <form method="post" action="/auth/dev-login">
+        <input type="hidden" name="next" value="<%= next %>">
+        <button class="btn btn--primary btn--block" type="submit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-shield"></use></svg>Se connecter (mode dev)</button>
+      </form>
+      <p class="mono mt3">AUTH_MODE=dev — Authentik n'est pas configuré sur cette instance.
+        Renseignez OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET et OIDC_REDIRECT_URI pour passer en SSO réel.</p>
+      <% } else { %>
+      <a class="btn btn--primary btn--block" href="/auth/start?next=<%= encodeURIComponent(next) %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-shield"></use></svg>Se connecter avec Authentik</a>
+      <% } %>
+
+      <div class="divider"><span>ou</span></div>
+
+      <a class="btn btn--ghost btn--block" href="/library"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-eye"></use></svg>Continuer en lecture seule</a>
+
+      <p class="mono">Session de 30 jours · déconnexion à tout moment.</p>
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

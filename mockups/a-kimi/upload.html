@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fr" data-theme="ember">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Déposer des clips — ClipVault</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="theme.js"></script>
+</head>
+<body>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-library" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M9 4v16M13 9h3M13 13h3"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 15v4h14v-4"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.1 1.1M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.1-1.1"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="1"/><path d="M16 8V5H5v11h3"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6h7l2 3h9v10H3Z"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <a class="brand" href="library.html" aria-label="ClipVault, bibliothèque">
+      <svg class="brand-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M3 3h22v22H3z" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h12v12H8z" stroke="currentColor" stroke-width="1.5"/><path d="m12 11 6 3-6 3z" fill="currentColor"/></svg>
+      <span class="brand-name">CLIP<span>VAULT</span></span>
+    </a>
+    <div class="instance-status"><span class="status-dot"></span><span>vault.squad-07.fr</span><span>·</span><span>78,2 Go disponibles</span></div>
+    <div class="topbar-actions">
+      <label class="theme-control"><span>Thème</span>
+        <select data-theme-select aria-label="Choisir le thème">
+          <option value="ember">Ember</option><option value="tide">Tide</option><option value="moss">Moss</option><option value="aurora">Aurora</option><option value="paper">Paper</option>
+        </select>
+      </label>
+      <a class="user-chip" href="upload.html" aria-label="Profil de NoxVega"><span class="avatar">NV</span><span class="user-name">NoxVega</span></a>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <p class="nav-label">Coffre</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="library.html"><svg class="icon" aria-hidden="true"><use href="#i-library"/></svg>Bibliothèque<span class="nav-count">248</span></a></li>
+          <li><a class="nav-link" href="upload.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Déposer des clips</a></li>
+        </ul>
+        <p class="nav-label">Vues</p>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="library.html"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Mes clips<span class="nav-count">37</span></a></li>
+          <li><a class="nav-link" href="watch.html"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>Dernier partage<span class="nav-count">01</span></a></li>
+        </ul>
+        <div class="storage"><div class="storage-heading"><span>Stockage</span><span>34 %</span></div><div class="storage-track"><span></span></div><div class="storage-figures"><span>41,8 Go utilisés</span><span>120 Go</span></div></div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="page-heading">
+        <div><p class="eyebrow">Entrée du coffre / nouveau dépôt</p><h1>Déposer des clips</h1><p class="page-description">Envoyez d’abord, complétez les informations pendant le transfert.</p></div>
+        <div class="upload-status"><span class="status-dot"></span>TRANSFERT CHIFFRÉ · HTTP/2</div>
+      </div>
+
+      <section class="upload-success" aria-label="Dépôt terminé">
+        <span class="success-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+        <div><h2>« Extraction à trois secondes » est en ligne.</h2><p>vault.squad-07.fr/w/cv-0242 · visible par les membres</p></div>
+        <a class="button button--small" href="watch.html"><svg class="icon icon--small" aria-hidden="true"><use href="#i-copy"/></svg>Copier le lien</a>
+      </section>
+
+      <div class="upload-layout">
+        <div class="upload-column">
+          <section class="dropzone" aria-labelledby="drop-title">
+            <div>
+              <span class="dropzone-icon"><svg class="icon icon--large" aria-hidden="true"><use href="#i-upload"/></svg></span>
+              <h2 id="drop-title">Déposez vos fichiers ici</h2>
+              <p>ou sélectionnez-les depuis votre dossier de captures</p>
+              <button class="button" type="button"><svg class="icon icon--small" aria-hidden="true"><use href="#i-folder"/></svg>Parcourir les fichiers</button>
+              <span class="dropzone-note">MP4, WEBM, MKV · 2 Go MAX. / FICHIER</span>
+            </div>
+          </section>
+
+          <section class="transfer-panel" aria-labelledby="transfer-title">
+            <div class="panel-header"><h2 id="transfer-title">Transfert en cours</h2><span class="mono">01 ACTIF / 02 EN ATTENTE</span></div>
+            <div class="active-transfer">
+              <div class="file-row">
+                <span class="file-type">MP4</span>
+                <div class="file-copy"><p class="file-name">valorant_lotus_1v4.mp4</p><p class="file-detail">84,7 Mo sur 124,6 Mo · original conservé</p></div>
+                <span class="progress-value">68 %</span>
+                <button class="icon-button" type="button" aria-label="Annuler le transfert"><svg class="icon icon--small" aria-hidden="true"><use href="#i-x"/></svg></button>
+              </div>
+              <div class="progress-track" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" aria-label="Progression du transfert"><span></span></div>
+              <div class="transfer-stats"><span>18,4 Mo/s</span><span>4 secondes restantes</span></div>
+            </div>
+          </section>
+
+          <section class="queue-panel" aria-labelledby="queue-title">
+            <div class="panel-header"><h2 id="queue-title">File d’attente</h2><span class="mono">3 FICHIERS · 481,3 Mo</span></div>
+            <ul class="queue-list">
+              <li class="queue-item"><span class="file-type">MP4</span><div class="file-copy"><p class="file-name">cs2_mirage_execute.mp4</p><p class="file-detail">1920 × 1080 · 60 fps</p></div><div class="queue-meta">91,8 Mo<span class="queue-state">En attente</span></div></li>
+              <li class="queue-item"><span class="file-type">MKV</span><div class="file-copy"><p class="file-name">trackmania_a07_pb.mkv</p><p class="file-detail">2560 × 1440 · 120 fps</p></div><div class="queue-meta">71,4 Mo<span class="queue-state">En attente</span></div></li>
+              <li class="queue-item"><span class="file-type">MP4</span><div class="file-copy"><p class="file-name">helldivers_extraction.mp4</p><p class="file-detail">1920 × 1080 · 60 fps</p></div><div class="queue-meta">193,5 Mo<span class="queue-state queue-state--done">Terminé à 21:36</span></div></li>
+            </ul>
+          </section>
+        </div>
+
+        <aside class="metadata-panel" aria-labelledby="details-title">
+          <div class="panel-header"><h2 id="details-title">Informations du clip</h2><span class="mono">CV–0248</span></div>
+          <form class="metadata-form">
+            <div class="field"><label for="clip-title">Titre <span class="required">*</span></label><input class="input" id="clip-title" value="Clutch 1v4 sur Lotus" required></div>
+            <div class="field"><label for="clip-game">Jeu <span class="required">*</span></label><select class="select" id="clip-game" required><option selected>Valorant</option><option>Counter-Strike 2</option><option>Apex Legends</option><option>Trackmania</option><option>Autre jeu…</option></select></div>
+            <div class="field">
+              <label for="clip-tags">Tags</label>
+              <div class="tag-input"><span class="tag">#clutch<svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></span><span class="tag">#ranked<svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></span><input id="clip-tags" placeholder="Ajouter…" aria-label="Ajouter un tag"></div>
+              <span class="field-hint">Entrée pour valider · 8 tags maximum</span>
+            </div>
+            <fieldset class="field visibility-field">
+              <legend>Visibilité</legend>
+              <div class="radio-list">
+                <label class="radio-option"><input type="radio" name="visibility" checked><span class="radio-copy"><strong>Membres de l’instance</strong><span>Visible par les 12 membres authentifiés.</span></span></label>
+                <label class="radio-option"><input type="radio" name="visibility"><span class="radio-copy"><strong>Toute personne avec le lien</strong><span>Lien public non répertorié, sans compte.</span></span></label>
+                <label class="radio-option"><input type="radio" name="visibility"><span class="radio-copy"><strong>Privé</strong><span>Visible uniquement par vous.</span></span></label>
+              </div>
+            </fieldset>
+            <div class="form-actions"><button class="button button--quiet" type="button">Enregistrer le brouillon</button><a class="button button--primary" href="watch.html">Publier le clip</a></div>
+          </form>
+        </aside>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

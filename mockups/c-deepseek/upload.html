@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="ember">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121010">
+<title>Déposer un clip — ClipVault</title>
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <symbol id="i-vault" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3.2"/><path d="M3 9h2.2M18.8 9H21M3 15h2.2M18.8 15H21"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M12 4 8 8M12 4l4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h8M18 7h2M4 17h4M12 17h8"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 5.2v13.6L20 12 8.5 5.2Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M12 15l-4-4M12 15l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.5 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.4-1.4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.8h5V7M6.2 7l.9 13h9.8l.9-13"/><path d="M10 11v5.5M14 11v5.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 20 6.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 20h18.4L12 4Z"/><path d="M12 10v4.2M12 17.2h.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 4.5 16.5 12 9 19.5"/></symbol>
+  <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M4.5 9 12 16.5 19.5 9"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"/><path d="M16 9a4.2 4.2 0 0 1 0 6"/></symbol>
+  <symbol id="i-cc" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M10.5 10.4a2.2 2.2 0 1 0 0 3.2M17.5 10.4a2.2 2.2 0 1 0 0 3.2"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9.5 4H4v5.5M14.5 4H20v5.5M14.5 20H20v-5.5M9.5 20H4v-5.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3.2 2"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8"/><path d="M17.5 8 21.5 12l-4 4M10 12h11"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1"/><path d="M7.5 4.5v15M16.5 4.5v15M3 9.5h4.5M3 14.5h4.5M16.5 9.5H21M16.5 14.5H21"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.4 3.2 7.7 7.5 9 4.3-1.3 7.5-4.6 7.5-9V6L12 3Z"/><path d="M8.8 12.2 11 14.4l4.4-4.4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-retry" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h5l2 2.5h9a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z"/></symbol>
+</svg>
+
+<div class="app">
+
+  <aside class="rail">
+    <a class="brand" href="library.html">
+      <svg class="icon icon--20 brand-mark" aria-hidden="true"><use href="#i-vault"/></svg>
+      <span class="brand-name">ClipVault</span>
+      <span class="brand-ver">0.4.2</span>
+    </a>
+
+    <nav class="nav" aria-label="Navigation principale">
+      <a class="nav-item" href="library.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-grid"/></svg>
+        <span>Bibliothèque</span>
+        <span class="nav-count">142</span>
+      </a>
+      <a class="nav-item" href="upload.html" aria-current="page">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-upload"/></svg>
+        <span>Déposer</span>
+      </a>
+      <a class="nav-item" href="library.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-tag"/></svg>
+        <span>Tags</span>
+        <span class="nav-count">26</span>
+      </a>
+      <a class="nav-item" href="library.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-sliders"/></svg>
+        <span>Réglages</span>
+      </a>
+    </nav>
+
+    <div class="rail-sec rail-sec--grow">
+      <div class="storage-head">
+        <span class="eyebrow">Stockage</span>
+        <span class="mono faint">38 %</span>
+      </div>
+      <div class="storage-bar"><i style="width:38.4%"></i></div>
+      <div class="mono faint" style="margin-top:6px">38,4 Go / 100 Go</div>
+    </div>
+
+    <div class="rail-sec">
+      <div class="eyebrow" style="margin-bottom:6px">Thème</div>
+      <div data-theme-mount="rail"></div>
+    </div>
+
+    <div class="rail-user">
+      <span class="avatar">NL</span>
+      <span class="who">
+        <b>nils</b>
+        <span>nils@ares-01</span>
+      </span>
+      <a class="btn btn--ghost btn--icon btn--sm" href="login.html" title="Se déconnecter" aria-label="Se déconnecter">
+        <svg class="icon icon--16" aria-hidden="true"><use href="#i-logout"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <header class="topbar">
+      <div class="crumb">
+        <span>clipvault.local</span>
+        <span class="sep">/</span>
+        <b>déposer</b>
+      </div>
+      <div class="topbar-actions">
+        <span class="mono faint">4 Go max · mp4, mkv, webm</span>
+        <a class="btn" href="library.html">
+          <svg class="icon icon--16" aria-hidden="true"><use href="#i-chev-l"/></svg>
+          Bibliothèque
+        </a>
+      </div>
+    </header>
+
+    <main class="page">
+
+      <div class="page-head">
+        <div class="titles">
+          <h1 class="page-title">Déposer un clip</h1>
+          <div class="page-sub">
+            <span>3 fichiers en file</span>
+            <span class="faint">·</span>
+            <span class="faint">4,13 Go</span>
+            <span class="faint">·</span>
+            <span class="faint">transcodage 1440p / 1080p / 720p</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="upload">
+
+        <div class="upload-main">
+
+          <div class="drop" role="button" tabindex="0">
+            <svg class="icon icon--24 drop-icon" aria-hidden="true"><use href="#i-upload"/></svg>
+            <h3>Glissez vos clips ici</h3>
+            <p>mp4 · mkv · webm — 4 Go par fichier, 12 fichiers à la fois</p>
+            <button class="btn btn--sm" type="button">
+              <svg class="icon icon--16" aria-hidden="true"><use href="#i-folder"/></svg>
+              Parcourir…
+            </button>
+          </div>
+
+          <section class="panel">
+            <div class="panel-head">
+              <span class="eyebrow">File d'attente</span>
+              <span class="mono faint">1 en cours · 1 en attente · 1 échec</span>
+              <span class="right"></span>
+              <button class="btn btn--ghost btn--sm" type="button">Tout suspendre</button>
+            </div>
+
+            <div class="queue">
+
+              <div class="qitem">
+                <div>
+                  <div class="qname">hunt_extraction_90s_1440p60.mp4</div>
+                  <div class="qmeta"><span>1,18 Go</span><span>·</span><span>HEVC</span><span>·</span><span>18,4 Mo/s</span><span>·</span><span>42 s restantes</span></div>
+                </div>
+                <div class="qbar" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Progression"><i style="width:62%"></i></div>
+                <div class="qstatus">
+                  62 %
+                  <button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Suspendre">
+                    <svg class="icon icon--16" aria-hidden="true"><use href="#i-pause"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="qitem">
+                <div>
+                  <div class="qname">drg_cavein_final_1080p.mp4</div>
+                  <div class="qmeta"><span>640 Mo</span><span>·</span><span>H.264</span><span>·</span><span>2e dans la file</span></div>
+                </div>
+                <div class="qbar qbar--idle"><i style="width:0"></i></div>
+                <div class="qstatus">
+                  en attente
+                  <button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Retirer de la file">
+                    <svg class="icon icon--16" aria-hidden="true"><use href="#i-x"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="qitem qitem--err">
+                <div>
+                  <div class="qname">sot_kraken_repair.mkv</div>
+                  <div class="qmeta"><span>2,31 Go</span><span>·</span><span>VP9 dans Matroska</span><span>·</span><span>ffprobe : codec non pris en charge</span></div>
+                </div>
+                <div class="qbar qbar--err"><i style="width:100%"></i></div>
+                <div class="qstatus qstatus--err">
+                  échec
+                  <button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Réessayer">
+                    <svg class="icon icon--16" aria-hidden="true"><use href="#i-retry"/></svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+        </div>
+
+        <section class="panel form-panel">
+          <div class="panel-head">
+            <span class="eyebrow">Métadonnées</span>
+            <span class="mono faint">fichier 1 / 3</span>
+          </div>
+
+          <div class="form-body">
+
+            <div class="field">
+              <label for="title">Titre</label>
+              <input class="input" id="title" value="Extraction sous les 90 secondes">
+              <span class="form-hint mono">détecté : 00:42 · 2560 × 1440 · 60 fps</span>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="game">Jeu</label>
+                <div class="select-wrap">
+                  <select class="select" id="game">
+                    <option>Hunt: Showdown 1896</option>
+                    <option>Elden Ring</option>
+                    <option>Helldivers 2</option>
+                    <option>Deep Rock Galactic</option>
+                    <option>+ Ajouter un jeu…</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="player">Joueur</label>
+                <input class="input input--mono" id="player" value="nils">
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Tags</span>
+              <div class="tag-input">
+                <span class="tag">clutch</span>
+                <span class="tag">extraction</span>
+                <span class="tag">solo</span>
+                <input type="text" placeholder="ajouter…" aria-label="Ajouter un tag">
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Visibilité</span>
+              <div class="seg" role="group" aria-label="Visibilité">
+                <button type="button" aria-pressed="false"><span class="dot"></span>Privé</button>
+                <button type="button" aria-pressed="true"><span class="dot"></span>Lien</button>
+                <button type="button" aria-pressed="false"><span class="dot"></span>Public</button>
+              </div>
+              <span class="form-hint">« Lien » : lisible par toute personne qui possède l'adresse, absent de la bibliothèque publique.</span>
+            </div>
+
+            <div class="check-row">
+              <span class="check check--on" aria-hidden="true">
+                <svg class="icon icon--16" style="width:10px;height:10px;stroke-width:2.5"><use href="#i-check"/></svg>
+              </span>
+              <div>
+                <div style="font-size:12px">Marquer comme spoiler</div>
+                <div class="form-hint">La vignette est floutée jusqu'au clic.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-foot">
+            <button class="btn btn--primary" type="button">Publier le clip</button>
+            <button class="btn btn--ghost" type="button">Brouillon</button>
+          </div>
+        </section>
+
+      </div>
+
+      <section class="states">
+        <div class="states-head">
+          <span class="eyebrow">États</span>
+          <span class="note">succès · zone active pendant le survol du fichier</span>
+        </div>
+        <div class="states-row">
+
+          <div class="panel">
+            <div class="panel-head">
+              <svg class="icon icon--16 faint" aria-hidden="true"><use href="#i-check"/></svg>
+              <span class="mono faint">succès · après publication</span>
+            </div>
+            <div class="panel-body" style="display:flex;flex-direction:column;gap:12px">
+              <div class="alert alert--ok">
+                <svg class="icon icon--16" aria-hidden="true"><use href="#i-check"/></svg>
+                <div>
+                  <b>Clip publié.</b> Transcodage terminé en 1 min 04.
+                  <div class="detail">8f3a2c · 1440p / 1080p / 720p · lien copié</div>
+                </div>
+              </div>
+              <div class="share">
+                <input class="input input--mono" value="https://clipvault.local/v/8f3a2c" readonly aria-label="Lien du clip publié">
+                <button class="btn" type="button">
+                  <svg class="icon icon--16" aria-hidden="true"><use href="#i-copy"/></svg>
+                  Copier
+                </button>
+              </div>
+              <div style="display:flex;gap:8px">
+                <a class="btn btn--sm" href="watch.html">Voir le clip</a>
+                <a class="btn btn--ghost btn--sm" href="library.html">Retour à la bibliothèque</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <svg class="icon icon--16 faint" aria-hidden="true"><use href="#i-upload"/></svg>
+              <span class="mono faint">état · fichier au-dessus de la zone</span>
+            </div>
+            <div class="panel-body">
+              <div class="drop drop--active" style="padding:28px 16px">
+                <svg class="icon icon--24 drop-icon" aria-hidden="true"><use href="#i-download"/></svg>
+                <h3>Déposez pour envoyer</h3>
+                <p>2 fichiers · 2,95 Go</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

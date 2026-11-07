@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="ember">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bibliothèque — ClipVault</title>
+<meta name="theme-color" content="#16110c">
+<script src="theme.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-logo" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <rect x="3.5" y="3.5" width="17" height="17" rx="2"/>
+    <path d="M10 8.4 16.2 12 10 15.6Z" fill="currentColor" stroke="none"/>
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="11" cy="11" r="6.5"/><path d="M16 16 20.5 20.5"/>
+  </symbol>
+  <symbol id="i-film" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M8 5v14M16 5v14"/>
+  </symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M12 16V4M7.5 8.5 12 4l4.5 4.5M4 20h16"/>
+  </symbol>
+  <symbol id="i-play" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M8 5.5 18.5 12 8 18.5Z"/>
+  </symbol>
+  <symbol id="i-play-fill" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5.5 18.5 12 8 18.5Z"/>
+  </symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M9.5 5v14M14.5 5v14"/>
+  </symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4z"/><path d="M15.5 9.6c1.5 1.3 1.5 3.5 0 4.8"/><path d="M18 7c2.9 2.8 2.9 7.2 0 10"/>
+  </symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+  </symbol>
+  <symbol id="i-link" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M9.5 14.5 8 16a3.5 3.5 0 0 1-5-5l1.5-1.5"/><path d="M14.5 9.5 16 8a3.5 3.5 0 0 1 5 5l-1.5 1.5"/><path d="m8.5 15.5 7-7"/>
+  </symbol>
+  <symbol id="i-download" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M12 3.5v11M7.5 10 12 14.5 16.5 10M4 19.5h16"/>
+  </symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 6.5h16M9 6.5V4h6v2.5M6.5 6.5 7.5 20h9l1-13.5M10 10v6.5M14 10v6.5"/>
+  </symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M12 5v14M5 12h14"/>
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m6 6 12 12M18 6 6 18"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m5 12.5 5 5L19 7"/>
+  </symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M12 4 21 19.5H3Z"/><path d="M12 10v4.5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 4h7l9 9-7 7-9-9z"/><path d="M8 8h.01"/>
+  </symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <rect x="3.5" y="5.5" width="17" height="15" rx="1.5"/><path d="M3.5 10.5h17M8 3.5v4M16 3.5v4"/>
+  </symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3.5 2"/>
+  </symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c0-3.9 3.1-6 7-6s7 2.1 7 6"/>
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="5" y="10.5" width="14" height="9.5" rx="1.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>
+  </symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.5 2.2 2.5 13.8 0 16M12 4c-2.5 2.2-2.5 13.8 0 16"/>
+  </symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M2.5 12S6 6.5 12 6.5 21.5 12 21.5 12 18 17.5 12 17.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>
+  </symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>
+  </symbol>
+  <symbol id="i-chev-down" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m6 9.5 6 6 6-6"/>
+  </symbol>
+  <symbol id="i-chev-left" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M14.5 6 8.5 12l6 6"/>
+  </symbol>
+  <symbol id="i-chev-right" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m9.5 6 6 6-6 6"/>
+  </symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/>
+  </symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M4 7h2M9 7h11M4 12h2M9 12h11M4 17h2M9 17h11"/>
+  </symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 7h16M4 12h16M4 17h16"/><rect x="7" y="5" width="4" height="4"/><rect x="13" y="10" width="4" height="4"/><rect x="9" y="15" width="4" height="4"/>
+  </symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M4 7h13M4 12h9M4 17h5M17 10v8M14 15l3 3 3-3"/>
+  </symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M3.5 19.5v-13h6l2 2.5h9v10.5z"/>
+  </symbol>
+  <symbol id="i-server" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="3.5" y="4.5" width="17" height="6" rx="1"/><rect x="3.5" y="13.5" width="17" height="6" rx="1"/><path d="M6.5 7.5h3M6.5 16.5h3"/>
+  </symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M20 5.5v5h-5M4 18.5v-5h5"/><path d="M19.2 10.5a7.5 7.5 0 0 0-13-2.6L4 10.5"/><path d="M4.8 13.5a7.5 7.5 0 0 0 13 2.6L20 13.5"/>
+  </symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M12 3.5 20 6v6c0 4.4-3.2 7.4-8 8.5-4.8-1.1-8-4.1-8-8.5V6z"/><path d="m8.8 12 2.2 2.2 4.5-4.5"/>
+  </symbol>
+</svg>
+
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <svg aria-hidden="true" focusable="false" class="brand__mark"><use href="#i-logo"></use></svg>
+      <div>
+        <div class="brand__name">CLIP<span>VAULT</span></div>
+        <div class="brand__sub">la tanière · v0.1</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav__item is-active" aria-current="page" href="library.html"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg><span>Bibliothèque</span></a>
+      <a class="nav__item" href="upload.html"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-upload"></use></svg><span>Dépôt</span></a>
+    </nav>
+
+    <div class="sidebar__section">
+      <div class="rule-label"><span>Jeux</span></div>
+      <ul class="game-list">
+        <li><a href="library.html"><span>VALORANT</span><span class="num">52</span></a></li>
+        <li><a href="library.html"><span>Rocket League</span><span class="num">41</span></a></li>
+        <li><a href="library.html"><span>Elden Ring</span><span class="num">33</span></a></li>
+        <li><a href="library.html"><span>Counter-Strike 2</span><span class="num">29</span></a></li>
+        <li><a href="library.html"><span>Helldivers 2</span><span class="num">24</span></a></li>
+        <li><a href="library.html"><span>Apex Legends</span><span class="num">18</span></a></li>
+        <li><a href="library.html"><span class="faint">+ 2 autres jeux</span><span class="num">17</span></a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar__foot">
+      <div class="theme-switch">
+        <span class="micro">Thème</span>
+        <div class="theme-switch__swatches">
+          <button class="swatch" data-theme-btn="ember" title="Ember" aria-label="Thème Ember" aria-pressed="true"></button>
+          <button class="swatch" data-theme-btn="tide" title="Tide" aria-label="Thème Tide" aria-pressed="false"></button>
+          <button class="swatch" data-theme-btn="moss" title="Moss" aria-label="Thème Moss" aria-pressed="false"></button>
+          <button class="swatch" data-theme-btn="aurora" title="Aurora" aria-label="Thème Aurora" aria-pressed="false"></button>
+          <button class="swatch" data-theme-btn="paper" title="Paper" aria-label="Thème Paper" aria-pressed="false"></button>
+        </div>
+        <span class="theme-switch__name" data-theme-label>Ember</span>
+      </div>
+      <div class="userchip">
+        <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-user"></use></svg>
+        <span class="name">kael_</span>
+        <span class="num">admin</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="contenu">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Bibliothèque</h1>
+        <p class="page-sub">vault://la-taniere — 214 clips · 38,4 Go · 8 jeux · maj il y a 3 min</p>
+      </div>
+      <div class="topbar__actions">
+        <label class="search">
+          <svg aria-hidden="true" focusable="false" class="ic"><use href="#i-search"></use></svg>
+          <input class="input" type="search" placeholder="Rechercher un clip, un jeu, un joueur…" aria-label="Rechercher">
+        </label>
+        <div class="segmented" role="group" aria-label="Affichage">
+          <button type="button" class="is-active" aria-pressed="true"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-grid"></use></svg>Grille</button>
+          <button type="button" aria-pressed="false"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-list"></use></svg>Liste</button>
+        </div>
+        <div class="select-wrap">
+          <select class="select" aria-label="Tri">
+            <option>Tri : plus récents</option>
+            <option>Tri : plus anciens</option>
+            <option>Tri : durée</option>
+            <option>Tri : taille de fichier</option>
+            <option>Tri : alphabétique</option>
+          </select>
+          <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-down"></use></svg>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <div class="filters">
+        <div class="filter">
+          <span class="micro">Jeu</span>
+          <div class="select-wrap">
+            <select class="select" aria-label="Filtre jeu">
+              <option>Tous les jeux</option>
+              <option>VALORANT</option>
+              <option>Rocket League</option>
+              <option>Elden Ring</option>
+              <option>Counter-Strike 2</option>
+              <option>Helldivers 2</option>
+            </select>
+            <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-down"></use></svg>
+          </div>
+        </div>
+        <div class="filter">
+          <span class="micro">Tag</span>
+          <div class="select-wrap">
+            <select class="select" aria-label="Filtre tag">
+              <option>Tous les tags</option>
+              <option>clutch</option>
+              <option>ace</option>
+              <option>speedrun</option>
+              <option>funny</option>
+              <option>4k</option>
+            </select>
+            <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-down"></use></svg>
+          </div>
+        </div>
+        <div class="filter">
+          <span class="micro">Date</span>
+          <div class="select-wrap">
+            <select class="select" aria-label="Filtre date">
+              <option>30 derniers jours</option>
+              <option>7 derniers jours</option>
+              <option>Cette année</option>
+              <option>Tout</option>
+            </select>
+            <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-down"></use></svg>
+          </div>
+        </div>
+        <div class="filter">
+          <span class="micro">Durée</span>
+          <div class="select-wrap">
+            <select class="select" aria-label="Filtre durée">
+              <option>Toutes durées</option>
+              <option>&lt; 1 min</option>
+              <option>1 – 3 min</option>
+              <option>&gt; 3 min</option>
+            </select>
+            <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-down"></use></svg>
+          </div>
+        </div>
+        <div class="filters__right">
+          <span class="mono">214 résultats · 12 par page</span>
+          <button class="btn btn--ghost btn--sm"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-refresh"></use></svg>Réinitialiser</button>
+        </div>
+      </div>
+
+      <div class="grid-clips">
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#7c2432;--g2:#1b1620">
+            <span class="thumb__code">#0231</span>
+            <span class="thumb__flag">nouveau</span>
+            <span class="thumb__dur">1:32</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Ace à l'Op — clutch 1v3 sur Ascent</h2>
+            <p class="clip__meta">VALORANT · 2560×1440 · 60 fps · 287 Mo</p>
+            <div class="clip__foot"><span class="tag">kael_</span><span class="num">il y a 2 heures</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#2a6db5;--g2:#12263f">
+            <span class="thumb__code">#0230</span>
+            <span class="thumb__dur">0:47</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Airdribble depuis la moitié adverse (ceiling reset)</h2>
+            <p class="clip__meta">Rocket League · 1920×1080 · 60 fps · 94 Mo</p>
+            <div class="clip__foot"><span class="tag">novabyte</span><span class="num">il y a 6 heures</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#8a6a2f;--g2:#241a10">
+            <span class="thumb__code">#0228</span>
+            <span class="thumb__flag">4k</span>
+            <span class="thumb__dur">3:14</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Malenia, phase 2 — sans coup pris</h2>
+            <p class="clip__meta">Elden Ring · 3440×1440 · 60 fps · 1,2 Go</p>
+            <div class="clip__foot"><span class="tag">solstice</span><span class="num">hier</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#b07a2a;--g2:#20180e">
+            <span class="thumb__code">#0226</span>
+            <span class="thumb__dur">0:38</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Ace pistol round — Deagle sur Mirage</h2>
+            <p class="clip__meta">Counter-Strike 2 · 1920×1080 · 60 fps · 76 Mo</p>
+            <div class="clip__foot"><span class="tag">mirakel</span><span class="num">il y a 2 jours</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#c2a13c;--g2:#2a2410">
+            <span class="thumb__code">#0222</span>
+            <span class="thumb__dur">2:05</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Extraction à 0:12 — Helldive impossible</h2>
+            <p class="clip__meta">Helldivers 2 · 2560×1440 · 60 fps · 421 Mo</p>
+            <div class="clip__foot"><span class="tag">bram</span><span class="num">il y a 3 jours</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#a63b2a;--g2:#1e1210">
+            <span class="thumb__code">#0220</span>
+            <span class="thumb__dur">1:48</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">1v9 avec Wraith — fin de partie</h2>
+            <p class="clip__meta">Apex Legends · 1920×1080 · 60 fps · 302 Mo</p>
+            <div class="clip__foot"><span class="tag">fenn</span><span class="num">il y a 4 jours</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#2c7f8f;--g2:#12262b">
+            <span class="thumb__code">#0218</span>
+            <span class="thumb__dur">1:12</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Auteur-fantôme — top 1 France sur Valley</h2>
+            <p class="clip__meta">Trackmania · 2560×1440 · 144 fps · 188 Mo</p>
+            <div class="clip__foot"><span class="tag">yuki.</span><span class="num">il y a 5 jours</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#7c3a52;--g2:#20101a">
+            <span class="thumb__code">#0215</span>
+            <span class="thumb__dur">2:31</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">La cinématique du campement — nuit 14</h2>
+            <p class="clip__meta">Baldur's Gate 3 · 1920×1080 · 60 fps · 512 Mo</p>
+            <div class="clip__foot"><span class="tag">ombre</span><span class="num">il y a 1 semaine</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#c26a2c;--g2:#211509">
+            <span class="thumb__code">#0213</span>
+            <span class="thumb__dur">0:52</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Shatter + Graviton — team wipe enchaîné</h2>
+            <p class="clip__meta">Overwatch 2 · 1920×1080 · 60 fps · 112 Mo</p>
+            <div class="clip__foot"><span class="tag">tali</span><span class="num">il y a 1 semaine</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#3f6a3a;--g2:#131f12">
+            <span class="thumb__code">#0209</span>
+            <span class="thumb__dur">4:07</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Dreadnought en solo — deep dive 3 étoiles</h2>
+            <p class="clip__meta">Deep Rock Galactic · 2560×1440 · 60 fps · 788 Mo</p>
+            <div class="clip__foot"><span class="tag">rook</span><span class="num">il y a 2 semaines</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#7c2432;--g2:#1b1620">
+            <span class="thumb__code">#0206</span>
+            <span class="thumb__dur">0:41</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Retake A — spraydown à travers la fumée</h2>
+            <p class="clip__meta">VALORANT · 1920×1080 · 60 fps · 96 Mo</p>
+            <div class="clip__foot"><span class="tag">novabyte</span><span class="num">il y a 2 semaines</span></div>
+          </div>
+        </a>
+
+        <a class="clip" href="watch.html">
+          <div class="thumb" style="--g1:#2a6db5;--g2:#12263f">
+            <span class="thumb__code">#0202</span>
+            <span class="thumb__dur">0:29</span>
+            <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+          </div>
+          <div class="clip__body">
+            <h2 class="clip__title">Flip reset manqué… puis le but de la gagne</h2>
+            <p class="clip__meta">Rocket League · 1920×1080 · 60 fps · 58 Mo</p>
+            <div class="clip__foot"><span class="tag">kael_</span><span class="num">il y a 3 semaines</span></div>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="pager">
+        <span class="mono">1–12 sur 214</span>
+        <div class="pager__pages">
+          <a href="library.html" aria-label="Page précédente"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-left"></use></svg></a>
+          <span class="is-current" aria-current="page">1</span>
+          <a href="library.html">2</a>
+          <a href="library.html">3</a>
+          <a href="library.html">4</a>
+          <span class="faint">…</span>
+          <a href="library.html">18</a>
+          <a href="library.html" aria-label="Page suivante"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-right"></use></svg></a>
+        </div>
+        <div class="flex">
+          <span class="micro">Par page</span>
+          <div class="select-wrap">
+            <select class="select" aria-label="Résultats par page">
+              <option>12</option>
+              <option>24</option>
+              <option>48</option>
+            </select>
+            <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-down"></use></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt5">
+        <div class="rule-label"><span>État — recherche sans résultat</span></div>
+        <div class="empty">
+          <svg aria-hidden="true" focusable="false" class="ic ic--lg"><use href="#i-search"></use></svg>
+          <p class="section-title">Aucun clip ne correspond à ces filtres</p>
+          <p class="dim">Filtres actifs : <span class="chip chip--sq">tag:clutch</span> <span class="chip chip--sq">durée:&lt;30s</span> <span class="chip chip--sq">jeu:Trackmania</span></p>
+          <div class="flex">
+            <button class="btn btn--primary"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-refresh"></use></svg>Tout réinitialiser</button>
+            <a class="btn btn--ghost" href="upload.html"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-upload"></use></svg>Déposer un clip</a>
+          </div>
+          <p class="mono">La recherche porte sur les titres, les jeux, les joueurs et les tags.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

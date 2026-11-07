@@ -1,0 +1,177 @@
+# ClipVault — serveur
+
+Remplaçant auto-hébergé de FireShare : dépôt et partage de clips de jeux vidéo.
+Node 22 + TypeScript + Fastify + SQLite (`better-sqlite3`) + EJS rendu serveur,
+métadonnées et miniatures via `ffprobe`/`ffmpeg`.
+
+Le design de référence (7 écrans, 5 thèmes) est dans `../design/`.
+
+## Démarrer
+
+```bash
+npm install
+npm run db:seed        # base de démonstration : 5 comptes, 14 clips
+npm start              # http://localhost:8099
+```
+
+En développement : `npm run dev` (rechargement à chaud).
+`npm run build` fait un `tsc --noEmit` complet.
+
+## Configuration
+
+Tout passe par des variables d'environnement (voir `.env.example`).
+
+| Variable | Défaut | Rôle |
+| --- | --- | --- |
+| `PORT` / `HOST` | `8099` / `0.0.0.0` | écoute |
+| `INSTANCE_NAME` | `La Tanière` | nom affiché |
+| `AUTH_MODE` | `dev` | `dev` (bouton local) ou `oidc` (Authentik) |
+| `SESSION_SECRET` | généré | ≥ 32 caractères ; sinon écrit dans `data/.session-secret` |
+| `MAX_UPLOAD_GB` | `4` | taille maximale d'un dépôt |
+| `OIDC_*` | — | obligatoires si `AUTH_MODE=oidc` ; `OIDC_REDIRECT_URI` facultatif (déduit de l'en-tête `Host` si absent) |
+
+## Authentik (SSO)
+
+Le provider OIDC et l'application `ClipVault` existent dans Authentik
+(`auth.lanro.eu`, provider `ClipVault`, application slug `clipvault`), avec
+`clipvault-admins` comme groupe administrateur.
+
+- `AUTH_MODE=oidc` : l'app fait sa propre découverte OIDC, PKCE S256, `state` et
+  `nonce`, échange le code avec `client_secret_basic`, lit `userinfo`.
+- Le rôle vient du groupe : membre de `clipvault-admins` → `admin`, sinon `member`.
+  Il est réévalué à chaque connexion.
+- URI de retour enregistrées : `http://192.168.5.100:8099/auth/callback` et
+  `http://127.0.0.1:8099/auth/callback`.
+
+Vérification automatisée de bout en bout (crée un compte de test en amont) :
+
+```bash
+python3 scripts/oidc-login-check.py --verbose
+```
+
+## Administration
+
+`/admin`, réservé au rôle `admin` : nom d'instance, **thème de l'instance**,
+visibilité par défaut des dépôts, expiration des liens publics, taille maximale,
+mode « sur invitation », liste des membres avec promotion/rétrogradation, et
+jetons d'invitation.
+
+### Thème
+
+Le thème est un réglage **d'instance**, pas une préférence par utilisateur : il
+est choisi dans `/admin`, stocké en base (`settings.theme`) et rendu par le
+serveur dans `<html data-theme>` et `<meta name="theme-color">`. Il n'y a plus
+de sélecteur dans l'interface, ni de `localStorage` : cinq thèmes disponibles
+(Ember, Tide, Moss, Aurora, Paper) qui s'appliquent aussi à la page de connexion
+et aux liens partagés.
+Un jeton s'utilise une fois via `/join/<jeton>`, qui ouvre la connexion SSO ;
+le compte est créé au premier login si `invite_only` est actif.
+
+## Routes
+
+| Route | Accès |
+| --- | --- |
+| `GET /library` | public (clips visibles selon la session) |
+| `GET /watch/:slug` | selon visibilité du clip |
+| `GET /c/:slug` | lien public, sans compte |
+| `GET /upload` | connecté |
+| `POST /upload` | connecté, `multipart/form-data` |
+| `GET /media/:slug/video` | `Range` supporté, 206 |
+| `GET /media/:slug/thumb` | JPEG |
+| `POST /clips/:slug/delete` | auteur ou admin |
+| `GET /login`, `GET /auth/start`, `GET /auth/callback`, `POST /auth/logout` | — |
+| `GET /api/jobs` | JSON, file d'attente |
+| `GET /admin` | admin |
+| `POST /admin/settings`, `POST /admin/invites`, `POST /admin/invites/:id/revoke`, `POST /admin/members/:id/role` | admin |
+| `GET /join/:token` | public (jeton à usage unique) |
+
+## Visibilité
+
+- `public` — listé et lisible par tout le monde
+- `members` — réservé aux comptes connectés
+- `link` — non listé, lisible par quiconque a l'URL (`/c/:slug`)
+
+## Données
+
+Tout est dans `data/` (ignoré par git) : `clipvault.db`, `media/`, `.session-secret`.
+Sauvegarde = copier ce dossier.
+
+## Déploiement : CT GammaClips
+
+L'instance de référence tourne sur le CT `GammaClips` (`192.168.1.243`),
+à côté des fichiers de l'ancien FireShare.
+
+| Élément | Valeur |
+| --- | --- |
+| Code | `/opt/clipvault` |
+| Conteneur | `clipvault` (image `clipvault:dev`, policy `unless-stopped`) |
+| Port | `8099` publié sur toutes les interfaces du CT |
+| Données | `/opt/clipvault/data` (`clipvault.db`, `media/`, `.session-secret`) |
+| Médias | `/srv/fireshare/videos/uploads` monté **en lecture seule** sur `/media-src` |
+| Accès LAN | **http://192.168.5.100:8099** |
+
+### Mise à jour
+
+```bash
+# depuis le poste de dev
+tar -czf /tmp/clipvault-src.tar.gz --exclude=node_modules --exclude=data --exclude=.env .
+scp /tmp/clipvault-src.tar.gz root@192.168.1.243:/root/
+ssh root@192.168.1.243 'cd /opt/clipvault && tar -xzf /root/clipvault-src.tar.gz --strip-components=1 && docker compose up -d --build'
+```
+
+### Import des vidéos existantes
+
+`src/import.ts` parcourt un dossier, sonde chaque fichier avec `ffprobe`,
+extrait une miniature, devine le jeu d'après le nom, et crée un **lien
+symbolique** dans `data/media` plutôt qu'une copie. Aucun octet n'est dupliqué,
+mais **si `/srv/fireshare/videos/uploads` est déplacé, les liens cassent**.
+
+```bash
+docker compose exec -T clipvault npx tsx src/import.ts /media-src <membre>
+```
+
+L'import est idempotent (`source_path` en base) : relancer ne crée pas de doublon.
+
+### Accès depuis le LAN
+
+`192.168.1.0/24` n'est joignable que par gammaWTR, via WireGuard. Le LAN passe
+donc par un DNAT sur gammaWTR (règles persistées par `netfilter-persistent`) :
+
+```
+navigateur -> http://192.168.5.100:8099
+  -> DNAT vmbr0:8099 -> 192.168.1.243:8099 (MASQUERADE vers wg0)
+    -> conteneur clipvault
+```
+
+Retour à l'ancienne cible (instance de dev sur plasmasrv) :
+
+```bash
+iptables -t nat -D PREROUTING -i vmbr0 -p tcp --dport 8099 -j DNAT --to-destination 192.168.1.243:8099
+iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 8099 -j DNAT --to-destination 10.10.10.1:8099
+iptables -t nat -A POSTROUTING -d 10.10.10.1/32 -o wg0 -p tcp --dport 8099 -j MASQUERADE
+netfilter-persistent save
+```
+
+### FireShare
+
+Les conteneurs sont arrêtés, les fichiers intacts (`/srv/fireshare`, 5,0 Go, 9 vidéos).
+Pour le remettre en service :
+
+```bash
+cd /opt/fireshare && docker compose start
+```
+
+### Limites connues sur ce déploiement
+
+- un seul fichier source par clip, pas de transcodage : le clip de 71 min / 4,3 Go
+  est servi tel quel (lecture par `Range`, donc pas de téléchargement complet)
+- les titres importés viennent des noms de fichiers (`IMG 1090`,
+  `2025.08.27 — 23.14`) : il n'existe pas encore d'édition de métadonnées
+- HTTP en clair sur le LAN, aucune exposition publique
+
+## Reste à faire
+
+- Transcodage (aujourd'hui : un seul fichier source + miniature)
+- Purge automatique des `link` expirés et des fichiers orphelins
+- Profil joueur et page « mes clips »
+- Tests automatisés du parcours d'upload

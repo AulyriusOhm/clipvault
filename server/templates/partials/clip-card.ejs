@@ -1,0 +1,15 @@
+<a class="clip" href="/watch/<%= clip.slug %>">
+  <div class="thumb<%= clip.thumb_path ? '' : ' thumb--empty' %>">
+    <% if (clip.thumb_path) { %>
+    <img class="thumb__img" src="/media/<%= clip.slug %>/thumb" alt="" loading="lazy">
+    <% } %>
+    <span class="thumb__code">#<%= String(clip.code).padStart(4, '0') %></span>
+    <span class="thumb__dur"><%= fmt.duration(clip.duration_s) %></span>
+    <span class="thumb__play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play-fill"></use></svg></span>
+  </div>
+  <div class="clip__body">
+    <h2 class="clip__title"><%= clip.title %></h2>
+    <p class="clip__meta"><%= clip.game_name ? clip.game_name + ' · ' : '' %><%= fmt.resolution(clip.width, clip.height) %> · <%= Math.round(clip.fps) %> fps · <%= fmt.bytes(clip.size_bytes) %></p>
+    <div class="clip__foot"><span class="tag"><%= clip.uploader || 'inconnu' %></span><span class="num"><%= fmt.relative(clip.created_at) %></span></div>
+  </div>
+</a>

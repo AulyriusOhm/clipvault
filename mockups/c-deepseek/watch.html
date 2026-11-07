@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="ember">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121010">
+<title>On a vendu le vaisseau pendant le saut — ClipVault</title>
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <symbol id="i-vault" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3.2"/><path d="M3 9h2.2M18.8 9H21M3 15h2.2M18.8 15H21"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M12 4 8 8M12 4l4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h8M18 7h2M4 17h4M12 17h8"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 5.2v13.6L20 12 8.5 5.2Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M12 15l-4-4M12 15l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.5 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.4-1.4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.8h5V7M6.2 7l.9 13h9.8l.9-13"/><path d="M10 11v5.5M14 11v5.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 20 6.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 20h18.4L12 4Z"/><path d="M12 10v4.2M12 17.2h.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 4.5 16.5 12 9 19.5"/></symbol>
+  <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M4.5 9 12 16.5 19.5 9"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"/><path d="M16 9a4.2 4.2 0 0 1 0 6"/></symbol>
+  <symbol id="i-cc" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M10.5 10.4a2.2 2.2 0 1 0 0 3.2M17.5 10.4a2.2 2.2 0 1 0 0 3.2"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9.5 4H4v5.5M14.5 4H20v5.5M14.5 20H20v-5.5M9.5 20H4v-5.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3.2 2"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8"/><path d="M17.5 8 21.5 12l-4 4M10 12h11"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1"/><path d="M7.5 4.5v15M16.5 4.5v15M3 9.5h4.5M3 14.5h4.5M16.5 9.5H21M16.5 14.5H21"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.4 3.2 7.7 7.5 9 4.3-1.3 7.5-4.6 7.5-9V6L12 3Z"/><path d="M8.8 12.2 11 14.4l4.4-4.4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 6.5 12 6.5 21.5 12 21.5 12 18 17.5 12 17.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.6"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-8.5 8.5"/><path d="M17 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h4"/></symbol>
+</svg>
+
+<div class="app">
+
+  <aside class="rail">
+    <a class="brand" href="library.html">
+      <svg class="icon icon--20 brand-mark" aria-hidden="true"><use href="#i-vault"/></svg>
+      <span class="brand-name">ClipVault</span>
+      <span class="brand-ver">0.4.2</span>
+    </a>
+
+    <nav class="nav" aria-label="Navigation principale">
+      <a class="nav-item" href="library.html" aria-current="page">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-grid"/></svg>
+        <span>Bibliothèque</span>
+        <span class="nav-count">142</span>
+      </a>
+      <a class="nav-item" href="upload.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-upload"/></svg>
+        <span>Déposer</span>
+      </a>
+      <a class="nav-item" href="library.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-tag"/></svg>
+        <span>Tags</span>
+        <span class="nav-count">26</span>
+      </a>
+      <a class="nav-item" href="library.html">
+        <svg class="icon icon--18" aria-hidden="true"><use href="#i-sliders"/></svg>
+        <span>Réglages</span>
+      </a>
+    </nav>
+
+    <div class="rail-sec rail-sec--grow">
+      <div class="storage-head">
+        <span class="eyebrow">Stockage</span>
+        <span class="mono faint">38 %</span>
+      </div>
+      <div class="storage-bar"><i style="width:38.4%"></i></div>
+      <div class="mono faint" style="margin-top:6px">38,4 Go / 100 Go</div>
+    </div>
+
+    <div class="rail-sec">
+      <div class="eyebrow" style="margin-bottom:6px">Thème</div>
+      <div data-theme-mount="rail"></div>
+    </div>
+
+    <div class="rail-user">
+      <span class="avatar">NL</span>
+      <span class="who">
+        <b>nils</b>
+        <span>nils@ares-01</span>
+      </span>
+      <a class="btn btn--ghost btn--icon btn--sm" href="login.html" title="Se déconnecter" aria-label="Se déconnecter">
+        <svg class="icon icon--16" aria-hidden="true"><use href="#i-logout"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <header class="topbar">
+      <div class="crumb">
+        <span>clipvault.local</span>
+        <span class="sep">/</span>
+        <a href="library.html">bibliothèque</a>
+        <span class="sep">/</span>
+        <b>8f3a2c</b>
+      </div>
+      <div class="topbar-actions">
+        <span class="mono faint">412 vues</span>
+        <a class="btn btn--primary" href="upload.html">
+          <svg class="icon icon--16" aria-hidden="true"><use href="#i-upload"/></svg>
+          Déposer un clip
+        </a>
+      </div>
+    </header>
+
+    <main class="page">
+
+      <div class="page-head">
+        <div class="titles">
+          <a class="btn btn--ghost btn--sm" href="library.html" style="margin-left:-8px">
+            <svg class="icon icon--16" aria-hidden="true"><use href="#i-chev-l"/></svg>
+            Bibliothèque
+          </a>
+          <h1 class="page-title" style="font-size:18px;margin-top:6px">On a vendu le vaisseau pendant le saut</h1>
+          <div class="page-sub">
+            <span>Sea of Thieves</span>
+            <span class="faint">·</span>
+            <span class="faint">wren</span>
+            <span class="faint">·</span>
+            <span class="faint">il y a 4 jours</span>
+            <span class="faint">·</span>
+            <span class="faint">03:47</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="watch">
+
+        <div>
+          <figure class="player" style="--h:195">
+            <div class="player-stage">
+              <div class="player-badges">
+                <span>2560 × 1440</span>
+                <span>60 fps</span>
+                <span>HEVC</span>
+              </div>
+              <span class="player-leader">47</span>
+              <button class="player-play" type="button" aria-label="Lire le clip">
+                <svg class="icon icon--24" aria-hidden="true"><use href="#i-play"/></svg>
+              </button>
+            </div>
+
+            <div class="player-bar">
+              <button class="pbtn" type="button" aria-label="Pause">
+                <svg class="icon icon--16" aria-hidden="true"><use href="#i-pause"/></svg>
+              </button>
+              <div class="scrub" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="227" aria-valuenow="73" tabindex="0">
+                <div class="scrub-track">
+                  <div class="scrub-fill"></div>
+                  <span class="scrub-tick" style="left:18%"></span>
+                  <span class="scrub-tick" style="left:47%"></span>
+                  <span class="scrub-tick" style="left:78%"></span>
+                </div>
+              </div>
+              <span class="tc"><b>01:12</b> / 03:47</span>
+              <div class="ctl">
+                <button type="button" aria-label="Volume"><svg class="icon icon--16" aria-hidden="true"><use href="#i-volume"/></svg></button>
+                <button type="button" aria-label="Sous-titres"><svg class="icon icon--16" aria-hidden="true"><use href="#i-cc"/></svg></button>
+                <button type="button" aria-label="Plein écran"><svg class="icon icon--16" aria-hidden="true"><use href="#i-expand"/></svg></button>
+              </div>
+            </div>
+
+            <div class="player-foot">
+              <button class="btn btn--primary" type="button">
+                <svg class="icon icon--16" aria-hidden="true"><use href="#i-link"/></svg>
+                Copier le lien
+              </button>
+              <button class="btn" type="button">
+                <svg class="icon icon--16" aria-hidden="true"><use href="#i-download"/></svg>
+                Télécharger · 1,24 Go
+              </button>
+              <span class="spacer"></span>
+              <button class="btn btn--danger" type="button">
+                <svg class="icon icon--16" aria-hidden="true"><use href="#i-trash"/></svg>
+                Supprimer
+              </button>
+            </div>
+          </figure>
+
+          <div class="watch-body">
+            <p class="watch-desc">
+              Saut par-dessus la tempête, vente du navire à un équipage qui nous suivait depuis
+              trois îles, puis fuite en dorade. On perd la cargaison mais on garde le sloop — et le
+              coffre était vide de toute façon. Enregistré en 1440p60, sans coupure.
+            </p>
+            <div class="tags">
+              <a class="tag" href="library.html">coop</a>
+              <a class="tag" href="library.html">pvp</a>
+              <a class="tag" href="library.html">clutch</a>
+              <a class="tag" href="library.html">sloop</a>
+              <a class="tag" href="library.html">wren-pov</a>
+            </div>
+            <div class="alert">
+              <svg class="icon icon--16" aria-hidden="true"><use href="#i-eye"/></svg>
+              <div>
+                <b>Visible par le lien.</b> Toute personne disposant de l'adresse peut lire ce clip.
+                <div class="detail">partagé 3 fois · 412 vues · 28 téléchargements</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+
+          <section class="panel">
+            <div class="panel-head">
+              <svg class="icon icon--16 faint" aria-hidden="true"><use href="#i-film"/></svg>
+              <span class="eyebrow">Fiche technique</span>
+              <span class="right mono faint">8f3a2c</span>
+            </div>
+            <div class="panel-body">
+              <dl class="dl">
+                <div><dt>Jeu</dt><dd>Sea of Thieves</dd></div>
+                <div><dt>Joueur</dt><dd>wren</dd></div>
+                <div><dt>Capturé</dt><dd>il y a 4 jours · 21:48</dd></div>
+                <div><dt>Durée</dt><dd>03:47</dd></div>
+                <div><dt>Résolution</dt><dd>2560 × 1440</dd></div>
+                <div><dt>Cadence</dt><dd>60 fps</dd></div>
+                <div><dt>Codec</dt><dd>HEVC Main10</dd></div>
+                <div><dt>Débit</dt><dd>18,4 Mb/s</dd></div>
+                <div><dt>Taille</dt><dd>1,24 Go</dd></div>
+                <div><dt>Fichier</dt><dd title="sot_vente_sloop_1440p60.mp4">sot_vente_sloop_1440p60.mp4</dd></div>
+              </dl>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <svg class="icon icon--16 faint" aria-hidden="true"><use href="#i-share"/></svg>
+              <span class="eyebrow">Partage</span>
+            </div>
+            <div class="panel-body" style="display:flex;flex-direction:column;gap:12px">
+              <div class="field">
+                <span class="field-label">Lien direct</span>
+                <div class="share">
+                  <input class="input input--mono" value="https://clipvault.local/v/8f3a2c" readonly aria-label="Lien de partage">
+                  <button class="btn btn--icon" type="button" aria-label="Copier le lien">
+                    <svg class="icon icon--16" aria-hidden="true"><use href="#i-copy"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="field">
+                <span class="field-label">Visibilité</span>
+                <div class="seg" role="group" aria-label="Visibilité">
+                  <button type="button" aria-pressed="false"><span class="dot"></span>Privé</button>
+                  <button type="button" aria-pressed="true"><span class="dot"></span>Lien</button>
+                  <button type="button" aria-pressed="false"><span class="dot"></span>Public</button>
+                </div>
+              </div>
+              <div class="alert alert--ok">
+                <svg class="icon icon--16" aria-hidden="true"><use href="#i-check"/></svg>
+                <div>
+                  <b>Lien copié</b> dans le presse-papiers.
+                  <div class="detail">expire jamais · régénérer l'identifiant</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <svg class="icon icon--16 faint" aria-hidden="true"><use href="#i-clock"/></svg>
+              <span class="eyebrow">Historique</span>
+            </div>
+            <div class="panel-body">
+              <dl class="dl">
+                <div><dt>Déposé</dt><dd>12 mars, 21:52</dd></div>
+                <div><dt>Par</dt><dd>wren</dd></div>
+                <div><dt>Transcodé</dt><dd>1440p · 1080p · 720p</dd></div>
+                <div><dt>Dernière vue</dt><dd>il y a 6 min</dd></div>
+              </dl>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <section class="next">
+        <div class="next-head">
+          <span class="eyebrow">À suivre</span>
+          <span class="mono faint">même jeu · même joueur</span>
+          <a class="btn btn--ghost btn--sm" href="library.html">Tout voir</a>
+        </div>
+
+        <div class="sheet sheet--4">
+
+          <article class="clip">
+            <a class="clip-link" href="watch.html">
+              <div class="thumb" style="--h:200">
+                <span class="thumb-idx">13</span>
+                <span class="thumb-leader">26</span>
+                <span class="thumb-dur">02:26</span>
+              </div>
+              <div class="clip-body">
+                <h3 class="clip-title">Le kraken pendant qu'on répare</h3>
+                <p class="clip-sub">Sea of Thieves <span class="dot">·</span> wren</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="clip">
+            <a class="clip-link" href="watch.html">
+              <div class="thumb" style="--h:180">
+                <span class="thumb-idx">14</span>
+                <span class="thumb-leader">09</span>
+                <span class="thumb-dur">00:54</span>
+              </div>
+              <div class="clip-body">
+                <h3 class="clip-title">Fort du crâne à deux, sans mourir</h3>
+                <p class="clip-sub">Sea of Thieves <span class="dot">·</span> brou</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="clip">
+            <a class="clip-link" href="watch.html">
+              <div class="thumb" style="--h:210">
+                <span class="thumb-idx">15</span>
+                <span class="thumb-leader">18</span>
+                <span class="thumb-dur">01:18</span>
+              </div>
+              <div class="clip-body">
+                <h3 class="clip-title">Trois gallons, un seul tonneau</h3>
+                <p class="clip-sub">Sea of Thieves <span class="dot">·</span> kaz</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="clip">
+            <a class="clip-link" href="watch.html">
+              <div class="thumb" style="--h:160">
+                <span class="thumb-idx">16</span>
+                <span class="thumb-leader">33</span>
+                <span class="thumb-dur">00:33</span>
+              </div>
+              <div class="clip-body">
+                <h3 class="clip-title">Ancrage raté, navire à la dérive</h3>
+                <p class="clip-sub">Sea of Thieves <span class="dot">·</span> sigrid</p>
+              </div>
+            </a>
+          </article>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

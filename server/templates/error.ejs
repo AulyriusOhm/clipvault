@@ -1,0 +1,28 @@
+<%- include('partials/shell-start', { title: title, active: '' }) %>
+
+    <header class="topbar">
+      <div>
+        <p class="micro"><a href="/library">Bibliothèque</a> · erreur</p>
+        <h1 class="page-title mt2"><%= heading %></h1>
+        <p class="page-sub"><%= sub %></p>
+      </div>
+      <div class="topbar__actions">
+        <a class="btn" href="/library"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-left"></use></svg>Retour à la bibliothèque</a>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="empty">
+        <svg aria-hidden="true" focusable="false" class="ic ic--lg"><use href="#i-alert"></use></svg>
+        <p class="section-title"><%= heading %></p>
+        <p class="dim"><%= body %></p>
+        <div class="flex">
+          <% actions.forEach(function (action) { %>
+          <a class="btn btn--primary" href="<%= action.href %>"><%= action.label %></a>
+          <% }); %>
+        </div>
+        <p class="mono">Si vous êtes arrivé par un lien partagé, demandez un nouveau lien à la personne qui vous l'a envoyé.</p>
+      </div>
+    </div>
+
+<%- include('partials/shell-end') %>

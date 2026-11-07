@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="ember">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121010">
+<title>Connexion — ClipVault</title>
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <symbol id="i-vault" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3.2"/><path d="M3 9h2.2M18.8 9H21M3 15h2.2M18.8 15H21"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v6c0 4.4 3.2 7.7 7.5 9 4.3-1.3 7.5-4.6 7.5-9V6L12 3Z"/><path d="M8.8 12.2 11 14.4l4.4-4.4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 20h18.4L12 4Z"/><path d="M12 10v4.2M12 17.2h.01"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 4.5 16.5 12 9 19.5"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1"/><path d="M7.5 4.5v15M16.5 4.5v15M3 9.5h4.5M3 14.5h4.5M16.5 9.5H21M16.5 14.5H21"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M17 17l2-2M14.5 14.5 16 13"/></symbol>
+</svg>
+
+<div class="auth-page">
+
+  <section class="leader">
+    <div class="leader-brand">
+      <svg class="icon icon--20 brand-mark" aria-hidden="true"><use href="#i-vault"/></svg>
+      <span class="brand-name">ClipVault</span>
+      <span class="brand-ver mono">0.4.2</span>
+    </div>
+
+    <div class="leader-mid">
+      <span class="kicker">Instance auto-hébergée</span>
+      <h2>Les clips restent sur <em>votre</em> serveur.</h2>
+      <p>
+        Dépôt, transcodage et partage par lien, sur une machine que vous administrez.
+        Aucun fichier, aucune vignette, aucune métadonnée ne quitte le réseau local.
+      </p>
+    </div>
+
+    <dl class="leader-facts">
+      <div><dt>Clips</dt><dd>142</dd></div>
+      <div><dt>Membres</dt><dd>7</dd></div>
+      <div><dt>Stockage</dt><dd>38,4 / 100 Go</dd></div>
+      <div><dt>Nœud</dt><dd>ares-01</dd></div>
+      <div><dt>Dernier dépôt</dt><dd>il y a 2 h</dd></div>
+      <div><dt>Uptime</dt><dd>41 j</dd></div>
+    </dl>
+
+    <span class="leader-leader" aria-hidden="true">07</span>
+  </section>
+
+  <section class="auth">
+
+    <div class="auth-card">
+
+      <div class="auth-head">
+        <span class="inst">
+          <svg class="icon icon--16" aria-hidden="true"><use href="#i-shield"/></svg>
+          clipvault.local
+          <span class="faint">· ares-01</span>
+        </span>
+        <h1>Connexion</h1>
+        <p>
+          Cette instance n'accepte pas de mot de passe local.
+          L'identité est vérifiée par Authentik, puis relayée ici par OIDC.
+        </p>
+      </div>
+
+      <div class="alert alert--error">
+        <svg class="icon icon--16" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div>
+          <b>La session a expiré.</b> Reconnectez-vous pour reprendre la lecture.
+          <div class="detail">invalid_request · 14:02:11 · id_token expiré après 8 h</div>
+        </div>
+      </div>
+
+      <button class="btn btn--primary btn-sso" type="button">
+        <span class="sso-mark">
+          <svg class="icon icon--18" aria-hidden="true"><use href="#i-shield"/></svg>
+        </span>
+        Se connecter avec Authentik
+      </button>
+
+      <div class="auth-alt">OIDC · PKCE</div>
+
+      <button class="btn btn-sso" type="button" style="height:38px;font-weight:450">
+        <span class="sso-mark">
+          <svg class="icon icon--16" aria-hidden="true"><use href="#i-key"/></svg>
+        </span>
+        Utiliser un jeton d'API
+      </button>
+
+      <p class="auth-note">
+        Vous serez redirigé vers <b>authentik.ares-01.local</b>.<br>
+        ClipVault ne stocke aucun mot de passe, seulement l'identifiant du compte
+        et son groupe d'accès.
+      </p>
+
+    </div>
+
+    <div class="auth-foot">
+      <span>v0.4.2 · auto-hébergé</span>
+      <a href="library.html">Passer en lecture seule →</a>
+    </div>
+
+  </section>
+
+</div>
+
+<div data-theme-mount="float"></div>
+
+</body>
+</html>

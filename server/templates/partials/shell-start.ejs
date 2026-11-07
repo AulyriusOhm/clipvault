@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="<%= theme.key %>">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %></title>
+<meta name="theme-color" content="<%= theme.background %>">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<%- include('sprite') %>
+
+<div class="app">
+
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Retour à l'accueil">
+      <svg aria-hidden="true" focusable="false" class="brand__mark"><use href="#i-logo"></use></svg>
+      <div>
+        <div class="brand__name">CLIP<span>VAULT</span></div>
+        <div class="brand__sub"><%= instance %> · v0.1</div>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a class="nav__item<%= active === 'library' ? ' is-active' : '' %>"<%= active === 'library' ? ' aria-current="page"' : '' %> href="/library"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg><span>Bibliothèque</span></a>
+      <a class="nav__item<%= active === 'upload' ? ' is-active' : '' %>"<%= active === 'upload' ? ' aria-current="page"' : '' %> href="/upload"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-upload"></use></svg><span>Dépôt</span></a>
+      <% if (user && user.role === 'admin') { %>
+      <a class="nav__item<%= active === 'admin' ? ' is-active' : '' %>"<%= active === 'admin' ? ' aria-current="page"' : '' %> href="/admin"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-sliders"></use></svg><span>Réglages</span></a>
+      <% } %>
+    </nav>
+
+    <div class="sidebar__section">
+      <div class="rule-label"><span>Jeux</span></div>
+      <ul class="game-list">
+        <% games.slice(0, 6).forEach(function (game) { %>
+        <li><a href="/library?game=<%= game.slug %>"><span><%= game.name %></span><span class="num"><%= game.count %></span></a></li>
+        <% }); %>
+        <% if (games.length > 6) { %>
+        <li><a href="/library"><span class="faint">+ <%= games.length - 6 %> autres jeux</span><span class="num"><%= games.slice(6).reduce(function (n, g) { return n + g.count; }, 0) %></span></a></li>
+        <% } %>
+      </ul>
+    </div>
+
+    <div class="sidebar__foot">
+      <% if (user) { %>
+      <div class="userchip">
+        <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-user"></use></svg>
+        <span class="name"><%= user.username %></span>
+        <span class="num"><%= user.role %></span>
+        <form method="post" action="/auth/logout">
+          <button class="btn btn--icon btn--sm btn--ghost" aria-label="Se déconnecter"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></button>
+        </form>
+      </div>
+      <% } else { %>
+      <a class="userchip" href="/login">
+        <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-lock"></use></svg>
+        <span class="name">Se connecter</span>
+        <span class="num">SSO</span>
+      </a>
+      <% } %>
+    </div>
+  </aside>
+
+  <main class="main" id="contenu">

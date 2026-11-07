@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="ember">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dépôt — ClipVault</title>
+<meta name="theme-color" content="#16110c">
+<script src="theme.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-logo" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <rect x="3.5" y="3.5" width="17" height="17" rx="2"/>
+    <path d="M10 8.4 16.2 12 10 15.6Z" fill="currentColor" stroke="none"/>
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="11" cy="11" r="6.5"/><path d="M16 16 20.5 20.5"/>
+  </symbol>
+  <symbol id="i-film" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M8 5v14M16 5v14"/>
+  </symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M12 16V4M7.5 8.5 12 4l4.5 4.5M4 20h16"/>
+  </symbol>
+  <symbol id="i-play" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M8 5.5 18.5 12 8 18.5Z"/>
+  </symbol>
+  <symbol id="i-play-fill" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5.5 18.5 12 8 18.5Z"/>
+  </symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M9.5 5v14M14.5 5v14"/>
+  </symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4z"/><path d="M15.5 9.6c1.5 1.3 1.5 3.5 0 4.8"/><path d="M18 7c2.9 2.8 2.9 7.2 0 10"/>
+  </symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+  </symbol>
+  <symbol id="i-link" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M9.5 14.5 8 16a3.5 3.5 0 0 1-5-5l1.5-1.5"/><path d="M14.5 9.5 16 8a3.5 3.5 0 0 1 5 5l-1.5 1.5"/><path d="m8.5 15.5 7-7"/>
+  </symbol>
+  <symbol id="i-download" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M12 3.5v11M7.5 10 12 14.5 16.5 10M4 19.5h16"/>
+  </symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 6.5h16M9 6.5V4h6v2.5M6.5 6.5 7.5 20h9l1-13.5M10 10v6.5M14 10v6.5"/>
+  </symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M12 5v14M5 12h14"/>
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m6 6 12 12M18 6 6 18"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m5 12.5 5 5L19 7"/>
+  </symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M12 4 21 19.5H3Z"/><path d="M12 10v4.5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 4h7l9 9-7 7-9-9z"/><path d="M8 8h.01"/>
+  </symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <rect x="3.5" y="5.5" width="17" height="15" rx="1.5"/><path d="M3.5 10.5h17M8 3.5v4M16 3.5v4"/>
+  </symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3.5 2"/>
+  </symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c0-3.9 3.1-6 7-6s7 2.1 7 6"/>
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="5" y="10.5" width="14" height="9.5" rx="1.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>
+  </symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.5 2.2 2.5 13.8 0 16M12 4c-2.5 2.2-2.5 13.8 0 16"/>
+  </symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M2.5 12S6 6.5 12 6.5 21.5 12 21.5 12 18 17.5 12 17.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>
+  </symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>
+  </symbol>
+  <symbol id="i-chev-down" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m6 9.5 6 6 6-6"/>
+  </symbol>
+  <symbol id="i-chev-left" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M14.5 6 8.5 12l6 6"/>
+  </symbol>
+  <symbol id="i-chev-right" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="m9.5 6 6 6-6 6"/>
+  </symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/>
+  </symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M4 7h2M9 7h11M4 12h2M9 12h11M4 17h2M9 17h11"/>
+  </symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M4 7h16M4 12h16M4 17h16"/><rect x="7" y="5" width="4" height="4"/><rect x="13" y="10" width="4" height="4"/><rect x="9" y="15" width="4" height="4"/>
+  </symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M4 7h13M4 12h9M4 17h5M17 10v8M14 15l3 3 3-3"/>
+  </symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M3.5 19.5v-13h6l2 2.5h9v10.5z"/>
+  </symbol>
+  <symbol id="i-server" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <rect x="3.5" y="4.5" width="17" height="6" rx="1"/><rect x="3.5" y="13.5" width="17" height="6" rx="1"/><path d="M6.5 7.5h3M6.5 16.5h3"/>
+  </symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="square">
+    <path d="M20 5.5v5h-5M4 18.5v-5h5"/><path d="M19.2 10.5a7.5 7.5 0 0 0-13-2.6L4 10.5"/><path d="M4.8 13.5a7.5 7.5 0 0 0 13 2.6L20 13.5"/>
+  </symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linejoin="miter">
+    <path d="M12 3.5 20 6v6c0 4.4-3.2 7.4-8 8.5-4.8-1.1-8-4.1-8-8.5V6z"/><path d="m8.8 12 2.2 2.2 4.5-4.5"/>
+  </symbol>
+</svg>
+
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <svg aria-hidden="true" focusable="false" class="brand__mark"><use href="#i-logo"></use></svg>
+      <div>
+        <div class="brand__name">CLIP<span>VAULT</span></div>
+        <div class="brand__sub">la tanière · v0.1</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav__item" href="library.html"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg><span>Bibliothèque</span></a>
+      <a class="nav__item is-active" aria-current="page" href="upload.html"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-upload"></use></svg><span>Dépôt</span></a>
+    </nav>
+
+    <div class="sidebar__section">
+      <div class="rule-label"><span>Jeux</span></div>
+      <ul class="game-list">
+        <li><a href="library.html"><span>VALORANT</span><span class="num">52</span></a></li>
+        <li><a href="library.html"><span>Rocket League</span><span class="num">41</span></a></li>
+        <li><a href="library.html"><span>Elden Ring</span><span class="num">33</span></a></li>
+        <li><a href="library.html"><span>Counter-Strike 2</span><span class="num">29</span></a></li>
+        <li><a href="library.html"><span>Helldivers 2</span><span class="num">24</span></a></li>
+        <li><a href="library.html"><span>Apex Legends</span><span class="num">18</span></a></li>
+        <li><a href="library.html"><span class="faint">+ 2 autres jeux</span><span class="num">17</span></a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar__foot">
+      <div class="theme-switch">
+        <span class="micro">Thème</span>
+        <div class="theme-switch__swatches">
+          <button class="swatch" data-theme-btn="ember" title="Ember" aria-label="Thème Ember" aria-pressed="true"></button>
+          <button class="swatch" data-theme-btn="tide" title="Tide" aria-label="Thème Tide" aria-pressed="false"></button>
+          <button class="swatch" data-theme-btn="moss" title="Moss" aria-label="Thème Moss" aria-pressed="false"></button>
+          <button class="swatch" data-theme-btn="aurora" title="Aurora" aria-label="Thème Aurora" aria-pressed="false"></button>
+          <button class="swatch" data-theme-btn="paper" title="Paper" aria-label="Thème Paper" aria-pressed="false"></button>
+        </div>
+        <span class="theme-switch__name" data-theme-label>Ember</span>
+      </div>
+      <div class="userchip">
+        <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-user"></use></svg>
+        <span class="name">kael_</span>
+        <span class="num">admin</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="contenu">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Dépôt</h1>
+        <p class="page-sub">upload://la-taniere — 4 fichiers en file · 1 en cours · limite 2 Go / fichier</p>
+      </div>
+      <div class="topbar__actions">
+        <span class="badge badge--run">1 upload en cours</span>
+        <button class="btn btn--ghost"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-folder"></use></svg>Dossier de capture</button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <div class="drop">
+        <svg aria-hidden="true" focusable="false" class="ic ic--lg"><use href="#i-upload"></use></svg>
+        <p class="section-title">Déposez vos clips ici</p>
+        <p class="dim">MP4, MKV, WebM ou MOV — 2 Go maximum par fichier, plusieurs fichiers acceptés.</p>
+        <button class="btn btn--primary"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-plus"></use></svg>Parcourir les fichiers…</button>
+        <p class="mono">Raccourci : glisser-déposer depuis OBS, ShadowPlay ou un dossier.</p>
+      </div>
+
+      <div class="upload-cols mt5">
+
+        <section>
+          <div class="rule-label"><span>File d'attente — 4 fichiers</span></div>
+          <div class="panel" aria-live="polite" aria-label="File d'attente des téléversements">
+
+            <div class="qitem">
+              <div class="qitem__icon"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg></div>
+              <div>
+                <div class="flex flex--between">
+                  <span class="qitem__name">ace_ascent_4k.mp4</span>
+                  <span class="badge badge--run">En cours</span>
+                </div>
+                <div class="qitem__meta">287 Mo · 18,4 Mo/s · 00:41 restant · 62 %</div>
+                <div class="progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Téléversement de ace_ascent_4k.mp4 — en cours, 62 %"><div class="progress__bar" style="width:62%"></div></div>
+              </div>
+              <button class="btn btn--icon btn--sm btn--ghost" aria-label="Annuler"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></button>
+            </div>
+
+            <div class="qitem">
+              <div class="qitem__icon"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg></div>
+              <div>
+                <div class="flex flex--between">
+                  <span class="qitem__name">malenia_phase2_nomiss.mkv</span>
+                  <span class="badge">En attente</span>
+                </div>
+                <div class="qitem__meta">1,4 Go · démarrage après le fichier en cours · 0 %</div>
+                <div class="progress" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" aria-label="Téléversement de malenia_phase2_nomiss.mkv — en attente"><div class="progress__bar" style="width:2%"></div></div>
+              </div>
+              <button class="btn btn--icon btn--sm btn--ghost" aria-label="Retirer de la file"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></button>
+            </div>
+
+            <div class="qitem">
+              <div class="qitem__icon"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg></div>
+              <div>
+                <div class="flex flex--between">
+                  <span class="qitem__name">airdribble_ceiling.mp4</span>
+                  <span class="badge badge--ok">Terminé</span>
+                </div>
+                <div class="qitem__meta">94 Mo · 8 s · transcodé en 1080p · miniature générée</div>
+                <div class="progress" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Téléversement de airdribble_ceiling.mp4 — terminé"><div class="progress__bar progress__bar--ok" style="width:100%"></div></div>
+              </div>
+              <a class="btn btn--icon btn--sm btn--ghost" href="watch.html" aria-label="Voir le clip"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-right"></use></svg></a>
+            </div>
+
+            <div class="qitem">
+              <div class="qitem__icon"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-alert"></use></svg></div>
+              <div>
+                <div class="flex flex--between">
+                  <span class="qitem__name">helldive_extraction.mp4</span>
+                  <span class="badge badge--err">Échec</span>
+                </div>
+                <div class="qitem__meta">Réseau interrompu à 41 % · 173 / 421 Mo · reprise possible</div>
+                <div class="progress" role="progressbar" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100" aria-label="Téléversement de helldive_extraction.mp4 — échec à 41 %"><div class="progress__bar progress__bar--err" style="width:41%"></div></div>
+              </div>
+              <button class="btn btn--icon btn--sm btn--ghost" aria-label="Réessayer"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-refresh"></use></svg></button>
+            </div>
+
+          </div>
+        </section>
+
+        <section>
+          <div class="rule-label"><span>Métadonnées du clip</span></div>
+          <div class="panel">
+            <div class="field">
+              <label for="titre">Titre</label>
+              <input class="input" id="titre" type="text" value="Ace à l'Op — clutch 1v3 sur Ascent">
+              <span class="field__hint">48 / 80 caractères</span>
+            </div>
+
+            <div class="form-grid mt4">
+              <div class="field">
+                <label for="jeu">Jeu</label>
+                <div class="select-wrap">
+                  <select class="select" id="jeu">
+                    <option>VALORANT</option>
+                    <option>Rocket League</option>
+                    <option>Elden Ring</option>
+                    <option>Counter-Strike 2</option>
+                    <option>Helldivers 2</option>
+                    <option>Autre…</option>
+                  </select>
+                  <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-chev-down"></use></svg>
+                </div>
+              </div>
+              <div class="field">
+                <label for="date">Date de capture</label>
+                <input class="input" id="date" type="text" value="18 juin 2026 — 22:41">
+              </div>
+            </div>
+
+            <div class="field mt4">
+              <label for="tags">Tags</label>
+              <div class="tag-input">
+                <span class="tag tag--accent">clutch<svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></span>
+                <span class="tag tag--accent">ace<svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></span>
+                <span class="tag tag--accent">op<svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></span>
+                <span class="tag tag--accent">ascent<svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></span>
+                <input class="input" id="tags" type="text" placeholder="Ajouter un tag…">
+              </div>
+              <span class="field__hint">Entrée pour valider · 12 tags maximum</span>
+            </div>
+
+            <div class="field mt4">
+              <label>Visibilité</label>
+              <div class="radio-list">
+                <label class="radio is-checked">
+                  <input type="radio" name="visibilite" checked>
+                  <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-lock"></use></svg>
+                  <span>Accès par lien</span>
+                  <span class="num">défaut</span>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="visibilite">
+                  <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-user"></use></svg>
+                  <span>Membres de l'instance</span>
+                  <span class="num">12</span>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="visibilite">
+                  <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-globe"></use></svg>
+                  <span>Public</span>
+                  <span class="num">indexé</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="row-actions mt5">
+              <button class="btn btn--primary"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-check"></use></svg>Publier le clip</button>
+              <button class="btn btn--ghost">Enregistrer en brouillon</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="mt5">
+        <div class="rule-label"><span>État — publication réussie</span></div>
+        <div class="alert alert--ok" role="status">
+          <svg aria-hidden="true" focusable="false" class="ic"><use href="#i-check"></use></svg>
+          <div>
+            <p><strong>Clip publié</strong> — ace_ascent_4k.mp4 est en ligne.</p>
+            <p class="mono mt2">https://vault.la-taniere.lan/c/9f2a-kestrel · 3 dérivés générés (1080p, 720p, miniature)</p>
+          </div>
+          <div class="alert__actions">
+            <button class="btn btn--sm"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-copy"></use></svg>Copier le lien</button>
+            <a class="btn btn--sm btn--ghost" href="watch.html">Voir le clip</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
