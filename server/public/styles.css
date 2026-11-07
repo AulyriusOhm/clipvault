@@ -1156,17 +1156,6 @@ a.brand {
   background: var(--accent);
 }
 
-.scrub__knob {
-  position: absolute;
-  top: 50%;
-  left: 32%;
-  width: 10px;
-  height: 10px;
-  background: var(--accent);
-  border-radius: var(--r-pill);
-  transform: translate(-50%, -50%);
-}
-
 /* --- 13. Métadonnées techniques (watch.html) ----------------------------- */
 
 .dl {
