@@ -55,6 +55,7 @@ export const config = {
   host: process.env.HOST ?? "0.0.0.0",
   trustProxy: (process.env.TRUST_PROXY ?? "false") === "true",
   cookieSecure: (process.env.COOKIE_SECURE ?? "false") === "true",
+  oidcLogoutRedirect: (process.env.OIDC_LOGOUT_REDIRECT ?? "false") === "true",
   port: Number(process.env.PORT ?? 8099),
   instanceName: process.env.INSTANCE_NAME ?? "La Tanière",
   baseUrl: process.env.BASE_URL ?? "http://localhost:8099",

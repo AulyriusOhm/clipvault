@@ -214,14 +214,29 @@ export async function completeLogin(request: FastifyRequest, code: string, state
   return user!;
 }
 
+/**
+ * Déconnexion côté fournisseur d'identité — désactivée par défaut.
+ *
+ * Elle n'est utile que si l'URI de retour post-déconnexion est déclarée chez
+ * l'IdP : Authentik refuse une URI non enregistrée et le navigateur reste
+ * bloqué. Sans `OIDC_LOGOUT_REDIRECT=true`, la déconnexion est purement locale
+ * et redirige vers /login.
+ */
 export async function logoutUrl(request: FastifyRequest): Promise<string | undefined> {
   const oidc = config.auth;
-  if (oidc.mode !== "oidc") {
+  if (oidc.mode !== "oidc" || !config.oidcLogoutRedirect) {
     return undefined;
   }
-  const meta = await discovery();
-  if (!meta.end_session_endpoint) {
+  try {
+    const meta = await discovery();
+    if (!meta.end_session_endpoint) {
+      return undefined;
+    }
+    const publicUrl = getSettings().public_url || config.baseUrl;
+    const back = `${publicUrl.replace(/\/+$/, "")}/login`;
+    return `${meta.end_session_endpoint}?post_logout_redirect_uri=${encodeURIComponent(back)}`;
+  } catch (error) {
+    request.log.warn({ err: error }, "déconnexion IdP impossible, déconnexion locale");
     return undefined;
   }
-  return `${meta.end_session_endpoint}?post_logout_redirect_uri=${encodeURIComponent(config.baseUrl)}`;
 }
