@@ -19,8 +19,8 @@ function abs(filePath: string): string {
   return path.join(config.mediaDir, filePath);
 }
 
-function canManage(clip: { uploader: string }, user: { username: string; role: string } | undefined): boolean {
-  return Boolean(user && (user.role === "admin" || user.username === clip.uploader));
+function canManage(clip: { uploader_id: number | null }, user: { id: number; role: string } | undefined): boolean {
+  return Boolean(user && (user.role === "admin" || clip.uploader_id === user.id));
 }
 
 export async function clipRoutes(app: FastifyInstance): Promise<void> {

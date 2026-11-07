@@ -1,8 +1,22 @@
 import type { FastifyInstance } from "fastify";
-import { buildLoginUrl, completeLogin, devSignIn, logoutUrl } from "../auth.ts";
+import { buildLoginUrl, completeLogin, devSignIn, logoutUrl, regenerateSession } from "../auth.ts";
 import { baseContext } from "../context.ts";
 import { publicHighlights } from "../db.ts";
 import { config } from "../config.ts";
+
+/** Refuse tout ce qui n'est pas un chemin interne : bloque //evil.com et /\evil.com */
+function safeNext(value: string | undefined | null): string {
+  if (!value) {
+    return "/";
+  }
+  if (!value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {
+    return "/";
+  }
+  if (/[\\\u0000-\u001f]/.test(value)) {
+    return "/";
+  }
+  return value;
+}
 
 export async function authRoutes(app: FastifyInstance): Promise<void> {
   app.get("/login", { config: { rateLimit: { max: 30, timeWindow: "1 minute" } } }, async (request, reply) => {
@@ -21,17 +35,18 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(404).send({ error: "not found" });
     }
     const { next } = request.body as { next?: string };
+    await regenerateSession(request);
     const user = devSignIn(request);
     request.log.info({ user: user.username }, "connexion dev");
-    return reply.redirect(next && next.startsWith("/") ? next : "/");
+    return reply.redirect(safeNext(next));
   });
 
   app.get("/auth/start", { config: { rateLimit: { max: 30, timeWindow: "1 minute" } } }, async (request, reply) => {
     if (config.auth.mode === "dev") {
       return reply.redirect("/login");
     }
-    const next = (request.query as Record<string, string | undefined>).next;
-    if (next) {
+    const next = safeNext((request.query as Record<string, string | undefined>).next);
+    if (next !== "/") {
       request.session.returnTo = next;
     }
     return reply.redirect(await buildLoginUrl(request));
@@ -46,11 +61,14 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       return reply.redirect("/login?error=callback%20incomplet");
     }
     try {
+      const returnTo = request.session.returnTo;
+      await regenerateSession(request);
+      request.session.returnTo = returnTo;
       const user = await completeLogin(request, q.code, q.state);
       request.log.info({ user: user.username }, "connexion OIDC");
-      const target = request.session.returnTo ?? "/";
+      const target = safeNext(request.session.returnTo);
       delete request.session.returnTo;
-      return reply.redirect(target.startsWith("/") ? target : "/");
+      return reply.redirect(target);
     } catch (error) {
       request.log.error(error);
       const message = error instanceof Error ? error.message : "échec de connexion";

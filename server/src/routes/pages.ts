@@ -92,6 +92,17 @@ export async function pageRoutes(app: FastifyInstance): Promise<void> {
     if (clip.visibility === "members" && !request.user) {
       return reply.redirect(`/login?next=${encodeURIComponent(`/c/${slug}`)}`);
     }
+    if (!visibleTo(clip, request.user?.id)) {
+      reply.code(410);
+      return reply.view("error.ejs", {
+        ...baseContext(request),
+        title: "Lien expiré — ClipVault",
+        heading: "Ce lien de partage a expiré",
+        sub: `/c/${slug} — 410`,
+        body: "La durée de partage définie par l'auteur est dépassée. Demandez-lui un nouveau lien.",
+        actions: [{ href: "/library", label: "Voir la bibliothèque" }],
+      });
+    }
     incrementViews(clip.id);
     return reply.view("share.ejs", {
       ...baseContext(request),
@@ -105,7 +116,7 @@ export async function pageRoutes(app: FastifyInstance): Promise<void> {
     return reply.view("upload.ejs", {
       ...baseContext(request),
       title: "Dépôt — ClipVault",
-      jobs: listJobs(),
+      jobs: listJobs(request.user!),
       error: (request.query as Record<string, string | undefined>).error,
     });
   });

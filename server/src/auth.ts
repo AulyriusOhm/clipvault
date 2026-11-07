@@ -60,6 +60,13 @@ export function requireUser(request: FastifyRequest, reply: FastifyReply, done: 
   done();
 }
 
+/** Empêche la fixation de session : le sid change au moment de l'authentification. */
+export function regenerateSession(request: FastifyRequest): Promise<void> {
+  return new Promise((resolve, reject) => {
+    request.session.regenerate((error?: Error) => (error ? reject(error) : resolve()));
+  });
+}
+
 export function devSignIn(request: FastifyRequest): User {
   const subject = "dev:kael_";
   const existing = findBySubject(subject);

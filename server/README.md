@@ -169,6 +169,32 @@ cd /opt/fireshare && docker compose start
   `2025.08.27 — 23.14`) : il n'existe pas encore d'édition de métadonnées
 - HTTP en clair sur le LAN, aucune exposition publique
 
+## Sécurité
+
+Mesures en place : `@fastify/static` à jour (CVE de traversée de chemin corrigée),
+en-têtes CSP / nosniff / X-Frame-Options / Referrer-Policy / Permissions-Policy,
+limitation de débit sur connexion, dépôt et invitations, `/api/jobs` et
+téléchargement réservés aux membres, redirections `next` validées en liste
+blanche, propriété des clips comparée par identifiant, sessions régénérées à la
+connexion, filtre de visibilité appliqué aux compteurs, ffmpeg borné en temps et
+restreint aux protocoles locaux, conteneur non privilégié sans capacités.
+
+### Avant une exposition sur Internet
+
+1. **TLS obligatoire.** Terminer TLS sur un proxy inverse, puis :
+   `COOKIE_SECURE=true`, `TRUST_PROXY=true`, et renseigner `public_url` dans
+   `/admin` avec l'URL `https://`. Sans cela le cookie de session — 30 jours,
+   valable pour l'admin — circule en clair.
+2. **Ne pas publier le port 8099** au-delà du proxy : le conteneur doit être
+   joignable seulement depuis le réseau du proxy.
+3. `AUTH_MODE=dev` est refusé dès que `NODE_ENV=production` ; vérifier que
+   `OIDC_*` est bien renseigné avant de basculer.
+4. Sauvegarder `/opt/clipvault/data` (base + médias + secret de session).
+5. Restent ouverts, à trancher selon l'exposition : pas de jeton CSRF (compensé
+   par `sameSite=lax`), sessions en mémoire, limitation de débit par processus,
+   pas de quota par membre, et ffmpeg qui traite des fichiers fournis par les
+   membres (à isoler dans un conteneur dédié si l'exposition est large).
+
 ## Reste à faire
 
 - Transcodage (aujourd'hui : un seul fichier source + miniature)

@@ -5,7 +5,7 @@ import { pipeline } from "node:stream/promises";
 import type { FastifyInstance } from "fastify";
 import { requireUser } from "../auth.ts";
 import { config } from "../config.ts";
-import { db, getSettings, nextCode, recordJob, setTags, upsertGame } from "../db.ts";
+import { db, getSettings, listJobs, nextCode, recordJob, setTags, upsertGame } from "../db.ts";
 import { extractThumbnail, probe } from "../media.ts";
 
 const ALLOWED = new Set([".mp4", ".mkv", ".mov", ".webm"]);
@@ -29,21 +29,29 @@ async function runPipeline(
   fields: { title: string; game: string; tags: string; description: string; visibility: string },
   uploaderId: number,
 ): Promise<void> {
-  const code = nextCode();
-  const slug = slugify(fields.title || filename.replace(/\.[^.]+$/, ""), code);
+  let code = nextCode();
+  let slug = slugify(fields.title || filename.replace(/\.[^.]+$/, ""), code);
   const ext = path.extname(filename).toLowerCase();
+  const takenSlug = db.prepare("SELECT 1 FROM clips WHERE slug = ?");
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    if (!takenSlug.get(slug) && !fs.existsSync(path.join(config.mediaDir, `${slug}${ext}`))) {
+      break;
+    }
+    code += 1;
+    slug = slugify(fields.title || filename.replace(/\.[^.]+$/, ""), code);
+  }
   const storedName = `${slug}${ext}`;
   const storedPath = path.join(config.mediaDir, storedName);
   const thumbName = `${slug}.jpg`;
 
   try {
-    recordJob(jobId, filename, "running", 62, "analyse ffprobe…");
+    recordJob(jobId, filename, "running", 62, "analyse du fichier…", uploaderId);
     await fs.promises.rename(tmpPath, storedPath);
 
     const meta = await probe(storedPath);
     const size = (await fs.promises.stat(storedPath)).size;
 
-    recordJob(jobId, filename, "running", 84, "génération de la miniature…");
+    recordJob(jobId, filename, "running", 84, "génération de la miniature…", uploaderId);
     let thumbPath: string | null = null;
     try {
       await extractThumbnail(storedPath, path.join(config.mediaDir, thumbName), Math.min(1, meta.duration_s / 2));
@@ -87,12 +95,14 @@ async function runPipeline(
       );
 
     setTags(Number(info.lastInsertRowid), fields.tags.split(","));
-    recordJob(jobId, filename, "done", 100, `clip publié · /watch/${slug}`, Number(info.lastInsertRowid));
+    recordJob(jobId, filename, "done", 100, `clip publié · /watch/${slug}`, uploaderId, Number(info.lastInsertRowid));
   } catch (error) {
     app.log.error({ err: error }, "traitement du clip échoué");
-    recordJob(jobId, filename, "failed", 41, error instanceof Error ? error.message : "échec du traitement");
+    recordJob(jobId, filename, "failed", 41, "traitement échoué — voir le journal du serveur");
     await fs.promises.rm(tmpPath, { force: true });
-    await fs.promises.rm(storedPath, { force: true });
+    if (fs.existsSync(tmpPath)) {
+      return;
+    }
   }
 }
 
@@ -109,7 +119,7 @@ export async function uploadRoutes(app: FastifyInstance): Promise<void> {
 
     const jobId = crypto.randomUUID();
     const tmpPath = path.join(config.mediaDir, `.incoming-${jobId}${ext}`);
-    recordJob(jobId, data.filename, "running", 12, "réception du fichier…");
+    recordJob(jobId, data.filename, "running", 12, "réception du fichier…", request.user!.id);
 
     await pipeline(data.file, fs.createWriteStream(tmpPath));
 
@@ -148,10 +158,7 @@ export async function uploadRoutes(app: FastifyInstance): Promise<void> {
     return reply.redirect("/upload?sent=1");
   });
 
-  app.get("/api/jobs", { preHandler: requireUser }, async (_request, reply) => {
-    const rows = db
-      .prepare("SELECT id, filename, state, pct, detail FROM jobs ORDER BY created_at DESC LIMIT 8")
-      .all();
-    return reply.send(rows);
+  app.get("/api/jobs", { preHandler: requireUser }, async (request, reply) => {
+    return reply.send(listJobs(request.user!, 8));
   });
 }

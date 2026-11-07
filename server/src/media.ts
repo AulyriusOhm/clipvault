@@ -3,6 +3,10 @@ import { promisify } from "node:util";
 
 const run = promisify(execFile);
 
+/** Un fichier fourni par un membre ne doit jamais faire ouvrir d'URL à ffmpeg. */
+const LIMITS = { timeout: 60_000, maxBuffer: 16 * 1024 * 1024 } as const;
+const SAFE_PROTOCOLS = "file,pipe,crypto,data";
+
 export interface ProbeResult {
   duration_s: number;
   width: number;
@@ -24,12 +28,14 @@ export async function probe(filePath: string): Promise<ProbeResult> {
   const { stdout } = await run("ffprobe", [
     "-v",
     "error",
+    "-protocol_whitelist",
+    SAFE_PROTOCOLS,
     "-show_streams",
     "-show_format",
     "-of",
     "json",
     filePath,
-  ]);
+  ], LIMITS);
   const data = JSON.parse(stdout) as {
     streams?: FfprobeStream[];
     format?: { duration?: string; bit_rate?: string };
@@ -53,6 +59,7 @@ export async function extractThumbnail(filePath: string, outPath: string, atSeco
   await run("ffmpeg", [
     "-v",
     "error",
+    "-nostdin",
     "-y",
     "-ss",
     String(atSeconds),
@@ -65,5 +72,5 @@ export async function extractThumbnail(filePath: string, outPath: string, atSeco
     "-q:v",
     "4",
     outPath,
-  ]);
+  ], LIMITS);
 }

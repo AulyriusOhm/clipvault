@@ -16,9 +16,9 @@ export function baseContext(request: FastifyRequest): Record<string, unknown> {
     themes: THEMES,
     baseUrl,
     instance: settings.instance_name || config.instanceName,
-    games: listGames(),
+    games: listGames(request.user?.id),
     tags: listTags(),
-    counting: stats(),
+    counting: stats(request.user?.id),
     authMode: config.auth.mode,
     currentUrl: request.url,
   };

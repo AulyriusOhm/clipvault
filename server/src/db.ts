@@ -66,6 +66,7 @@ db.exec(`
 
   CREATE TABLE IF NOT EXISTS jobs (
     id         TEXT PRIMARY KEY,
+    owner_id   INTEGER REFERENCES users(id),
     filename   TEXT NOT NULL,
     state      TEXT NOT NULL,
     pct        INTEGER NOT NULL DEFAULT 0,
@@ -93,6 +94,11 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_clips_created ON clips(created_at DESC);
   CREATE INDEX IF NOT EXISTS idx_clips_game ON clips(game_id);
 `);
+
+const jobColumns = (db.prepare("PRAGMA table_info(jobs)").all() as { name: string }[]).map((c) => c.name);
+if (!jobColumns.includes("owner_id")) {
+  db.exec("ALTER TABLE jobs ADD COLUMN owner_id INTEGER");
+}
 
 const columns = (db.prepare("PRAGMA table_info(clips)").all() as { name: string }[]).map((c) => c.name);
 
@@ -129,6 +135,7 @@ export interface Clip {
   game_name: string | null;
   game_slug: string | null;
   uploader: string;
+  uploader_id: number | null;
   file_path: string;
   thumb_path: string | null;
   duration_s: number;
@@ -163,16 +170,21 @@ export function createUser(subject: string, username: string, displayName: strin
   return db.prepare("SELECT * FROM users WHERE id = ?").get(info.lastInsertRowid) as User;
 }
 
-export function listGames(): Game[] {
+export function listGames(viewerId?: number): Game[] {
   return db
     .prepare(
       `SELECT g.id, g.slug, g.name, COUNT(c.id) AS count
          FROM games g
-         LEFT JOIN clips c ON c.game_id = g.id AND c.deleted_at IS NULL
+         LEFT JOIN clips c ON c.game_id = g.id
+              AND c.deleted_at IS NULL
+              AND (c.visibility = 'public'
+                   OR (c.visibility = 'members' AND ? = 1)
+                   OR c.uploader_id = ?)
         GROUP BY g.id
+        HAVING count > 0
         ORDER BY count DESC, g.name`,
     )
-    .all() as Game[];
+    .all(viewerId ? 1 : 0, viewerId ?? -1) as Game[];
 }
 
 export function listTags(): string[] {
@@ -294,15 +306,21 @@ export function publicHighlights(limit = 3): Clip[] {
     .all(limit) as Clip[];
 }
 
-export function stats(): { clips: number; games: number; members: number; bytes: number } {
+export function stats(viewerId?: number): { clips: number; games: number; members: number; bytes: number } {
+  const filter = `deleted_at IS NULL AND (visibility = 'public' OR (visibility = 'members' AND ? = 1) OR uploader_id = ?)`;
   const row = db
     .prepare(
-      `SELECT (SELECT COUNT(*) FROM clips WHERE deleted_at IS NULL) AS clips,
-              (SELECT COUNT(DISTINCT game_id) FROM clips WHERE deleted_at IS NULL) AS games,
+      `SELECT (SELECT COUNT(*) FROM clips WHERE ${filter}) AS clips,
+              (SELECT COUNT(DISTINCT game_id) FROM clips WHERE ${filter}) AS games,
               (SELECT COUNT(*) FROM users) AS members,
-              (SELECT COALESCE(SUM(size_bytes), 0) FROM clips WHERE deleted_at IS NULL) AS bytes`,
+              (SELECT COALESCE(SUM(size_bytes), 0) FROM clips WHERE ${filter}) AS bytes`,
     )
-    .get() as { clips: number; games: number; members: number; bytes: number };
+    .get(viewerId ? 1 : 0, viewerId ?? -1, viewerId ? 1 : 0, viewerId ?? -1, viewerId ? 1 : 0, viewerId ?? -1) as {
+      clips: number;
+      games: number;
+      members: number;
+      bytes: number;
+    };
   return row;
 }
 
@@ -335,17 +353,32 @@ export function nextCode(): number {
   return row.n + 1;
 }
 
-export function recordJob(id: string, filename: string, state: string, pct: number, detail: string, clipId?: number): void {
+export function recordJob(
+  id: string,
+  filename: string,
+  state: string,
+  pct: number,
+  detail: string,
+  ownerId?: number,
+  clipId?: number,
+): void {
   db.prepare(
-    `INSERT INTO jobs (id, filename, state, pct, detail, clip_id) VALUES (?, ?, ?, ?, ?, ?)
-     ON CONFLICT(id) DO UPDATE SET state = excluded.state, pct = excluded.pct, detail = excluded.detail, clip_id = COALESCE(excluded.clip_id, jobs.clip_id)`,
-  ).run(id, filename, state, pct, detail, clipId ?? null);
+    `INSERT INTO jobs (id, filename, state, pct, detail, owner_id, clip_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+     ON CONFLICT(id) DO UPDATE SET state = excluded.state, pct = excluded.pct, detail = excluded.detail,
+                                   owner_id = COALESCE(excluded.owner_id, jobs.owner_id),
+                                   clip_id = COALESCE(excluded.clip_id, jobs.clip_id)`,
+  ).run(id, filename, state, pct, detail, ownerId ?? null, clipId ?? null);
 }
 
-export function listJobs(limit = 6): { id: string; filename: string; state: string; pct: number; detail: string }[] {
+export function listJobs(viewer: { id: number; role: string }, limit = 6): { id: string; filename: string; state: string; pct: number; detail: string }[] {
+  const all = viewer.role === "admin";
   return db
-    .prepare("SELECT id, filename, state, pct, detail FROM jobs ORDER BY created_at DESC LIMIT ?")
-    .all(limit) as { id: string; filename: string; state: string; pct: number; detail: string }[];
+    .prepare(
+      `SELECT id, filename, state, pct, detail FROM jobs
+        WHERE ? = 1 OR owner_id IS NULL OR owner_id = ?
+        ORDER BY created_at DESC LIMIT ?`,
+    )
+    .all(all ? 1 : 0, viewer.id, limit) as { id: string; filename: string; state: string; pct: number; detail: string }[];
 }
 
 export function ensureDir(dir: string): void {
