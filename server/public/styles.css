@@ -2305,3 +2305,29 @@ a.brand {
     font-size: 14px;
   }
 }
+
+/* ---------- Tags sur les cartes de la bibliothèque ---------- */
+.clip__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  margin-top: var(--s2);
+}
+
+.clip__tags .tag {
+  height: 18px;
+  padding: 0 7px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 760px) {
+  .clip__tags {
+    gap: 4px;
+  }
+
+  .clip__tags .tag {
+    height: 20px;
+    font-size: 11px;
+  }
+}

@@ -10,6 +10,12 @@
   <div class="clip__body">
     <h2 class="clip__title"><%= clip.title %></h2>
     <p class="clip__meta"><%= clip.game_name ? clip.game_name + ' · ' : '' %><%= fmt.resolution(clip.width, clip.height) %> · <%= Math.round(clip.fps) %> fps · <%= fmt.bytes(clip.size_bytes) %></p>
+      <% var cardTags = clip.tags.split(' ').filter(Boolean).slice(0, 3); %>
+      <% if (cardTags.length) { %>
+      <div class="clip__tags">
+        <% cardTags.forEach(function (tag) { %><span class="tag tag--accent"><%= tag %></span><% }); %>
+      </div>
+      <% } %>
     <div class="clip__foot"><span class="tag"><%= clip.uploader || 'inconnu' %></span><span class="num"><%= fmt.relative(clip.created_at) %></span></div>
   </div>
 </a>

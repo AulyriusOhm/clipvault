@@ -11,7 +11,7 @@
         <% if (user) { %>
         <a class="btn" href="/media/<%= clip.slug %>/video?download=1" download><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-download"></use></svg>Télécharger</a>
         <% } %>
-        <% if (user && (user.role === 'admin' || user.username === clip.uploader)) { %>
+        <% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %>
         <a class="btn" href="/clips/<%= clip.slug %>/edit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-sliders"></use></svg>Modifier</a>
         <% } %>
       </div>
@@ -26,21 +26,49 @@
             <%- include('partials/player', { clip: clip }) %>
           </section>
 
+          <section data-block="about">
+            <div class="rule-label"><span>À propos</span></div>
+            <% if (clip.description) { %>
+            <p class="dim"><%= clip.description %></p>
+            <% } else { %>
+            <p class="dim faint">Aucune description.<% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %> <a href="/clips/<%= clip.slug %>/edit">En ajouter une</a>.<% } %></p>
+            <% } %>
+            <% var tagList = clip.tags.split(' ').filter(Boolean); %>
+            <% if (tagList.length) { %>
+            <div class="flex mt3">
+              <% tagList.forEach(function (tag) { %>
+              <a class="tag tag--accent" href="/library?tag=<%= encodeURIComponent(tag) %>"><%= tag %></a>
+              <% }); %>
+            </div>
+            <% } else { %>
+            <p class="mono faint mt3">aucun tag<% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %> — <a href="/clips/<%= clip.slug %>/edit">en ajouter</a><% } %></p>
+            <% } %>
+          </section>
+
+          <section data-block="tech">
+            <div class="rule-label"><span>Détails techniques</span></div>
+            <div class="dl">
+              <div><span class="dl__k">Jeu</span><span class="dl__v"><%= clip.game_name || '—' %></span></div>
+              <div><span class="dl__k">Joueur</span><span class="dl__v"><%= clip.uploader || '—' %></span></div>
+              <div><span class="dl__k">Déposé le</span><span class="dl__v"><%= fmt.dateLong(clip.created_at) %> · <%= fmt.clock(clip.created_at) %></span></div>
+              <div><span class="dl__k">Durée</span><span class="dl__v"><%= fmt.duration(clip.duration_s) %></span></div>
+              <div><span class="dl__k">Résolution</span><span class="dl__v"><%= fmt.resolution(clip.width, clip.height) %></span></div>
+              <div><span class="dl__k">Images/s</span><span class="dl__v"><%= Math.round(clip.fps) %> fps</span></div>
+              <div><span class="dl__k">Codec</span><span class="dl__v"><%= clip.codec || '—' %></span></div>
+              <div><span class="dl__k">Débit</span><span class="dl__v"><%= clip.bitrate_kbps ? fmt.bitrate(clip.bitrate_kbps) : '—' %></span></div>
+              <div><span class="dl__k">Taille</span><span class="dl__v"><%= fmt.bytes(clip.size_bytes) %></span></div>
+              <div><span class="dl__k">Source</span><span class="dl__v"><%= clip.source_path ? 'import' : 'dépôt direct' %></span></div>
+            </div>
+          </section>
+
           <section data-block="history">
-                        <div class="rule-label"><span>Historique du fichier</span></div>
+            <div class="rule-label"><span>Historique du fichier</span></div>
             <div class="panel">
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-upload"></use></svg>
                 <span class="grow"><%= clip.source_path ? 'Importé du disque' : 'Téléversé' %> par <strong><%= clip.uploader || 'inconnu' %></strong></span>
                 <span class="num"><%= fmt.relative(clip.created_at) %></span>
               </div>
-              <% if (clip.source_path) { %>
-              <div class="rowline">
-                <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-folder"></use></svg>
-                <span class="grow">Fichier d'origine conservé hors du dépôt</span>
-                <span class="num">lecture directe</span>
-              </div>
-              <% } %>
               <% if (clip.updated_at) { %>
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-tag"></use></svg>
@@ -80,7 +108,7 @@
 
           <% if (suggested.length) { %>
           <section data-block="next">
-                        <div class="rule-label"><span>À suivre</span></div>
+            <div class="rule-label"><span>À suivre</span></div>
             <a class="clip clip--wide" href="/watch/<%= suggested[0].slug %>">
               <div class="thumb thumb--sm<%= suggested[0].thumb_path ? '' : ' thumb--empty' %>">
                 <% if (suggested[0].thumb_path) { %><img class="thumb__img" src="/media/<%= suggested[0].slug %>/thumb" alt="" loading="lazy"><% } %>
@@ -96,7 +124,7 @@
 
           <% if (suggested.length > 1) { %>
           <section data-block="suggest">
-                        <div class="rule-label"><span>Suggestions</span></div>
+            <div class="rule-label"><span>Suggestions</span></div>
             <div class="panel">
               <% suggested.slice(1).forEach(function (item, index) { %>
               <a class="clip clip--wide<%= index > 0 ? ' mt3' : '' %>" href="/watch/<%= item.slug %>">
@@ -114,7 +142,7 @@
           </section>
           <% } %>
 
-          <% if (user && (user.role === 'admin' || user.username === clip.uploader)) { %>
+          <% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %>
           <section class="panel" data-block="delete">
             <div class="rule-label"><span>Suppression</span></div>
             <p class="dim">Le clip et sa miniature seront effacés du disque. Action réservée au déposant et aux administrateurs.</p>

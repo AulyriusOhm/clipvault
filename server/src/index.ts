@@ -28,7 +28,6 @@ const app = Fastify({
   logger: { level: process.env.LOG_LEVEL ?? "info" },
   trustProxy: config.trustProxy,
   bodyLimit: 1024 * 1024,
-  disableRequestLogging: false,
 });
 
 await app.register(cookie);
