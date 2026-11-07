@@ -48,20 +48,25 @@
               <div class="field mt4">
                 <label for="default_tags">Tags par défaut</label>
                 <div class="tag-editor" data-tag-editor="default_tags">
-                  <span class="tag-editor__list">
-                    <% var actifs = settings.default_tags.split(',').map(function (t) { return t.trim().toLowerCase(); }).filter(Boolean); %>
-                    <% var proposes = baseTagChoices.concat(actifs.filter(function (t) { return baseTagChoices.indexOf(t) < 0; })); %>
-                    <% proposes.forEach(function (tag) { %>
-                    <% var on = actifs.indexOf(tag) >= 0; %>
-                    <button class="tag tag--chip<%= on ? ' is-active' : '' %>" type="button" data-toggle-tag="<%= tag %>" aria-pressed="<%= on ? 'true' : 'false' %>">
-                      <% if (on) { %><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg><% } %><%= tag %>
+                  <% var actifs = settings.default_tags.split(',').map(function (t) { return t.trim().toLowerCase(); }).filter(Boolean); %>
+                  <% var proposes = baseTagChoices.concat(actifs.filter(function (t) { return baseTagChoices.indexOf(t) < 0; })); %>
+                  <div class="tag-editor__applied" data-applied>
+                    <% actifs.forEach(function (tag) { %>
+                    <button class="tag tag--chip is-active" type="button" data-remove-tag="<%= tag %>">
+                      <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg><%= tag %>
                     </button>
                     <% }); %>
-                  </span>
+                  </div>
+                  <p class="tag-editor__empty" data-empty>Aucun tag par défaut — cliquez une suggestion ci-dessous.</p>
+                  <div class="tag-editor__pool" data-pool>
+                    <% proposes.filter(function (t) { return actifs.indexOf(t) < 0; }).forEach(function (tag) { %>
+                    <button class="tag tag--chip" type="button" data-add-tag="<%= tag %>"><%= tag %></button>
+                    <% }); %>
+                  </div>
                   <input class="input tag-editor__input" type="text" id="tag-ajout" placeholder="autre tag…" aria-label="Ajouter un tag par défaut">
                 </div>
                 <input type="hidden" id="default_tags" name="default_tags" value="<%= settings.default_tags %>">
-                <span class="field__hint">pastilles pleines = appliquées par défaut ; cliquez-en une pour la retirer, une pastille vide pour l'ajouter</span>
+                <span class="field__hint">les pastilles pleines sont appliquées par défaut — cliquez-en une pour la retirer, une pastille grise pour l'ajouter</span>
               </div>
 
               <div class="field mt4">

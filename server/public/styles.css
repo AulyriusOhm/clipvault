@@ -2380,23 +2380,55 @@ a.brand {
 /* ---------- Éditeur de tags par défaut (réglages) ---------- */
 .tag-editor {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
   gap: var(--s2);
-  padding: var(--s2);
+  padding: var(--s3);
   border: 1px solid var(--border);
   border-radius: var(--r-sharp);
   background: var(--surface);
 }
 
-.tag-editor__list {
-  display: contents;
+.tag-editor__applied,
+.tag-editor__pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  min-height: 22px;
+}
+
+.tag-editor__pool {
+  padding-top: var(--s2);
+  border-top: 1px dashed var(--border);
+}
+
+.tag-editor__empty {
+  font: 400 var(--fs-meta) / 1.4 var(--font-ui);
+  color: var(--text-faint);
+}
+
+.tag-editor__empty[hidden] {
+  display: none;
+}
+
+.tag-editor .tag--chip {
+  transition: opacity 150ms ease, transform 150ms ease;
 }
 
 .tag-editor .tag--chip svg {
   width: 12px;
   height: 12px;
-  opacity: 0.75;
+  margin-right: 4px;
+  opacity: 0.8;
+}
+
+.tag-editor .tag--chip.is-leaving {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.tag-editor .tag--chip.is-entering {
+  opacity: 0;
+  transform: scale(0.8);
 }
 
 .tag-editor .tag--chip:hover {
@@ -2411,11 +2443,11 @@ a.brand {
 }
 
 .tag-editor__input {
-  flex: 1 1 140px;
-  min-width: 120px;
   border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
   background: transparent;
-  padding: 4px;
+  padding: var(--s2) 0 0;
 }
 
 .tag-editor__input:focus {
@@ -2423,11 +2455,13 @@ a.brand {
 }
 
 @media (max-width: 760px) {
-  .tag-editor {
-    padding: 6px;
-  }
-
   .tag-editor .tag--chip {
     height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-editor .tag--chip {
+    transition: none;
   }
 }
