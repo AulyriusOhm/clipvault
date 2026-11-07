@@ -47,8 +47,13 @@
 
               <div class="field mt4">
                 <label for="default_tags">Tags par défaut</label>
-                <input class="input" id="default_tags" name="default_tags" type="text" value="<%= settings.default_tags %>" placeholder="clip, jeuxvideo">
+                <input class="input" id="default_tags" name="default_tags" type="text" value="<%= settings.default_tags %>" placeholder="fps, ace, clutch…">
                 <span class="field__hint">séparés par des virgules — ajoutés à chaque nouveau dépôt, en plus des tags saisis</span>
+                <div class="tag-palette" data-tag-palette="default_tags">
+                  <% tagPalette.forEach(function (tag) { %>
+                  <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
+                  <% }); %>
+                </div>
               </div>
 
               <div class="field mt4">
@@ -192,5 +197,7 @@
     </div>
 
 <script src="/assets/copy.js" defer></script>
+
+<script src="/assets/tags.js" defer></script>
 
 <%- include('partials/shell-end') %>
