@@ -14,6 +14,14 @@ import {
   findInvite,
 } from "../db.ts";
 
+export function normaliseTags(value: string | undefined): string {
+  const raw = (value ?? "")
+    .split(",")
+    .map((tag) => tag.trim().toLowerCase().replace(/\s+/g, "-").slice(0, 24))
+    .filter(Boolean);
+  return [...new Set(raw)].slice(0, 10).join(", ");
+}
+
 function normaliseUrl(value: string | undefined): string {
   const raw = (value ?? "").trim();
   if (!raw) {
@@ -73,6 +81,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       max_upload_gb: String(Math.max(1, Number(body.max_upload_gb ?? 4) || 4)),
       theme: THEMES.some((t) => t.key === body.theme) ? body.theme! : DEFAULT_THEME,
       public_url: normaliseUrl(body.public_url),
+      default_tags: normaliseTags(body.default_tags),
     });
     return reply.redirect("/admin?ok=settings");
   });

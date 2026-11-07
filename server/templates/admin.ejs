@@ -46,6 +46,12 @@
               </div>
 
               <div class="field mt4">
+                <label for="default_tags">Tags par défaut</label>
+                <input class="input" id="default_tags" name="default_tags" type="text" value="<%= settings.default_tags %>" placeholder="clip, jeuxvideo">
+                <span class="field__hint">séparés par des virgules — ajoutés à chaque nouveau dépôt, en plus des tags saisis</span>
+              </div>
+
+              <div class="field mt4">
                 <span class="micro">Thème de l'instance</span>
                 <div class="radio-list">
                   <% themes.forEach(function (item) { %>

@@ -51,8 +51,8 @@
                 </div>
                 <div class="field">
                   <label for="tags">Tags</label>
-                  <input class="input" id="tags" type="text" name="tags" placeholder="clutch, ace, ranked">
-                  <span class="field__hint">séparés par des virgules</span>
+                  <input class="input" id="tags" type="text" name="tags" value="<%= settings.default_tags %>" placeholder="clutch, ace, ranked">
+                  <span class="field__hint">séparés par des virgules<% if (settings.default_tags) { %> — les tags par défaut de l'instance sont pré-remplis<% } %></span>
                 </div>
               </div>
               <div class="field mt4">

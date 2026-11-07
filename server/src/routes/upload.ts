@@ -94,7 +94,8 @@ async function runPipeline(
         shareExpires,
       );
 
-    setTags(Number(info.lastInsertRowid), fields.tags.split(","));
+    const defaults = (getSettings().default_tags ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
+    setTags(Number(info.lastInsertRowid), [...fields.tags.split(","), ...defaults]);
     recordJob(jobId, filename, "done", 100, `clip publié · /watch/${slug}`, uploaderId, Number(info.lastInsertRowid));
   } catch (error) {
     app.log.error({ err: error }, "traitement du clip échoué");

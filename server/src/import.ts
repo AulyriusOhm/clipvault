@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { db, ensureDir, nextCode, setTags, upsertGame } from "./db.ts";
+import { db, ensureDir, getSettings, nextCode, setTags, upsertGame } from "./db.ts";
 import { config } from "./config.ts";
 import { extractThumbnail, probe } from "./media.ts";
 
@@ -133,7 +133,8 @@ for (const file of files) {
       "members",
       file,
     );
-    setTags(Number(info.lastInsertRowid), game ? [game[1], "import"] : ["import"]);
+    const defaults = (getSettings().default_tags ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
+    setTags(Number(info.lastInsertRowid), [...(game ? [game[1], "import"] : ["import"]), ...defaults]);
     imported += 1;
     console.log(`  + #${String(code).padStart(4, "0")} ${title} — ${Math.round(meta.duration_s)} s, ${(size / 1024 / 1024).toFixed(1)} Mo${game ? ` · ${game[1]}` : ""}`);
   } catch (error) {

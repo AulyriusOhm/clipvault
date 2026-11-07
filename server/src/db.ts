@@ -391,6 +391,7 @@ export const DEFAULT_SETTINGS = {
   instance_name: "",
   theme: "ember",
   public_url: "",
+  default_tags: "",
   default_visibility: "link",
   link_expiry_days: "0",
   invite_only: "false",

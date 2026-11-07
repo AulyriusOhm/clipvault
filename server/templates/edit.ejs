@@ -44,7 +44,7 @@
                 <div class="field">
                   <label for="tags">Tags</label>
                   <input class="input" id="tags" name="tags" type="text" value="<%= tags %>" placeholder="clutch, ace, ranked">
-                  <span class="field__hint">séparés par des virgules</span>
+                  <span class="field__hint">séparés par des virgules<% if (settings.default_tags) { %> — défaut de l'instance : <%= settings.default_tags %><% } %></span>
                 </div>
               </div>
 
