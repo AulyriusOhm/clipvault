@@ -115,8 +115,40 @@ FireShare, sur le domaine **https://clip.lanro.eu**.
 | Accès LAN | `http://192.168.1.243:8099` depuis le site SLP ; `http://192.168.5.100:8099` par DNAT depuis Grenoble |
 
 Derrière un proxy qui termine le TLS, trois variables sont obligatoires :
-`BASE_URL=https://clip.lanro.eu`, `TRUST_PROXY=true` (IP réelle des clients dans
-les journaux et la limitation de débit) et `COOKIE_SECURE=true`.
+`BASE_URL=https://clip.lanro.eu`, `COOKIE_SECURE=true`, et `TRUST_PROXY=1`
+(nombre de proxys de confiance — voir ci-dessous).
+
+### TRUST_PROXY : un nombre, jamais `true`
+
+`TRUST_PROXY=true` fait confiance à toute la chaîne `X-Forwarded-For`, donc à la
+valeur que le client a pu y mettre : la limitation de débit devient contournable
+(un `X-Forwarded-For` différent par requête suffit). `TRUST_PROXY=1` ne retient
+que le dernier maillon, celui ajouté par le WAF, et ignore le reste.
+
+Attention : `@fastify/session` n'émet **aucun** cookie quand `COOKIE_SECURE=true`
+et que la requête n'est pas reconnue comme HTTPS. Sans `X-Forwarded-Proto` côté
+proxy (ou avec `TRUST_PROXY` mal lu), la connexion échoue en « state OIDC
+invalide » au retour d'Authentik — le symptôme n'a l'air de rien, la cause est
+là.
+
+### Durcissement du conteneur
+
+Racine en lecture seule (`/tmp` en tmpfs), `mem_limit 2g`, `pids_limit 256`,
+toutes les capabilities retirées, `no-new-privileges`, journaux plafonnés à
+3 × 10 Mo, processus en uid 1000. `ffmpeg` traite des fichiers fournis par les
+membres : ces limites sont ce qui empêche un fichier piégé ou une rafale de
+dépôts de mettre le CT à genoux.
+
+### Contrôle après déploiement
+
+```bash
+ssh root@192.168.1.243 'sh /opt/clipvault/scripts/verifier-deploiement.sh'
+```
+
+Il vérifie ce qui a déjà cassé une fois : code réellement embarqué dans l'image
+(un `docker compose up` sans `--build` laisse l'ancien), cookie de session émis
+derrière le proxy, volume monté sur `/media`, durcissement effectif. **Rebuilder
+avec `--no-cache` quand un fichier source change** et relancer ce script.
 
 ### Mise à jour
 

@@ -49,11 +49,32 @@ if (production && authMode === "dev") {
   );
 }
 
+/**
+ * true = fait confiance à toute la chaîne X-Forwarded-For, donc au client qui
+ * peut la forger : la limitation de débit devient contournable. Un nombre =
+ * nombre de proxys de confiance : seul le dernier maillon ajouté par le proxy
+ * fait foi, les valeurs ajoutées par le client sont ignorées.
+ */
+function trustProxy(): boolean | string | ((address: string, hop: number) => boolean) {
+  const raw = (process.env.TRUST_PROXY ?? "false").trim();
+  if (raw === "true") {
+    return true;
+  }
+  if (raw === "false" || raw === "") {
+    return false;
+  }
+  if (/^\d+$/.test(raw)) {
+    const hops = Number(raw);
+    return (_address: string, hop: number) => hop < hops;
+  }
+  return raw;
+}
+
 export const config = {
   root,
   production,
   host: process.env.HOST ?? "0.0.0.0",
-  trustProxy: (process.env.TRUST_PROXY ?? "false") === "true",
+  trustProxy: trustProxy(),
   cookieSecure: (process.env.COOKIE_SECURE ?? "false") === "true",
   oidcLogoutRedirect: (process.env.OIDC_LOGOUT_REDIRECT ?? "false") === "true",
   port: Number(process.env.PORT ?? 8099),
