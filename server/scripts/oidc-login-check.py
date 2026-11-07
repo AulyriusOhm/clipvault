@@ -168,6 +168,15 @@ def main() -> int:
         return 1
     print("4. code d'autorisation reçu sur", callback.split("?")[0])
 
+    # le retour peut viser l'URL publique (réglage public_url) : le script tourne
+    # sur la même machine que l'application, on ramène l'appel sur APP pour que le
+    # cookie de session corresponde, le state restant validé côté serveur
+    parsed = urllib.parse.urlparse(callback)
+    app_parsed = urllib.parse.urlparse(APP)
+    if parsed.netloc != app_parsed.netloc:
+        print(f"   retour réécrit de {parsed.netloc} vers {app_parsed.netloc} (test local)")
+        callback = urllib.parse.urlunparse(parsed._replace(scheme=app_parsed.scheme, netloc=app_parsed.netloc))
+
     print("5. dépôt du code sur /auth/callback")
     status, headers, _ = call(callback)
     landing = headers.get("location", "")

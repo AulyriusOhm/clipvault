@@ -61,9 +61,19 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       return reply.redirect("/login?error=callback%20incomplet");
     }
     try {
-      const returnTo = request.session.returnTo;
+      // la régénération vide la session : les données OIDC doivent survivre,
+      // sinon completeLogin ne retrouve plus ni son state ni son code_verifier
+      const carried = {
+        returnTo: request.session.returnTo,
+        oidcState: request.session.oidcState,
+        oidcNonce: request.session.oidcNonce,
+        oidcVerifier: request.session.oidcVerifier,
+      };
       await regenerateSession(request);
-      request.session.returnTo = returnTo;
+      request.session.returnTo = carried.returnTo;
+      request.session.oidcState = carried.oidcState;
+      request.session.oidcNonce = carried.oidcNonce;
+      request.session.oidcVerifier = carried.oidcVerifier;
       const user = await completeLogin(request, q.code, q.state);
       request.log.info({ user: user.username }, "connexion OIDC");
       const target = safeNext(request.session.returnTo);
