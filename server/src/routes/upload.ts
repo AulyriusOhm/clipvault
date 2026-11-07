@@ -94,8 +94,9 @@ async function runPipeline(
         shareExpires,
       );
 
-    const defaults = (getSettings().default_tags ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
-    setTags(Number(info.lastInsertRowid), [...fields.tags.split(","), ...defaults]);
+    // le champ est pré-rempli avec les tags par défaut : ce que le membre laisse
+    // dans le formulaire fait foi, y compris s'il les a tous retirés
+    setTags(Number(info.lastInsertRowid), fields.tags.split(","));
     recordJob(jobId, filename, "done", 100, `clip publié · /watch/${slug}`, uploaderId, Number(info.lastInsertRowid));
   } catch (error) {
     app.log.error({ err: error }, "traitement du clip échoué");

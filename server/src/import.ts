@@ -134,7 +134,7 @@ for (const file of files) {
       file,
     );
     const defaults = (getSettings().default_tags ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
-    setTags(Number(info.lastInsertRowid), [...(game ? [game[1], "import"] : ["import"]), ...defaults]);
+    setTags(Number(info.lastInsertRowid), defaults);
     imported += 1;
     console.log(`  + #${String(code).padStart(4, "0")} ${title} — ${Math.round(meta.duration_s)} s, ${(size / 1024 / 1024).toFixed(1)} Mo${game ? ` · ${game[1]}` : ""}`);
   } catch (error) {
