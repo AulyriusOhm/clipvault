@@ -30,6 +30,74 @@
     });
   }
 
+  document.querySelectorAll("[data-tag-editor]").forEach(function (editor) {
+    var hidden = document.getElementById(editor.getAttribute("data-tag-editor"));
+    var list = editor.querySelector(".tag-editor__list");
+    var input = editor.querySelector(".tag-editor__input");
+    if (!hidden || !list || !input) {
+      return;
+    }
+
+    function values() {
+      return hidden.value.split(",").map(function (v) { return v.trim(); }).filter(Boolean);
+    }
+
+    function paint() {
+      list.innerHTML = "";
+      values().forEach(function (tag) {
+        var chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "tag tag--chip is-active";
+        chip.setAttribute("data-remove-tag", tag);
+        chip.textContent = tag + " ";
+        var icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        icon.setAttribute("class", "ic ic--sm");
+        icon.setAttribute("aria-hidden", "true");
+        var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        use.setAttribute("href", "#i-x");
+        icon.appendChild(use);
+        chip.appendChild(icon);
+        list.appendChild(chip);
+      });
+    }
+
+    function commit(next) {
+      hidden.value = next.join(", ");
+      paint();
+    }
+
+    list.addEventListener("click", function (event) {
+      var chip = event.target.closest("[data-remove-tag]");
+      if (!chip) {
+        return;
+      }
+      event.preventDefault();
+      var tag = chip.getAttribute("data-remove-tag").toLowerCase();
+      commit(values().filter(function (value) { return value.toLowerCase() !== tag; }));
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter") {
+        return;
+      }
+      event.preventDefault();
+      var tag = input.value.trim().toLowerCase().replace(/\s+/g, "-");
+      if (!tag) {
+        return;
+      }
+      var current = values();
+      if (current.some(function (value) { return value.toLowerCase() === tag; })) {
+        input.value = "";
+        return;
+      }
+      current.push(tag);
+      commit(current.slice(0, 10));
+      input.value = "";
+    });
+
+    paint();
+  });
+
   document.querySelectorAll("[data-tag-palette]").forEach(function (group) {
     var input = document.getElementById(group.getAttribute("data-tag-palette"));
     if (!input) {

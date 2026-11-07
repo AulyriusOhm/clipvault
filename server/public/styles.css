@@ -2376,3 +2376,53 @@ a.brand {
     padding: 0 12px;
   }
 }
+
+/* ---------- Éditeur de tags par défaut (réglages) ---------- */
+.tag-editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sharp);
+  background: var(--surface);
+}
+
+.tag-editor__list {
+  display: contents;
+}
+
+.tag-editor .tag--chip svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.75;
+}
+
+.tag-editor .tag--chip:hover {
+  background: var(--danger, #b03a3a);
+  border-color: var(--danger, #b03a3a);
+  color: #fff;
+}
+
+.tag-editor__input {
+  flex: 1 1 140px;
+  min-width: 120px;
+  border: 0;
+  background: transparent;
+  padding: 4px;
+}
+
+.tag-editor__input:focus {
+  outline: none;
+}
+
+@media (max-width: 760px) {
+  .tag-editor {
+    padding: 6px;
+  }
+
+  .tag-editor .tag--chip {
+    height: 32px;
+  }
+}

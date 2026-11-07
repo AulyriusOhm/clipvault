@@ -47,25 +47,18 @@
 
               <div class="field mt4">
                 <label for="default_tags">Tags par défaut</label>
-                <input class="input" id="default_tags" name="default_tags" type="text" value="<%= settings.default_tags %>" placeholder="fps, ace, clutch…">
-                <span class="field__hint">séparés par des virgules — ajoutés à chaque nouveau dépôt, en plus des tags saisis</span>
-                <div class="tag-palette" data-tag-palette="default_tags">
-                  <% tagPalette.forEach(function (tag) { %>
-                  <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
-                  <% }); %>
-                  <button class="tag tag--chip tag--clear" type="button" data-clear="default_tags">Vider</button>
+                <div class="tag-editor" data-tag-editor="default_tags">
+                  <span class="tag-editor__list">
+                    <% settings.default_tags.split(',').map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (tag) { %>
+                    <button class="tag tag--chip is-active" type="button" data-remove-tag="<%= tag %>">
+                      <%= tag %><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg>
+                    </button>
+                    <% }); %>
+                  </span>
+                  <input class="input tag-editor__input" type="text" id="tag-ajout" placeholder="ajouter un tag puis Entrée" aria-label="Ajouter un tag par défaut">
                 </div>
-
-              <div class="field mt4">
-                <label for="tag_palette">Tags proposés dans les formulaires</label>
-                <input class="input" id="tag_palette" name="tag_palette" type="text" value="<%= settings.tag_palette %>" placeholder="liste par défaut : <%= baseTagChoices.slice(0, 6).join(', ') %>…">
-                <span class="field__hint">laisser vide pour la liste livrée avec l'application — cliquez les pastilles pour composer la vôtre, « Vider » pour tout retirer</span>
-                <div class="tag-palette" data-tag-palette="tag_palette">
-                  <% baseTagChoices.forEach(function (tag) { %>
-                  <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
-                  <% }); %>
-                  <button class="tag tag--chip tag--clear" type="button" data-clear="tag_palette">Vider</button>
-                </div>
+                <input type="hidden" id="default_tags" name="default_tags" value="<%= settings.default_tags %>">
+                <span class="field__hint">cliquez la croix pour retirer un tag — ils sont pré-remplis dans chaque nouveau dépôt</span>
               </div>
 
               <div class="field mt4">
