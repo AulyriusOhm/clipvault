@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { buildLoginUrl, completeLogin, devSignIn, logoutUrl, regenerateSession } from "../auth.ts";
 import { baseContext } from "../context.ts";
-import { publicHighlights } from "../db.ts";
+import { getSettings, publicHighlights } from "../db.ts";
 import { config } from "../config.ts";
 
 /** Refuse tout ce qui n'est pas un chemin interne : bloque //evil.com et /\evil.com */
@@ -46,6 +46,16 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       return reply.redirect("/login");
     }
     const next = safeNext((request.query as Record<string, string | undefined>).next);
+    const publicUrl = getSettings().public_url;
+    if (publicUrl && new URL(publicUrl).host !== request.headers.host) {
+      // La session ouverte sur l'IP LAN (http, cookie Secure refusé) ne survit pas au
+      // retour sur l'URL publique : on renvoie d'abord le navigateur sur le domaine.
+      const cible = new URL("/auth/start", publicUrl);
+      if (next !== "/") {
+        cible.searchParams.set("next", next);
+      }
+      return reply.redirect(cible.toString());
+    }
     if (next !== "/") {
       request.session.returnTo = next;
     }

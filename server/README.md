@@ -40,8 +40,14 @@ Le provider OIDC et l'application `ClipVault` existent dans Authentik
   `nonce`, échange le code avec `client_secret_basic`, lit `userinfo`.
 - Le rôle vient du groupe : membre de `clipvault-admins` → `admin`, sinon `member`.
   Il est réévalué à chaque connexion.
-- URI de retour enregistrées : `http://192.168.5.100:8099/auth/callback` et
-  `http://127.0.0.1:8099/auth/callback`.
+- URI de retour enregistrées : `https://clip.lanro.eu/auth/callback` (et
+  `http://127.0.0.1:8099/auth/callback` pour les essais locaux). **La première URI
+  de la liste devient l'URL de lancement de la tuile dans Authentik** : si une
+  adresse interne y traîne en tête, l'interface du SSO renvoie le navigateur sur
+  cette IP. L'application fixe aussi `meta_launch_url` à `https://clip.lanro.eu`.
+- Une connexion entamée sur une autre adresse que l'URL publique (IP LAN en
+  `http`) est renvoyée sur le domaine par `/auth/start` : le cookie `Secure` n'y
+  serait pas posé et la session serait perdue au retour d'Authentik.
 
 Vérification automatisée de bout en bout (crée un compte de test en amont) :
 

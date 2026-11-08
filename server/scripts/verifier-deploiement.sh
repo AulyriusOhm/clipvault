@@ -18,9 +18,9 @@ printf '\n=== application ===\n'
 code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/login")
 check "page de connexion répond 200 (reçu $code)" "$([ "$code" = "200" ] && echo 1 || echo 0)"
 
-cookie_avec=$(curl -s -D - -o /dev/null -H 'X-Forwarded-Proto: https' -H 'X-Forwarded-For: 203.0.113.7' "$BASE/auth/start?next=%2F" | grep -ci '^set-cookie')
+cookie_avec=$(curl -s -D - -o /dev/null -H 'Host: clip.lanro.eu' -H 'X-Forwarded-Proto: https' -H 'X-Forwarded-For: 203.0.113.7' "$BASE/auth/start?next=%2F" | grep -ci '^set-cookie')
 check "cookie de session émis derrière le proxy" "$([ "$cookie_avec" -ge 1 ] && echo 1 || echo 0)"
-cookie_sans=$(curl -s -D - -o /dev/null "$BASE/auth/start?next=%2F" | grep -ci '^set-cookie')
+cookie_sans=$(curl -s -D - -o /dev/null -H 'Host: clip.lanro.eu' "$BASE/auth/start?next=%2F" | grep -ci '^set-cookie')
 check "aucun cookie en clair sans X-Forwarded-Proto" "$([ "$cookie_sans" -eq 0 ] && echo 1 || echo 0)"
 
 printf '\n=== image et code ===\n'
