@@ -1,39 +1,37 @@
-# Sécurité
+# Security
 
-ClipVault est un service auto-hébergé : il n'y a pas d'instance publique
-maintenue par le projet, et aucune version n'est supportée au sens d'un
-engagement de correctif. Le code est fourni tel quel (voir `LICENSE`).
+ClipVault is self-hosted software: there is no public instance maintained by the
+project, and no version is "supported" in the sense of a fix commitment. The
+code is provided as is (see `LICENSE`).
 
-## Signaler une vulnérabilité
+## Reporting a vulnerability
 
-Utilise **GitHub → Security → Report a vulnerability** (avis privé) plutôt
-qu'une issue publique : le rapport reste visible des seuls mainteneurs le temps
-du correctif.
+Please use **GitHub → Security → Report a vulnerability** (private advisory)
+rather than a public issue: the report stays visible to the maintainers only
+until a fix ships.
 
-Merci de préciser : version ou commit, configuration (`AUTH_MODE`, présence d'un
-proxy terminant le TLS), étapes de reproduction, et l'impact que tu estimes
-(lecture d'un clip privé, contournement de la limitation de débit, exécution de
-code via un fichier déposé, etc.).
+Useful details: version or commit, configuration (`AUTH_MODE`, whether a proxy
+terminates TLS), reproduction steps, and the impact you believe it has (reading
+a private clip, bypassing rate limiting, code execution through an uploaded
+file, …).
 
-## Périmètre
+## In scope
 
-Sont particulièrement intéressants :
+- bypassing a clip's visibility (`public` / `members` / `link`) or its ownership
+  (deleting someone else's clip);
+- bypassing OIDC authentication or the `admin` role;
+- path traversal, mishandled `Range`, or reading outside `MEDIA_DIR` through
+  `/media/:slug/*`;
+- command injection or sandbox escape around `ffprobe`/`ffmpeg` (crafted
+  uploaded file);
+- bypassing rate limiting through `X-Forwarded-For`;
+- CSRF on routes that write.
 
-- contournement de la visibilité d'un clip (`public` / `members` / `link`) ou de
-  la propriété (suppression d'un clip d'autrui) ;
-- contournement de l'authentification OIDC ou du rôle `admin` ;
-- traversée de chemin, `Range` mal géré ou lecture hors de `MEDIA_DIR` via
-  `/media/:slug/*` ;
-- injection de commande ou évasion du bac à sable autour de `ffprobe`/`ffmpeg`
-  (fichier déposé piégé) ;
-- contournement de la limitation de débit par `X-Forwarded-For` ;
-- CSRF sur les routes qui écrivent.
+## Out of scope
 
-## Hors périmètre
-
-- absence de jeton CSRF par formulaire : le modèle est `SameSite=Lax` + contrôle
-  d'`Origin`, documenté dans `server/README.md` ;
-- sessions en mémoire (perdues au redémarrage) et absence de quota par membre :
-  limites connues, listées dans le README ;
-- déploiements qui exposent `AUTH_MODE=dev` ou le port `8099` sur Internet :
-  erreur de configuration, pas une vulnérabilité du code.
+- the absence of per-form CSRF tokens: the model is `SameSite=Lax` plus an
+  `Origin` check, documented in `server/README.md`;
+- in-memory sessions (lost on restart) and the absence of a per-member quota:
+  known limits, listed in the README;
+- deployments that expose `AUTH_MODE=dev` or port `8099` to the Internet: a
+  configuration mistake, not a vulnerability in the code.
