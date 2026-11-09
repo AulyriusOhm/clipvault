@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
-# LEGACY — sert uniquement l'ancien déploiement sur plasmasrv (hub VPS -> 10.1.50.10).
-# Depuis la bascule sur le CT GammaClips, l'accès LAN passe par un DNAT sur gammaWTR
-# vers 192.168.1.243:8099 et ce script n'est plus nécessaire. Voir README, section
-# « Déploiement : CT GammaClips ».
-# Tunnel inverse plasmasrv -> hub VPS, qui rend l'app accessible depuis le LAN
-# Grenoble via http://192.168.5.100:8099 (DNAT sur gammaWTR, déjà persisté).
+# LEGACY — tunnel inverse depuis un hôte de dev vers un hub VPS.
+# L'accès distant de ce déploiement passe désormais par le WAF (voir README,
+# section « Déploiement ») : ce script n'est plus nécessaire.
+# Tunnel inverse hôte-de-dev -> hub VPS, qui rendait l'app accessible depuis un
+# second site via un DNAT déjà persisté.
 #
-#   navigateur LAN -> 192.168.5.100:8099
-#     -> DNAT vmbr0:8099 -> 10.10.10.1:8099 (MASQUERADE vers wg0)
+#   navigateur distant -> 192.0.2.20:8099
+#     -> DNAT vmbr0:8099 -> 10.0.0.1:8099 (MASQUERADE vers wg0)
 #       -> hub VPS (écoute WireGuard uniquement)
 #         -> ce tunnel -> 127.0.0.1:8099
 #
@@ -15,9 +14,9 @@
 #         tmux new -d -s clipvault-tunnel ./scripts/clipvault-tunnel.sh
 set -uo pipefail
 
-KEY="${CLIPVAULT_TUNNEL_KEY:-$HOME/.ssh/id_ed25519_ohm}"
-HUB="${CLIPVAULT_TUNNEL_HUB:-root@194.164.201.13}"
-REMOTE="${CLIPVAULT_TUNNEL_REMOTE:-10.10.10.1:8099}"
+KEY="${CLIPVAULT_TUNNEL_KEY:-$HOME/.ssh/id_ed25519}"
+HUB="${CLIPVAULT_TUNNEL_HUB:-root@192.0.2.53}"
+REMOTE="${CLIPVAULT_TUNNEL_REMOTE:-10.0.0.1:8099}"
 LOCAL="${CLIPVAULT_TUNNEL_LOCAL:-127.0.0.1:8099}"
 
 [ -f "$KEY" ] || { echo "clé absente : $KEY" >&2; exit 1; }

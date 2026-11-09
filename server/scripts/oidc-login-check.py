@@ -16,15 +16,18 @@ import urllib.parse
 import urllib.request
 
 APP = os.environ.get("CLIPVAULT_APP", "http://127.0.0.1:8099")
-ISSUER = "https://auth.lanro.eu"
+ISSUER = os.environ.get("CLIPVAULT_ISSUER", "https://auth.lanro.eu")
 FLOW = "default-authentication-flow"
 USERNAME = os.environ.get("CLIPVAULT_TEST_USER", "clipvault-test")
-PASSWORD = os.environ.get("CLIPVAULT_TEST_PASSWORD", "ClipVault-Test-2026-x7q")
+PASSWORD = os.environ.get("CLIPVAULT_TEST_PASSWORD")
 VERBOSE = "--verbose" in sys.argv
 WRITE_TESTS = "--write-tests" in sys.argv
 UPLOAD = ""
 if "--upload" in sys.argv:
     UPLOAD = sys.argv[sys.argv.index("--upload") + 1]
+
+if not PASSWORD:
+    sys.exit("CLIPVAULT_TEST_PASSWORD est requis (mot de passe du compte de test Authentik).")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

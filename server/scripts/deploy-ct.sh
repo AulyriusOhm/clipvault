@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Déploiement de ClipVault sur le CT GammaClips (192.168.1.243).
+# Déploiement de ClipVault sur un CT Proxmox dédié (192.0.2.10).
 # Le code source est attendu dans /root/clipvault-src.tar.gz (avec /app/.env à côté).
 #
 #   ./scripts/deploy-ct.sh              # construit, démarre, importe les vidéos existantes

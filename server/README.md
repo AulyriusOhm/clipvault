@@ -52,8 +52,9 @@ Le provider OIDC et l'application `ClipVault` existent dans Authentik
 Vérification automatisée de bout en bout (crée un compte de test en amont) :
 
 ```bash
-python3 scripts/oidc-login-check.py --verbose
+CLIPVAULT_TEST_PASSWORD=… python3 scripts/oidc-login-check.py --verbose
 ```
+
 
 ## Administration
 
@@ -102,10 +103,11 @@ le compte est créé au premier login si `invite_only` est actif.
 Tout est dans `data/` (ignoré par git) : `clipvault.db`, `media/`, `.session-secret`.
 Sauvegarde = copier ce dossier.
 
-## Déploiement : CT GammaClips (production)
+## Déploiement (production)
 
-L'instance publique tourne sur le CT 143 `GammaClips` de NASa, à la place de
-FireShare, sur le domaine **https://clip.lanro.eu**.
+L'instance publique tourne dans un conteneur LXC Proxmox, à la place de
+FireShare, sur le domaine **https://clip.lanro.eu**. Les adresses ci-dessous
+sont des placeholders (`192.0.2.0/24` = documentation RFC 5737).
 
 | Élément | Valeur |
 | --- | --- |
@@ -114,11 +116,11 @@ FireShare, sur le domaine **https://clip.lanro.eu**.
 | Port | `8099`, atteint par le WAF ; le CT n'est **pas** exposé directement |
 | Données | `/opt/clipvault/data` (`clipvault.db`, `.session-secret`) |
 | Médias | `/srv/fireshare/clipvault/media` monté sur `/media` (`MEDIA_DIR=/media`) |
-| Quota du volume | **150 Go** (`refquota` ZFS de `HDD_POOL/subvol-143-disk-0`) |
-| Entrée publique | `clip.lanro.eu` → WAF BunkerWeb (`194.164.201.13`) → `192.168.1.243:8099` |
+| Quota du volume | **150 Go** (`refquota` ZFS de `POOL/subvol-<vmid>-disk-0`) |
+| Entrée publique | `clip.lanro.eu` → WAF BunkerWeb → `192.0.2.10:8099` |
 | Certificat | wildcard `*.lanro.eu` (Let's Encrypt), terminé par le WAF |
 | Authentification | Authentik OIDC (`https://auth.lanro.eu/application/o/clipvault/`), groupe admin `clipvault-admins` |
-| Accès LAN | `http://192.168.1.243:8099` depuis le site SLP ; `http://192.168.5.100:8099` par DNAT depuis Grenoble |
+| Accès LAN | `http://192.0.2.10:8099` sur le réseau local, ou par redirection depuis un autre site |
 
 Derrière un proxy qui termine le TLS, trois variables sont obligatoires :
 `BASE_URL=https://clip.lanro.eu`, `COOKIE_SECURE=true`, et `TRUST_PROXY=1`
@@ -148,7 +150,7 @@ dépôts de mettre le CT à genoux.
 ### Contrôle après déploiement
 
 ```bash
-ssh root@192.168.1.243 'sh /opt/clipvault/scripts/verifier-deploiement.sh'
+ssh root@192.0.2.10 'sh /opt/clipvault/scripts/verifier-deploiement.sh'
 ```
 
 Il vérifie ce qui a déjà cassé une fois : code réellement embarqué dans l'image
@@ -160,9 +162,10 @@ avec `--no-cache` quand un fichier source change** et relancer ce script.
 
 ```bash
 # depuis le poste de dev
+cd server
 tar -czf /tmp/clipvault-src.tar.gz --exclude=node_modules --exclude=data --exclude=.env .
-scp /tmp/clipvault-src.tar.gz root@192.168.1.243:/root/
-ssh root@192.168.1.243 'cd /opt/clipvault && tar -xzf /root/clipvault-src.tar.gz --strip-components=1 && docker compose up -d --build'
+scp /tmp/clipvault-src.tar.gz root@192.0.2.10:/root/
+ssh root@192.0.2.10 'cd /opt/clipvault && tar -xzf /root/clipvault-src.tar.gz --strip-components=1 && docker compose up -d --build'
 ```
 
 ### Stockage et quota
@@ -171,8 +174,8 @@ Les vidéos vivent sur le volume du CT, pas sur le disque système (24 Go). Le
 quota est un `refquota` ZFS, posé côté hôte :
 
 ```bash
-pct set 143 -mp0 HDD_POOL:subvol-143-disk-0,mp=/srv/fireshare,size=150G
-zfs set refquota=150G HDD_POOL/subvol-143-disk-0   # pct set ne touche pas au refquota
+pct set <vmid> -mp0 POOL:subvol-<vmid>-disk-0,mp=/srv/fireshare,size=150G
+zfs set refquota=150G POOL/subvol-<vmid>-disk-0   # pct set ne touche pas au refquota
 ```
 
 `/admin` affiche l'espace libre réel du volume. Le dépôt est refusé avec un

@@ -4,3 +4,5 @@ server/data/
 server/preview/
 server/.env
 .env
+server/scripts/__pycache__/
+.plasma/
