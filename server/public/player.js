@@ -9,6 +9,7 @@
   var play = document.querySelector("[data-play]");
   var big = document.querySelector("[data-big]");
   var volume = document.querySelector("[data-volume]");
+  var range = document.querySelector("[data-volume-range]");
   var time = document.querySelector("[data-time]");
   var scrub = document.querySelector("[data-scrub]");
   var fill = document.querySelector("[data-fill]");
@@ -67,14 +68,70 @@
     big.addEventListener("click", toggle);
   }
 
-  if (volume) {
-    volume.addEventListener("click", function () {
-      video.muted = !video.muted;
+  var VOLUME_KEY = "clipvault:volume";
+  var lastVolume = 1;
+
+  function storedVolume() {
+    try {
+      var raw = window.localStorage.getItem(VOLUME_KEY);
+      var value = raw === null ? NaN : parseFloat(raw);
+      return isFinite(value) ? value : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function storeVolume(value) {
+    try {
+      window.localStorage.setItem(VOLUME_KEY, String(value));
+    } catch (err) {}
+  }
+
+  function refreshVolume() {
+    var silent = video.muted || video.volume === 0;
+    if (range) {
+      range.value = String(Math.round(video.volume * 100));
+      range.style.setProperty("--vol", Math.round(video.volume * 100) + "%");
+    }
+    if (volume) {
       var use = volume.querySelector("use");
       if (use) {
-        use.setAttribute("href", video.muted ? "#i-x" : "#i-volume");
+        use.setAttribute("href", silent ? "#i-x" : "#i-volume");
       }
-      volume.setAttribute("aria-label", video.muted ? "Rétablir le son" : "Couper le son");
+      volume.setAttribute("aria-label", silent ? "Rétablir le son" : "Couper le son");
+    }
+  }
+
+  function applyVolume(value) {
+    video.volume = Math.min(1, Math.max(0, value));
+    video.muted = video.volume === 0;
+    if (video.volume > 0) {
+      lastVolume = video.volume;
+    }
+    refreshVolume();
+  }
+
+  var initialVolume = storedVolume();
+  if (initialVolume !== null) {
+    applyVolume(initialVolume);
+  }
+
+  if (volume) {
+    volume.addEventListener("click", function () {
+      if (video.muted || video.volume === 0) {
+        applyVolume(lastVolume || 1);
+      } else {
+        lastVolume = video.volume;
+        video.muted = true;
+        refreshVolume();
+      }
+    });
+  }
+
+  if (range) {
+    range.addEventListener("input", function () {
+      applyVolume(parseFloat(range.value) / 100);
+      storeVolume(video.volume);
     });
   }
 
@@ -141,7 +198,9 @@
   video.addEventListener("pause", refreshIcon);
   video.addEventListener("ended", refreshIcon);
   video.addEventListener("click", toggle);
+  video.addEventListener("volumechange", refreshVolume);
 
   refreshIcon();
   refreshTime();
+  refreshVolume();
 })();
