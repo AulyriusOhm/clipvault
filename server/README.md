@@ -49,11 +49,17 @@ Le provider OIDC et l'application `ClipVault` existent dans Authentik
   `http`) est renvoyée sur le domaine par `/auth/start` : le cookie `Secure` n'y
   serait pas posé et la session serait perdue au retour d'Authentik.
 
-Vérification automatisée de bout en bout (crée un compte de test en amont) :
+Vérification automatisée de bout en bout : le script déroule le flow
+d'authentification d'Authentik sans navigateur, dépose le code sur
+`/auth/callback` et contrôle que la session est ouverte. Il faut un compte de
+test **avec mot de passe, créé à la main le temps du contrôle puis supprimé** :
+aucun compte de test n'est conservé sur l'IdP.
 
 ```bash
 CLIPVAULT_TEST_PASSWORD=… python3 scripts/oidc-login-check.py --verbose
+# CLIPVAULT_TEST_USER (défaut clipvault-test), CLIPVAULT_APP, CLIPVAULT_ISSUER
 ```
+
 
 
 ## Administration

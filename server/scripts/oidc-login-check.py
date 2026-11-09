@@ -4,7 +4,12 @@ Déroule le flow d'authentification via l'API d'exécution de flows d'Authentik,
 récupère le code d'autorisation, le dépose sur /auth/callback de ClipVault, puis
 vérifie que la session est bien ouverte côté application.
 
-Usage : python3 scripts/oidc-login-check.py [--verbose]
+Aucun compte de test n'est conservé sur l'IdP : en créer un à la main (mot de
+passe, aucun groupe) le temps du contrôle, puis le supprimer.
+
+Usage : CLIPVAULT_TEST_PASSWORD=… python3 scripts/oidc-login-check.py [--verbose]
+Variables : CLIPVAULT_TEST_USER (défaut clipvault-test), CLIPVAULT_APP,
+CLIPVAULT_ISSUER.
 """
 import http.cookiejar
 import json
