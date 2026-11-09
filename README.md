@@ -19,6 +19,25 @@ navigateur, partageable par lien.
   vues, expiration des liens publics.
 - **Une seule dépendance de service** : SQLite. Sauvegarde = copier `data/`.
 
+## Captures
+
+Toutes prises sur l'instance de démonstration (`npm run db:seed` + `npm run media`),
+thème Ember par défaut : aucun clip réel, les vignettes sont des vidéos générées
+par `ffmpeg`.
+
+![Bibliothèque](docs/screenshots/library.png)
+
+![Lecteur](docs/screenshots/watch.png)
+
+| Dépôt | Réglages de l'instance |
+| --- | --- |
+| ![Dépôt](docs/screenshots/upload.png) | ![Réglages](docs/screenshots/admin.png) |
+
+| Bibliothèque (mobile) | Lecteur (mobile) |
+| --- | --- |
+| ![Bibliothèque sur mobile](docs/screenshots/mobile-library.png) | ![Lecteur sur mobile](docs/screenshots/mobile-watch.png) |
+
+
 ## Pile
 
 Node 22 · TypeScript · Fastify 5 · EJS rendu serveur · SQLite
