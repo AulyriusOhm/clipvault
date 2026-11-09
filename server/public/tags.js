@@ -74,7 +74,7 @@
       }
     }
 
-    /** Fait disparaître la pastille de sa zone, puis la fait réapparaître dans l'autre. */
+    /** Fades the chip out of its zone, then brings it back in the other one. */
     function move(chip, targetIsApplied, tag) {
       chip.classList.add("is-leaving");
       window.setTimeout(function () {

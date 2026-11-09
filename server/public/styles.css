@@ -1,11 +1,11 @@
 /* ==========================================================================
-   ClipVault — design de référence « Vault Ledger »
-   Un seul fichier CSS : tokens des 5 thèmes + composants partagés.
-   Identité : bordures 1 px, pas d'ombre, grille de points, mono pour les
-   métadonnées techniques, rayon 2–3 px, échelle 4/8 px.
+   ClipVault — reference design "Vault Ledger"
+   A single CSS file: tokens for the 5 themes + shared components.
+   Identity: 1 px borders, no shadow, dot grid, mono for technical
+   metadata, 2–3 px radius, 4/8 px scale.
    ========================================================================== */
 
-/* --- 1. Polices système (aucune requête réseau) -------------------------- */
+/* --- 1. System fonts (no network requests) ------------------------------- */
 
 :root {
   --font-ui: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -33,7 +33,7 @@
   --dur: 110ms;
 }
 
-/* --- 2. Les 5 thèmes ---------------------------------------------------- */
+/* --- 2. The 5 themes ---------------------------------------------------- */
 
 [data-theme="ember"] {
   --bg: #16110c;
@@ -230,7 +230,7 @@ ul {
   height: 28px;
 }
 
-/* --- 4. Micro-typographie ------------------------------------------------ */
+/* --- 4. Micro-typography ------------------------------------------------- */
 
 .micro {
   font: 600 var(--fs-micro) / 1 var(--font-ui);
@@ -305,7 +305,7 @@ ul {
   color: var(--text-faint);
 }
 
-/* --- 5. Coque : sidebar + zone principale ------------------------------- */
+/* --- 5. Shell: sidebar + main area -------------------------------------- */
 
 .app {
   position: relative;
@@ -475,7 +475,7 @@ a.brand {
   min-width: 0;
 }
 
-/* --- 6. Champs, boutons, contrôles -------------------------------------- */
+/* --- 6. Fields, buttons, controls --------------------------------------- */
 
 .input,
 .select,
@@ -756,7 +756,7 @@ a.brand {
   background: var(--danger-soft);
 }
 
-/* --- 7. Miniatures (placeholders 100 % CSS/SVG) -------------------------- */
+/* --- 7. Thumbnails (100% CSS/SVG placeholders) --------------------------- */
 
 .thumb {
   position: relative;
@@ -848,7 +848,7 @@ a.brand {
   border-radius: var(--r-sharp) 0 0 var(--r-sharp);
 }
 
-/* --- 8. Carte de clip ---------------------------------------------------- */
+/* --- 8. Clip card -------------------------------------------------------- */
 
 .grid-clips {
   display: grid;
@@ -913,7 +913,7 @@ a.brand {
   justify-content: center;
 }
 
-/* --- 9. Barre de filtres -------------------------------------------------- */
+/* --- 9. Filter bar -------------------------------------------------------- */
 
 .filters {
   display: flex;
@@ -988,7 +988,7 @@ a.brand {
   font-weight: 700;
 }
 
-/* --- 11. États : vide, alertes, succès ----------------------------------- */
+/* --- 11. States: empty, alerts, success ---------------------------------- */
 
 .empty {
   border: 1px dashed var(--border-strong);
@@ -1048,7 +1048,7 @@ a.brand {
   margin-top: var(--s5);
 }
 
-/* --- 12. Lecteur (watch.html) -------------------------------------------- */
+/* --- 12. Player (watch.html) --------------------------------------------- */
 
 .player {
   background: var(--surface);
@@ -1229,7 +1229,7 @@ a.brand {
   background: var(--accent);
 }
 
-/* --- 13. Métadonnées techniques (watch.html) ----------------------------- */
+/* --- 13. Technical metadata (watch.html) --------------------------------- */
 
 .dl {
   display: grid;
@@ -1582,7 +1582,7 @@ a.brand {
   background: var(--border);
 }
 
-/* --- 16. Sélecteur de thème ---------------------------------------------- */
+/* --- 16. Theme picker ---------------------------------------------------- */
 
 .theme-switch {
   display: flex;
@@ -1624,7 +1624,7 @@ a.brand {
   min-width: 52px;
 }
 
-/* --- 17. Utilitaires ------------------------------------------------------ */
+/* --- 17. Utilities -------------------------------------------------------- */
 
 .flex {
   display: flex;
@@ -1666,7 +1666,7 @@ a.brand {
   margin-bottom: var(--s5);
 }
 
-/* --- 18. Adaptatif -------------------------------------------------------- */
+/* --- 18. Responsive ------------------------------------------------------- */
 
 @media (max-width: 1240px) {
   .grid-clips {
@@ -1763,7 +1763,7 @@ a.brand {
   }
 }
 
-/* ---------- Accessibilité : lien d'évitement ---------- */
+/* ---------- Accessibility: skip link ------------------ */
 
 .skip {
   position: fixed;
@@ -1788,7 +1788,7 @@ a.brand {
   outline-offset: 2px;
 }
 
-/* ---------- Accessibilité : mouvement réduit ---------- */
+/* ---------- Accessibility: reduced motion ------------- */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -1805,7 +1805,7 @@ a.brand {
   }
 }
 
-/* ---------- Vue publique : lien partagé, sans compte ---------------- */
+/* ---------- Public view: shared link, no account -------------------- */
 
 .public {
   display: flex;
@@ -1855,7 +1855,7 @@ a.brand {
   }
 }
 
-/* ---------- Médias réels (server) ---------------------------------- */
+/* ---------- Real media (server) ------------------------------------ */
 
 .thumb__img {
   position: absolute;
@@ -1879,8 +1879,8 @@ a.brand {
   background: #000;
 }
 
-/* sur une vraie vidéo, aucun calque au-dessus du lecteur : les contrôles natifs
-   doivent recevoir les clics */
+/* on a real video, no layer above the player: native controls must
+   receive the clicks */
 .player__stage--video::after {
   content: none;
 }
@@ -1918,9 +1918,9 @@ a.brand {
   outline-offset: 2px;
 }
 
-/* ---------- Lecteur : cadre maîtrisé, indépendant de la source ---------- */
-/* la taille du lecteur ne dépend plus des dimensions du fichier : cadre 16:9
-   plafonné à 880 px de large et 62 % de la hauteur de vue, centré */
+/* ---------- Player: frame controlled, independent of the source ---------- */
+/* the player size no longer depends on the file dimensions: 16:9 frame
+   capped at 880 px wide and 62 % of the viewport height, centered */
 .player__stage {
   width: min(100%, 880px, calc(62vh * 16 / 9));
   margin-inline: auto;
@@ -1941,7 +1941,7 @@ a.brand {
   z-index: 1;
 }
 
-/* ---------- Lecteur : superposition correcte des éléments de la maquette ---------- */
+/* ---------- Player: correct stacking of the mockup elements ---------- */
 .player__big,
 .player__tag {
   z-index: 2;
@@ -1955,7 +1955,7 @@ a.brand {
   margin-left: 0;
 }
 
-/* ---------- Détails techniques : lisible à toute largeur ---------- */
+/* ---------- Technical details: readable at any width -------------- */
 .dl__k {
   flex: 0 0 auto;
   white-space: nowrap;
@@ -1968,8 +1968,8 @@ a.brand {
 }
 
 /* ==========================================================================
-   Mobile — direction « application » : onglets en bas, vignettes pleines,
-   aucune bordure de registre. Le bureau n'est pas touché.
+   Mobile — "app" direction: tabs at the bottom, full-bleed thumbnails,
+   no ledger border. Desktop is untouched.
    ========================================================================== */
 
 @media (max-width: 760px) {
@@ -1978,7 +1978,7 @@ a.brand {
     padding-bottom: 64px;
   }
 
-  /* --- barre d'onglets collée en bas --- */
+  /* ---------- tab bar pinned to the bottom ---------- */
   .sidebar {
     position: fixed;
     top: auto;
@@ -2063,7 +2063,7 @@ a.brand {
     display: none;
   }
 
-  /* --- en-tête : titre, puis recherche en pilule --- */
+  /* ---------- header: title, then search as a pill ---------- */
   .topbar {
     align-items: center;
     gap: var(--s3);
@@ -2111,7 +2111,7 @@ a.brand {
     padding: var(--s3) var(--s4) var(--s5);
   }
 
-  /* --- filtres en pastilles défilantes --- */
+  /* ---------- scrolling pill filters ----- */
   .filters {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -2143,7 +2143,7 @@ a.brand {
     display: none;
   }
 
-  /* --- bandeau public sur une ligne --- */
+  /* ---------- public banner on one line ---------- */
   .session-note {
     padding: var(--s2) var(--s3);
     font-size: 11px;
@@ -2157,7 +2157,7 @@ a.brand {
     font-size: 11px;
   }
 
-  /* --- clips : grandes vignettes, sans cadre --- */
+  /* ---------- clips: large thumbnails, no frame ---------- */
   .grid-clips {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--s5);
@@ -2196,7 +2196,7 @@ a.brand {
     color: var(--text-dim);
   }
 
-  /* --- lecteur --- */
+  /* ---------- player ---------- */
   .player {
     border-radius: 10px;
   }
@@ -2218,7 +2218,7 @@ a.brand {
     font-size: 11px;
   }
 
-  /* --- page clip : ordre pour le pouce --- */
+  /* ---------- clip page: order for the thumb ---------- */
   .watch-cols,
   .upload-cols {
     display: flex;
@@ -2253,7 +2253,7 @@ a.brand {
     text-align: left;
   }
 
-  /* --- connexion : le bouton SSO sans défiler --- */
+  /* ---------- login: the SSO button without scrolling ---------- */
   .auth {
     display: block;
   }
@@ -2286,7 +2286,7 @@ a.brand {
     gap: var(--s3);
   }
 
-  /* liste des membres : le nom était écrasé à 13 px et se repliait sur 3 lignes */
+  /* member list: the name was squeezed at 13 px and wrapped onto 3 lines */
   .member-row {
     flex-wrap: wrap;
     row-gap: var(--s2);
@@ -2316,7 +2316,7 @@ a.brand {
     min-height: 32px;
   }
 
-  /* libellé de règle trop long : il poussait le document de 4 px */
+  /* rule label too long: it pushed the document 4 px wider */
   .rule-label {
     flex-wrap: wrap;
   }
@@ -2325,7 +2325,7 @@ a.brand {
     white-space: normal;
   }
 
-  /* les URL en monospace débordaient sur la vue publique */
+  /* monospace URLs overflowed on the public view */
   .mono {
     overflow-wrap: anywhere;
   }
@@ -2368,7 +2368,7 @@ a.brand {
   }
 }
 
-/* ---------- Tags sur les cartes de la bibliothèque ---------- */
+/* ---------- Tags on library cards --------------------------- */
 .clip__tags {
   display: flex;
   flex-wrap: wrap;
@@ -2394,7 +2394,7 @@ a.brand {
   }
 }
 
-/* ---------- Palette de tags cliquables (dépôt, édition) ---------- */
+/* ---------- Clickable tag palette (upload, edit) ----------------- */
 .tag-palette {
   display: flex;
   flex-wrap: wrap;
@@ -2450,7 +2450,7 @@ a.brand {
   }
 }
 
-/* ---------- Éditeur de tags par défaut (réglages) ---------- */
+/* ---------- Default tag editor (settings) ------------------ */
 .tag-editor {
   display: flex;
   flex-direction: column;
@@ -2539,7 +2539,7 @@ a.brand {
   }
 }
 
-/* ---------- Stockage (réglages) ---------- */
+/* ---------- Storage (settings) ----------- */
 .storage-line {
   display: flex;
   align-items: center;

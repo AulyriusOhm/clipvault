@@ -1,91 +1,91 @@
 # BRIEF — ClipVault, design mockups (v0.1)
 
-## Le produit
+## The product
 
-ClipVault est un remplaçant auto-hébergé de **Fireshare** : une plateforme d'hébergement et de
-partage rapide de **clips de jeux vidéo**. Cible : un petit groupe de joueurs auto-hébergeurs
-(5 à 50 utilisateurs) qui droppent leurs clips et les partagent par lien.
+ClipVault is a self-hosted replacement for **Fireshare**: a platform for hosting and
+quickly sharing **video game clips**. Target: a small group of self-hosting players
+(5 to 50 users) who drop their clips and share them by link.
 
-Ce que Fireshare fait mal et que ClipVault doit faire mieux :
+What Fireshare does badly and ClipVault must do better:
 
-1. **Pas de SSO.** ClipVault s'authentifie via **Authentik** (OIDC). L'écran de login est donc
-   minimal : un bouton "Se connecter avec Authentik", le nom de l'instance, un état d'erreur
-   propre. Pas de formulaire email/mot de passe (optionnel, mais pas la voie principale).
-2. **Interface datée.** Fireshare ressemble à un Bootstrap 4 de 2016 : cartes lourdes, ombres
-   partout, coins arrondis génériques, typographie par défaut. ClipVault doit être
-   **minimaliste, calme, dense en information, et clairement dessiné** — pas un template.
-3. **Thèmes.** L'utilisateur choisit parmi **5 thèmes**, persistés côté client :
-   - **Ember** — noir profond + marron clair (accent chaud, sable/ambre)
-   - **Tide** — noir profond + cyan (accent froid, technique)
-   - **Moss** — vert + blanc (accent végétal, lumineux, faible saturation)
-   - **Aurora** — blanc + violet (clair, accent violet, contraste doux)
-   - **Paper** — gris + marron (neutre, papier, presque monochrome, accent brun)
+1. **No SSO.** ClipVault authenticates via **Authentik** (OIDC). The login screen is
+   therefore minimal: a "Sign in with Authentik" button, the instance name, a clean
+   error state. No email/password form (optional, but not the main path).
+2. **Dated interface.** Fireshare looks like Bootstrap 4 from 2016: heavy cards, shadows
+   everywhere, generic rounded corners, default typography. ClipVault must be
+   **minimalist, calm, information-dense, and clearly drawn** — not a template.
+3. **Themes.** The user picks among **5 themes**, persisted client-side:
+   - **Ember** — deep black + light brown (warm accent, sand/amber)
+   - **Tide** — deep black + cyan (cold accent, technical)
+   - **Moss** — green + white (plant accent, bright, low saturation)
+   - **Aurora** — white + purple (light, purple accent, soft contrast)
+   - **Paper** — grey + brown (neutral, paper, almost monochrome, brown accent)
 
-## Périmètre des mockups
+## Mockup scope
 
-Des **mockups HTML statiques**, pas d'application. Pas de backend, pas de build, pas de framework.
-Chaque écran est un fichier `.html` autonome qui partage un CSS et un JS de thème.
+**Static HTML mockups**, not an application. No backend, no build, no framework.
+Each screen is a standalone `.html` file sharing one CSS and one theme JS.
 
-Écrans à produire (4 fichiers HTML par variante) :
+Screens to produce (4 HTML files per variant):
 
-| Fichier          | Contenu attendu                                                                                          |
+| File             | Expected content                                                                                          |
 | ---------------- | -------------------------------------------------------------------------------------------------------- |
-| `library.html`   | Écran principal : grille des clips, recherche, filtres (jeu, tag, date, durée), tri, état vide, pagination |
-| `watch.html`     | Lecture d'un clip : player 16:9, métadonnées (jeu, joueur, date, durée, résolution), tags, actions (copier le lien, télécharger, supprimer), clips suggérés / suivants |
-| `upload.html`    | Dépôt d'un clip : zone de drop, progression d'un upload en cours, file d'attente, saisie des métadonnées (titre, jeu, tags, visibilité), état de succès |
-| `login.html`     | Page de connexion Authentik : nom de l'instance, bouton SSO unique, mention auto-hébergée, état d'erreur discret |
+| `library.html`   | Main screen: clip grid, search, filters (game, tag, date, duration), sort, empty state, pagination        |
+| `watch.html`     | Clip playback: 16:9 player, metadata (game, player, date, duration, resolution), tags, actions (copy link, download, delete), suggested / next clips |
+| `upload.html`    | Clip deposit: drop zone, in-progress upload, queue, metadata entry (title, game, tags, visibility), success state |
+| `login.html`     | Authentik login page: instance name, single SSO button, self-hosted mention, discreet error state        |
 
-Plus :
-- `styles.css` — toutes les variables de thème + composants (partagé par les 4 pages)
-- `theme.js` — bascule de thème + persistance `localStorage`, sélecteur visible sur **toutes** les pages
-- `notes.md` — 15 à 30 lignes : intentions de design, ce qui distingue chaque thème, ce qui est
-  volontairement écarté
+Plus:
+- `styles.css` — all theme variables + components (shared by the 4 pages)
+- `theme.js` — theme switching + `localStorage` persistence, selector visible on **every** page
+- `notes.md` — 15 to 30 lines: design intents, what sets each theme apart, what is
+  deliberately left out
 
-## Exigences techniques
+## Technical requirements
 
-- **Aucune dépendance externe obligatoire.** Pas de CDN Tailwind, pas d'images distantes, pas de
-  webfont distante pour le rendu de base (une Google Font *optionnelle* avec fallback système est
-  tolérée, mais le mockup doit être lisible hors-ligne). Miniatures = placeholders générés en
-  CSS/SVG inline (dégradé + libellé), pas de `picsum.photos`.
-- Un seul fichier `styles.css` et un seul `theme.js` par variante, référencés en relatif.
-- **Les 5 thèmes doivent être implémentés** via un attribut sur `<html>` (`data-theme="ember"`)
-  ou des classes, et basculer instantanément sans rechargement. Un thème = un jeu complet de
-  variables (fond, surface, surface élevée, bordure, texte, texte faible, accent, accent-contraste).
-  Ne pas faire 5 variations de la même couleur : les 5 thèmes doivent être perceptiblement différents
-  en température et en contraste, y compris la hiérarchie des surfaces.
-- Tailles de cible : **desktop 1440 px** prioritaire, mais pas de layout cassé à 1024 px. Un
-  comportement mobile simple (grille qui se replie) est un plus, pas une obligation.
-- Contenu factice **réaliste** : noms de jeux et de clips crédibles (pas "Lorem ipsum", pas
-  "Item 1"), durées, tailles de fichier, dates relatives ("il y a 2 jours"), pseudos de joueurs.
-  La densité d'information et la crédibilité du contenu font partie de la qualité du mockup.
+- **No mandatory external dependency.** No Tailwind CDN, no remote images, no remote
+  webfont for base rendering (an *optional* Google Font with a system fallback is
+  tolerated, but the mockup must be readable offline). Thumbnails = placeholders generated in
+  inline CSS/SVG (gradient + label), no `picsum.photos`.
+- A single `styles.css` and a single `theme.js` per variant, referenced relatively.
+- **All 5 themes must be implemented** via an attribute on `<html>` (`data-theme="ember"`)
+  or classes, and switch instantly without reload. One theme = one complete set of
+  variables (background, surface, elevated surface, border, text, muted text, accent, accent-contrast).
+  Do not make 5 variations of the same colour: the 5 themes must be perceptibly different
+  in temperature and in contrast, including the surface hierarchy.
+- Target sizes: **desktop 1440 px** first, but no broken layout at 1024 px. A simple
+  mobile behaviour (grid that folds) is a plus, not a requirement.
+- **Realistic** dummy content: credible game and clip names (no "Lorem ipsum", no
+  "Item 1"), durations, file sizes, relative dates ("2 days ago"), player handles.
+  Information density and content credibility are part of the mockup's quality.
 
-## Style — la ligne rouge
+## Style — the red line
 
-Le commanditaire refuse explicitement une interface "AI slop". Concrètement, **à éviter** :
+The client explicitly rejects an "AI slop" interface. Concretely, **to avoid**:
 
-- Emoji utilisés comme iconographie ; jeux d'icônes incohérents. Utilise des SVG inline dessinés
-  avec un trait régulier (stroke cohérent, 1.5–2 px) et une grille de 20 ou 24.
-- Dégradés violets/bleus par défaut, glow, glassmorphism généralisé, ombres portées diffuses
-  empilées, `border-radius: 24px` sur tout, coins arrondis sur les cartes *et* les boutons *et*
-  les champs avec la même valeur.
-- Le trio "hero + 3 cards + CTA centré" appliqué à un écran d'application.
-- Titres en `font-weight: 800` partout, tracking négatif au hasard, texte gris clair illisible.
-- Animations gratuites, `transition: all .3s` sur tout.
+- Emoji used as iconography; inconsistent icon sets. Use inline SVG drawn
+  with a regular stroke (consistent stroke, 1.5–2 px) and a 20 or 24 grid.
+- Default purple/blue gradients, glow, widespread glassmorphism, stacked diffuse
+  drop shadows, `border-radius: 24px` on everything, rounded corners on cards *and* buttons *and*
+  fields with the same value.
+- The "hero + 3 cards + centred CTA" trio applied to an application screen.
+- `font-weight: 800` titles everywhere, random negative tracking, unreadable light grey text.
+- Gratuitous animations, `transition: all .3s` on everything.
 
-**À rechercher :**
+**To aim for:**
 
-- Une grille et un rythme vertical assumés (échelle d'espacement constante, 4 ou 8 px).
-- Deux ou trois niveaux de surface maximum, séparés par la bordure et non par l'ombre.
-- Une échelle typographique courte et respectée (par ex. 12 / 13 / 15 / 18 / 24), une seule
-  famille pour l'UI + éventuellement une mono pour les métadonnées techniques (codec, bitrate,
-  taille de fichier).
-- Des états honnêtes : hover, focus visible au clavier, sélection, actif, vide, erreur.
-- Une identité propre : le mockup doit être reconnaissable au premier coup d'œil et ne pas
-  ressembler à ce que produirait un autre modèle. Prends un parti pris, assume-le.
+- An assumed grid and vertical rhythm (constant spacing scale, 4 or 8 px).
+- Two or three surface levels at most, separated by the border and not by the shadow.
+- A short and respected typographic scale (e.g. 12 / 13 / 15 / 18 / 24), a single
+  family for the UI + possibly a mono for technical metadata (codec, bitrate,
+  file size).
+- Honest states: hover, keyboard-visible focus, selection, active, empty, error.
+- A distinctive identity: the mockup must be recognisable at first glance and must not
+  look like what another model would produce. Take a stance, own it.
 
-## Livraison
+## Delivery
 
-Écris **uniquement** dans le dossier de ta variante, indiqué dans ta tâche. Ne touche à aucun
-autre fichier du dépôt. Ne crée pas de README de projet, ne crée pas de package.json, pas de
-serveur. À la fin, réponds avec un résumé de 10 lignes maximum : le parti pris de design, les
-noms de fichiers écrits, et la commande exacte pour ouvrir le mockup.
+Write **only** in your variant's folder, as given in your task. Do not touch any
+other file in the repository. Do not create a project README, do not create a package.json, no
+server. When done, answer with a summary of 10 lines maximum: the design stance, the
+file names written, and the exact command to open the mockup.

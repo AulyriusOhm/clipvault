@@ -32,7 +32,7 @@
 
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(url).then(
-        function () { feedback(button, "Copié"); },
+        function () { feedback(button, "Copied"); },
         function () { feedback(button, url); },
       );
       return;
@@ -47,9 +47,9 @@
     area.select();
     try {
       document.execCommand("copy");
-      feedback(button, "Copié");
+      feedback(button, "Copied");
     } catch (error) {
-      window.prompt("Copier ce lien :", url);
+      window.prompt("Copy this link:", url);
     }
     document.body.removeChild(area);
   });

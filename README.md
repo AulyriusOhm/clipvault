@@ -19,9 +19,6 @@ a link.
   link expiry.
 - **A single service dependency**: SQLite. Backup = copy `data/`.
 
-The interface is in French — labels live in plain EJS templates, so translating
-it is a find-and-replace away.
-
 ## Screenshots
 
 Taken on the demo instance (`npm run db:seed` + `npm run media`), default Ember

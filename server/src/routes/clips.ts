@@ -28,21 +28,21 @@ export async function clipRoutes(app: FastifyInstance): Promise<void> {
     const { slug } = request.params as { slug: string };
     const clip = getClip(slug);
     if (!clip || clip.deleted_at) {
-      return reply.code(404).send({ error: "clip introuvable" });
+      return reply.code(404).send({ error: "clip not found" });
     }
     if (!visible(clip, request.user?.id)) {
-      return reply.code(403).send({ error: "accès refusé" });
+      return reply.code(403).send({ error: "access denied" });
     }
 
     const file = abs(clip.file_path);
     const stat = await fs.promises.stat(file).catch(() => null);
     if (!stat) {
-      return reply.code(404).send({ error: "fichier absent du disque" });
+      return reply.code(404).send({ error: "file missing from disk" });
     }
 
     const wantsDownload = (request.query as Record<string, string | undefined>).download === "1";
     if (wantsDownload && !request.user) {
-      return reply.code(403).send({ error: "téléchargement réservé aux membres connectés" });
+      return reply.code(403).send({ error: "download reserved for signed-in members" });
     }
     if (wantsDownload) {
       const extension = path.extname(clip.file_path) || ".mp4";
@@ -92,14 +92,14 @@ export async function clipRoutes(app: FastifyInstance): Promise<void> {
     const { slug } = request.params as { slug: string };
     const clip = getClip(slug);
     if (!clip || clip.deleted_at || !clip.thumb_path) {
-      return reply.code(404).send({ error: "miniature absente" });
+      return reply.code(404).send({ error: "thumbnail missing" });
     }
     if (!visible(clip, request.user?.id)) {
-      return reply.code(403).send({ error: "accès refusé" });
+      return reply.code(403).send({ error: "access denied" });
     }
     const file = abs(clip.thumb_path);
     if (!fs.existsSync(file)) {
-      return reply.code(404).send({ error: "miniature absente" });
+      return reply.code(404).send({ error: "thumbnail missing" });
     }
     reply.header("cache-control", "private, max-age=86400");
     reply.type("image/jpeg");
@@ -110,19 +110,19 @@ export async function clipRoutes(app: FastifyInstance): Promise<void> {
     const { slug } = request.params as { slug: string };
     const clip = getClip(slug);
     if (!clip || clip.deleted_at) {
-      return reply.code(404).send({ error: "clip introuvable" });
+      return reply.code(404).send({ error: "clip not found" });
     }
     if (!canManage(clip, request.user)) {
-      return reply.code(403).send({ error: "modification réservée à l'auteur ou à un administrateur" });
+      return reply.code(403).send({ error: "edit reserved for the author or an administrator" });
     }
     const query = request.query as Record<string, string | undefined>;
     return reply.view("edit.ejs", {
       ...baseContext(request),
-      title: `Modifier — ${clip.title}`,
+      title: `Edit — ${clip.title}`,
       active: "library",
       clip,
       tagsValue: clip.tags.split(" ").filter(Boolean).join(", "),
-      flash: query.ok ? "Modifications enregistrées." : null,
+      flash: query.ok ? "Changes saved." : null,
     });
   });
 
@@ -130,16 +130,16 @@ export async function clipRoutes(app: FastifyInstance): Promise<void> {
     const { slug } = request.params as { slug: string };
     const clip = getClip(slug);
     if (!clip || clip.deleted_at) {
-      return reply.code(404).send({ error: "clip introuvable" });
+      return reply.code(404).send({ error: "clip not found" });
     }
     if (!canManage(clip, request.user)) {
-      return reply.code(403).send({ error: "modification réservée à l'auteur ou à un administrateur" });
+      return reply.code(403).send({ error: "edit reserved for the author or an administrator" });
     }
 
     const body = request.body as Record<string, string | undefined>;
     const title = (body.title ?? "").trim().slice(0, 90);
     if (!title) {
-      return reply.redirect(`/clips/${slug}/edit?error=${encodeURIComponent("le titre ne peut pas être vide")}`);
+      return reply.redirect(`/clips/${slug}/edit?error=${encodeURIComponent("the title cannot be empty")}`);
     }
     const visibility = ["link", "members", "public"].includes(body.visibility ?? "") ? body.visibility! : clip.visibility;
     const days = Math.max(0, Number(body.expiry_days ?? 0) || 0);
@@ -162,10 +162,10 @@ export async function clipRoutes(app: FastifyInstance): Promise<void> {
     const { slug } = request.params as { slug: string };
     const clip = getClip(slug);
     if (!clip) {
-      return reply.code(404).send({ error: "clip introuvable" });
+      return reply.code(404).send({ error: "clip not found" });
     }
     if (!canManage(clip, request.user)) {
-      return reply.code(403).send({ error: "suppression réservée à l'auteur ou à un administrateur" });
+      return reply.code(403).send({ error: "delete reserved for the author or an administrator" });
     }
     softDelete(clip.id);
     for (const file of [clip.file_path, clip.thumb_path]) {

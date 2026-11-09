@@ -1,47 +1,47 @@
-# ClipVault — design de référence
+# ClipVault — reference design
 
-Variante retenue après le test à l'aveugle : « Vault Ledger », durcie.
+Variant selected after the blind test: "Vault Ledger", hardened.
 
-Ouvrir `index.html` (sommaire), ou directement `library.html` pour entrer dans le mockup.
+Open `index.html` (contents), or directly `library.html` to enter the mockup.
 
-## Écrans
+## Screens
 
-| Fichier | Contenu |
+| File | Content |
 | --- | --- |
-| `index.html` | Sommaire : écrans, thèmes, corrections, points ouverts |
-| `library.html` | Grille de clips, recherche, filtres, tri, pagination, état vide |
-| `watch.html` | Player, métadonnées techniques, tags, historique du fichier |
-| `upload.html` | Drop, file d'attente à 4 états, métadonnées, confirmation |
-| `login.html` | SSO Authentik, erreur OIDC, lecture seule |
-| `share.html` | Vue publique d'un lien partagé, sans compte |
-| `404.html` | Clip supprimé + table des autres codes d'erreur |
+| `index.html` | Contents: screens, themes, fixes, open points |
+| `library.html` | Clip grid, search, filters, sort, pagination, empty state |
+| `watch.html` | Player, technical metadata, tags, file history |
+| `upload.html` | Drop, four-state queue, metadata, confirmation |
+| `login.html` | Authentik SSO, OIDC error, read-only |
+| `share.html` | Public view of a shared link, without an account |
+| `404.html` | Deleted clip + table of the other error codes |
 
-## Thèmes
+## Themes
 
-Ember, Tide, Moss, Aurora, Paper. Bascules par les pastilles du sélecteur ou
-`Alt+1` à `Alt+5`, persistées dans `localStorage` (`clipvault.theme`).
-`theme.js` est la source unique des couleurs : aucune valeur n'est dupliquée
-dans le HTML.
+Ember, Tide, Moss, Aurora, Paper. Switch with the selector swatches or
+`Alt+1` to `Alt+5`, persisted in `localStorage` (`clipvault.theme`).
+`theme.js` is the single source of colours: no value is duplicated
+in the HTML.
 
-## Corrections appliquées après sélection
+## Fixes applied after selection
 
-Accessibilité — lien d'évitement, `prefers-reduced-motion`, `role="progressbar"`
-sur les barres de téléversement, `aria-live` sur la file, `role="status"` sur la
-confirmation, `role="alert"` sur l'erreur de connexion, `aria-current="page"`,
-`aria-hidden` + `focusable="false"` sur les icônes décoratives, `tabindex` sur
-les curseurs de lecture.
+Accessibility — skip link, `prefers-reduced-motion`, `role="progressbar"`
+on upload bars, `aria-live` on the queue, `role="status"` on the
+confirmation, `role="alert"` on the sign-in error, `aria-current="page"`,
+`aria-hidden` + `focusable="false"` on decorative icons, `tabindex` on
+the playback sliders.
 
-Code — pastilles de thème peintes depuis une table unique, `meta theme-color`
-et `color-scheme` synchronisés, raccourcis clavier.
+Code — theme swatches painted from a single table, `meta theme-color`
+and `color-scheme` kept in sync, keyboard shortcuts.
 
-## Contraintes tenues
+## Constraints met
 
-Aucun framework, aucun build, aucune requête réseau : polices système, icônes
-SVG inline, miniatures en dégradés CSS. Chaque page s'ouvre seule depuis le
-disque.
+No framework, no build, no network request: system fonts, inline
+SVG icons, CSS gradient thumbnails. Each page opens on its own from
+disk.
 
-## Points ouverts
+## Open points
 
-- Réglages d'instance, membres et invitations, profil joueur.
-- Expiration par défaut d'un lien public, quota par membre, transcodage.
-- Aucune vue mobile spécifiquement dessinée (le rail se replie sous 760 px).
+- Instance settings, members and invitations, player profile.
+- Default expiry of a public link, per-member quota, transcoding.
+- No specifically drawn mobile view (the rail collapses below 760 px).

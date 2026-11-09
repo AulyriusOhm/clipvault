@@ -28,12 +28,12 @@ async function discovery(): Promise<Discovery> {
   }
   const oidc = config.auth;
   if (oidc.mode !== "oidc") {
-    throw new Error("Découverte OIDC demandée en mode dev");
+    throw new Error("OIDC discovery requested in dev mode");
   }
   const url = new URL(".well-known/openid-configuration", oidc.issuer.endsWith("/") ? oidc.issuer : `${oidc.issuer}/`);
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Découverte OIDC impossible (${response.status}) sur ${url}`);
+    throw new Error(`OIDC discovery failed (${response.status}) on ${url}`);
   }
   discoveryCache = (await response.json()) as Discovery;
   return discoveryCache;
@@ -60,7 +60,7 @@ export function requireUser(request: FastifyRequest, reply: FastifyReply, done: 
   done();
 }
 
-/** Empêche la fixation de session : le sid change au moment de l'authentification. */
+/** Prevents session fixation: the sid changes at sign-in time. */
 export function regenerateSession(request: FastifyRequest): Promise<void> {
   return new Promise((resolve, reject) => {
     request.session.regenerate((error?: Error) => (error ? reject(error) : resolve()));
@@ -82,7 +82,7 @@ export function devSignIn(request: FastifyRequest): User {
 export function redirectUri(request: FastifyRequest): string {
   const oidc = config.auth;
   if (oidc.mode !== "oidc") {
-    throw new Error("redirectUri appelé en mode dev");
+    throw new Error("redirectUri called in dev mode");
   }
   const publicUrl = getSettings().public_url;
   if (publicUrl) {
@@ -98,7 +98,7 @@ export function redirectUri(request: FastifyRequest): string {
 export async function buildLoginUrl(request: FastifyRequest): Promise<string> {
   const oidc = config.auth;
   if (oidc.mode !== "oidc") {
-    throw new Error("buildLoginUrl appelé en mode dev");
+    throw new Error("buildLoginUrl called in dev mode");
   }
   const meta = await discovery();
 
@@ -135,14 +135,14 @@ interface UserInfo {
 export async function completeLogin(request: FastifyRequest, code: string, state: string): Promise<User> {
   const oidc = config.auth;
   if (oidc.mode !== "oidc") {
-    throw new Error("completeLogin appelé en mode dev");
+    throw new Error("completeLogin called in dev mode");
   }
   if (!request.session.oidcState || request.session.oidcState !== state) {
-    throw new Error("state OIDC invalide — relancez la connexion");
+    throw new Error("invalid OIDC state — restart the sign-in");
   }
   const verifier = request.session.oidcVerifier;
   if (!verifier) {
-    throw new Error("code_verifier absent de la session");
+    throw new Error("code_verifier missing from the session");
   }
 
   const meta = await discovery();
@@ -165,19 +165,19 @@ export async function completeLogin(request: FastifyRequest, code: string, state
 
   if (!tokenResponse.ok) {
     const text = await tokenResponse.text();
-    throw new Error(`Échange de code refusé (${tokenResponse.status}) : ${text.slice(0, 300)}`);
+    throw new Error(`Code exchange refused (${tokenResponse.status}): ${text.slice(0, 300)}`);
   }
 
   const tokens = (await tokenResponse.json()) as { access_token?: string };
   if (!tokens.access_token) {
-    throw new Error("Pas d'access_token dans la réponse du token_endpoint");
+    throw new Error("No access_token in the token_endpoint response");
   }
 
   const userinfoResponse = await fetch(meta.userinfo_endpoint, {
     headers: { authorization: `Bearer ${tokens.access_token}` },
   });
   if (!userinfoResponse.ok) {
-    throw new Error(`userinfo refusé (${userinfoResponse.status})`);
+    throw new Error(`userinfo refused (${userinfoResponse.status})`);
   }
   const info = (await userinfoResponse.json()) as UserInfo;
 
@@ -188,12 +188,12 @@ export async function completeLogin(request: FastifyRequest, code: string, state
   let user = findBySubject(info.sub);
   if (!user) {
     if (!oidc.autoCreate) {
-      throw new Error(`Compte inconnu (${username}) et création automatique désactivée`);
+      throw new Error(`Unknown account (${username}) and automatic creation disabled`);
     }
     if (getSettings().invite_only === "true") {
       const invite = request.session.inviteToken ? usableInvite(request.session.inviteToken) : undefined;
       if (!invite) {
-        throw new Error("cette instance est sur invitation — demandez un lien à un administrateur");
+        throw new Error("this instance is invite-only — ask an administrator for a link");
       }
       user = createUser(info.sub, username, displayName, role);
       redeemInvite(invite.token, user.id);
@@ -215,12 +215,12 @@ export async function completeLogin(request: FastifyRequest, code: string, state
 }
 
 /**
- * Déconnexion côté fournisseur d'identité — désactivée par défaut.
+ * Sign-out on the identity provider side — disabled by default.
  *
- * Elle n'est utile que si l'URI de retour post-déconnexion est déclarée chez
- * l'IdP : Authentik refuse une URI non enregistrée et le navigateur reste
- * bloqué. Sans `OIDC_LOGOUT_REDIRECT=true`, la déconnexion est purement locale
- * et redirige vers /login.
+ * It is only useful when the post-logout redirect URI is registered with the
+ * IdP: Authentik refuses an unregistered URI and the browser stays stuck.
+ * Without `OIDC_LOGOUT_REDIRECT=true`, sign-out is purely local and redirects
+ * to /login.
  */
 export async function logoutUrl(request: FastifyRequest): Promise<string | undefined> {
   const oidc = config.auth;
@@ -236,7 +236,7 @@ export async function logoutUrl(request: FastifyRequest): Promise<string | undef
     const back = `${publicUrl.replace(/\/+$/, "")}/login`;
     return `${meta.end_session_endpoint}?post_logout_redirect_uri=${encodeURIComponent(back)}`;
   } catch (error) {
-    request.log.warn({ err: error }, "déconnexion IdP impossible, déconnexion locale");
+    request.log.warn({ err: error }, "IdP sign-out failed, signing out locally");
     return undefined;
   }
 }

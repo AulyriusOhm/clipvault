@@ -47,7 +47,7 @@
     if (use) {
       use.setAttribute("href", video.paused ? "#i-play" : "#i-pause");
     }
-    play.setAttribute("aria-label", video.paused ? "Lecture" : "Pause");
+    play.setAttribute("aria-label", video.paused ? "Play" : "Pause");
     if (big) {
       big.hidden = !video.paused;
     }
@@ -98,7 +98,7 @@
       if (use) {
         use.setAttribute("href", silent ? "#i-x" : "#i-volume");
       }
-      volume.setAttribute("aria-label", silent ? "Rétablir le son" : "Couper le son");
+      volume.setAttribute("aria-label", silent ? "Unmute" : "Mute");
     }
   }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="<%= theme.key %>">
+<html lang="en" data-theme="<%= theme.key %>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,39 +9,39 @@
 </head>
 <body>
 
-<a class="skip" href="#contenu">Aller au contenu</a>
+<a class="skip" href="#contenu">Skip to content</a>
 
 <%- include('partials/sprite') %>
 
 <div class="public">
 
   <header class="public__bar">
-    <a class="brand" href="/" aria-label="Retour à l'accueil">
+    <a class="brand" href="/" aria-label="Back to home">
       <svg aria-hidden="true" focusable="false" class="brand__mark"><use href="#i-logo"></use></svg>
       <div>
         <div class="brand__name">CLIP<span>VAULT</span></div>
-        <div class="brand__sub"><%= instance %> · lien public</div>
+        <div class="brand__sub"><%= instance %> · public link</div>
       </div>
     </a>
 
-    <span class="chip chip--sq"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-globe"></use></svg>Accès par lien</span>
+    <span class="chip chip--sq"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-globe"></use></svg>Link access</span>
 
     <div class="grow"></div>
 
     <% if (user) { %>
-    <a class="btn btn--sm" href="/library"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-film"></use></svg>Bibliothèque</a>
+    <a class="btn btn--sm" href="/library"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-film"></use></svg>Library</a>
     <% } else { %>
-    <a class="btn btn--primary btn--sm" href="/login?next=<%= encodeURIComponent('/c/' + clip.slug) %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-shield"></use></svg>Ouvrir dans <%= instance %></a>
+    <a class="btn btn--primary btn--sm" href="/login?next=<%= encodeURIComponent('/c/' + clip.slug) %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-shield"></use></svg>Open in <%= instance %></a>
     <% } %>
   </header>
 
   <main class="public__body" id="contenu">
     <div class="public__wrap">
 
-      <div class="rule-label"><span>Clip partagé — aucune connexion requise</span></div>
+      <div class="rule-label"><span>Shared clip — no sign-in required</span></div>
 
       <h1 class="page-title"><%= clip.title %></h1>
-      <p class="page-sub"><%= clip.game_name ? clip.game_name + ' · ' : '' %><%= clip.uploader || 'inconnu' %> · <%= fmt.dateLong(clip.created_at) %> · <%= fmt.duration(clip.duration_s) %> · <%= clip.views %> vue<%= clip.views > 1 ? 's' : '' %></p>
+      <p class="page-sub"><%= clip.game_name ? clip.game_name + ' · ' : '' %><%= clip.uploader || 'unknown' %> · <%= fmt.dateLong(clip.created_at) %> · <%= fmt.duration(clip.duration_s) %> · <%= clip.views %> view<%= clip.views > 1 ? 's' : '' %></p>
 
       <div class="mt4">
         <%- include('partials/player', { clip: clip }) %>
@@ -49,11 +49,11 @@
 
       <div class="mt4 flex">
         <% if (user) { %>
-        <a class="btn btn--primary" href="/media/<%= clip.slug %>/video?download=1" download><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-download"></use></svg>Télécharger — <%= fmt.bytes(clip.size_bytes) %></a>
+        <a class="btn btn--primary" href="/media/<%= clip.slug %>/video?download=1" download><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-download"></use></svg>Download — <%= fmt.bytes(clip.size_bytes) %></a>
         <% } else { %>
-        <a class="btn btn--primary" href="/login?next=<%= encodeURIComponent('/c/' + clip.slug) %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-lock"></use></svg>Se connecter pour télécharger</a>
+        <a class="btn btn--primary" href="/login?next=<%= encodeURIComponent('/c/' + clip.slug) %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-lock"></use></svg>Sign in to download</a>
         <% } %>
-        <button class="btn" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-copy"></use></svg>Copier le lien</button>
+        <button class="btn" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-copy"></use></svg>Copy link</button>
         <div class="grow"></div>
         <% clip.tags.split(' ').filter(Boolean).forEach(function (tag) { %>
         <span class="tag tag--accent"><%= tag %></span>
@@ -65,55 +65,55 @@
         <div class="stack">
           <% if (clip.description) { %>
           <section>
-            <div class="rule-label"><span>À propos</span></div>
+            <div class="rule-label"><span>About</span></div>
             <p class="dim"><%= clip.description %></p>
           </section>
           <% } %>
           <section>
-            <div class="rule-label"><span>Ce lien</span></div>
+            <div class="rule-label"><span>This link</span></div>
             <div class="panel">
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-link"></use></svg>
                 <span class="grow mono"><%= baseUrl %>/c/<%= clip.slug %></span>
-                <button class="btn btn--icon btn--sm btn--ghost" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>" aria-label="Copier"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-copy"></use></svg></button>
+                <button class="btn btn--icon btn--sm btn--ghost" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>" aria-label="Copy"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-copy"></use></svg></button>
               </div>
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-eye"></use></svg>
-                <span class="grow">Vues</span>
+                <span class="grow">Views</span>
                 <span class="num"><%= clip.views %></span>
               </div>
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-clock"></use></svg>
-                <span class="grow">Expiration</span>
-                <span class="num"><%= clip.share_expires ? fmt.dateShort(clip.share_expires) : 'aucune' %></span>
+                <span class="grow">Expiry</span>
+                <span class="num"><%= clip.share_expires ? fmt.dateShort(clip.share_expires) : 'none' %></span>
               </div>
             </div>
-            <p class="mono mt3">Lien révocable à tout moment par <%= clip.uploader || "l'auteur" %>. Aucun compte n'est nécessaire pour lire ;
-              pour déposer un clip, connectez-vous avec Authentik.</p>
+            <p class="mono mt3">Link revocable at any time by <%= clip.uploader || "the author" %>. No account is needed to watch;
+              to upload a clip, sign in with Authentik.</p>
           </section>
         </div>
 
         <aside class="stack">
           <section>
-            <div class="rule-label"><span>Détails techniques</span></div>
+            <div class="rule-label"><span>Technical details</span></div>
             <div class="panel">
               <div class="dl">
-                <div><span class="dl__k">Jeu</span><span class="dl__v"><%= clip.game_name || '—' %></span></div>
-                <div><span class="dl__k">Durée</span><span class="dl__v"><%= fmt.duration(clip.duration_s) %></span></div>
-                <div><span class="dl__k">Résolution</span><span class="dl__v"><%= fmt.resolution(clip.width, clip.height) %></span></div>
+                <div><span class="dl__k">Game</span><span class="dl__v"><%= clip.game_name || '—' %></span></div>
+                <div><span class="dl__k">Duration</span><span class="dl__v"><%= fmt.duration(clip.duration_s) %></span></div>
+                <div><span class="dl__k">Resolution</span><span class="dl__v"><%= fmt.resolution(clip.width, clip.height) %></span></div>
                 <div><span class="dl__k">Codec</span><span class="dl__v"><%= clip.codec || '—' %></span></div>
-                <div><span class="dl__k">Taille</span><span class="dl__v"><%= fmt.bytes(clip.size_bytes) %></span></div>
+                <div><span class="dl__k">Size</span><span class="dl__v"><%= fmt.bytes(clip.size_bytes) %></span></div>
               </div>
             </div>
           </section>
 
           <% if (!user) { %>
           <section>
-            <div class="rule-label"><span>Vous voulez déposer un clip ?</span></div>
+            <div class="rule-label"><span>Want to upload a clip?</span></div>
             <div class="panel">
-              <p class="dim"><%= instance %> est une instance privée : <%= counting.members %> membres, <%= counting.games %> jeux, <%= counting.clips %> clips.</p>
-              <a class="btn btn--block mt3" href="/login"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-shield"></use></svg>Se connecter avec Authentik</a>
-              <p class="mono mt3">Accès sur invitation</p>
+              <p class="dim"><%= instance %> is a private instance: <%= counting.members %> members, <%= counting.games %> games, <%= counting.clips %> clips.</p>
+              <a class="btn btn--block mt3" href="/login"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-shield"></use></svg>Sign in with Authentik</a>
+              <p class="mono mt3">Invite-only access</p>
             </div>
           </section>
           <% } %>
@@ -123,7 +123,7 @@
 
       <% if (suggested.length) { %>
       <div class="mt5">
-        <div class="rule-label"><span>Du même jeu</span></div>
+        <div class="rule-label"><span>More from this game</span></div>
         <div class="grid-clips">
           <% suggested.forEach(function (item) { %>
           <a class="clip" href="/c/<%= item.slug %>">
@@ -136,7 +136,7 @@
             <div class="clip__body">
               <h2 class="clip__title"><%= item.title %></h2>
               <p class="clip__meta"><%= item.game_name ? item.game_name + ' · ' : '' %><%= fmt.resolution(item.width, item.height) %> · <%= fmt.bytes(item.size_bytes) %></p>
-              <div class="clip__foot"><span class="tag"><%= item.uploader || 'inconnu' %></span><span class="num"><%= fmt.relative(item.created_at) %></span></div>
+              <div class="clip__foot"><span class="tag"><%= item.uploader || 'unknown' %></span><span class="num"><%= fmt.relative(item.created_at) %></span></div>
             </div>
           </a>
           <% }); %>

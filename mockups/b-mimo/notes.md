@@ -1,30 +1,31 @@
-# ClipVault — variante B « Vault Ledger » (b-mimo)
+# ClipVault — variant B "Vault Ledger" (b-mimo)
 
-## Parti pris
-Un outil d'archive, pas une vitrine : bordures 1 px, aucune ombre, rayons 2–3 px, grille de
-points 24 px en fond. L'interface reste calme et presque monochrome ; la couleur vient des clips.
-Deux registres typographiques seulement : sans-serif système pour l'UI (11/12/13/15/18/24) et
-mono à chasse fixe pour tout ce qui est technique (durées, tailles, codec, débit, URLs, codes).
-Signature : micro-libellés capitales suivis d'un filet, index des jeux dans une colonne de
-gauche dense, et une ligne de statut mono sous chaque titre de page (`vault://la-taniere — …`).
+## Stance
+An archive tool, not a shop window: 1 px borders, no shadow, 2–3 px radii, a
+24 px dot grid in the background. The interface stays calm and almost monochrome;
+colour comes from the clips.
+Only two typographic registers: system sans-serif for the UI (11/12/13/15/18/24) and
+a fixed-pitch mono for anything technical (durations, sizes, codec, bitrate, URLs, codes).
+Signature: uppercase micro-labels followed by a rule, a game index in a dense left
+column, and a mono status line under each page title (`vault://la-taniere — …`).
 
-## Ce qui distingue chaque thème
-- **Ember** (défaut) : fond brun quasi noir, surfaces chaudes, accent ambre — le feu de forge.
-- **Tide** : fond bleu-nuit froid, surfaces ardoise, accent cyan technique — la salle machine.
-- **Moss** : thème clair, fond vert pâle très désaturé, accent végétal — herbe et papier.
-- **Aurora** : thème clair blanc-violet, contraste doux, accent violet franc — le plus lumineux.
-- **Paper** : thème clair gris-beige presque neutre, accent brun, grisés partout — le classeur.
-Les 5 thèmes basculent sans rechargement (`data-theme` sur `<html>`, persistance `localStorage`)
-et changent aussi la température des surfaces, pas seulement l'accent.
+## What sets each theme apart
+- **Ember** (default): near-black brown background, warm surfaces, amber accent — forge fire.
+- **Tide**: cold night-blue background, slate surfaces, technical cyan accent — the machine room.
+- **Moss**: light theme, very desaturated pale green background, plant accent — grass and paper.
+- **Aurora**: light white-purple theme, soft contrast, frank purple accent — the brightest.
+- **Paper**: light, almost neutral grey-beige theme, brown accent, greys everywhere — the binder.
+The 5 themes switch without reload (`data-theme` on `<html>`, `localStorage` persistence)
+and also change the temperature of the surfaces, not just the accent.
 
-## Choix assumés
-- Miniatures = dégradés CSS par jeu + lignes de balayage + code de frame (`#0231`) : la couleur
-  des vignettes reste identique dans les 5 thèmes, comme le ferait une vraie capture.
-- Icônes : un seul jeu SVG inline (grille 24, trait 1,75, embouts carrés), servi via `<symbol>`.
-- États honnêtes montrés sur les écrans : vide (library), en cours / en attente / terminé /
-  échec (upload), succès de publication (upload), erreur de connexion (login), hover/focus.
+## Deliberate choices
+- Thumbnails = per-game CSS gradients + scanlines + frame code (`#0231`): the thumbnail
+  colour stays identical across the 5 themes, as a real screenshot would.
+- Icons: a single inline SVG set (24 grid, 1.75 stroke, square caps), served via `<symbol>`.
+- Honest states shown on the screens: empty (library), uploading / queued / done /
+  failed (upload), publish success (upload), sign-in error (login), hover/focus.
 
-## Volontairement écarté
-Aucun emoji, aucune icône générique du web, aucune ombre portée, pas de glassmorphism, pas de
-dégradé violet/bleu décoratif, pas de coins arrondis 24 px, pas de héros marketing centré, pas
-de font distante, aucune image externe ni CDN : tout tient dans 7 fichiers statiques.
+## Deliberately left out
+No emoji, no generic web icons, no drop shadows, no glassmorphism, no decorative
+purple/blue gradient, no 24 px rounded corners, no centred marketing hero, no
+remote font, no external image or CDN: everything fits in 7 static files.

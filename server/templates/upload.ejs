@@ -2,11 +2,11 @@
 
     <header class="topbar">
       <div>
-        <h1 class="page-title">Dépôt</h1>
-        <p class="page-sub">mp4, mkv, mov, webm · limite <%= Math.round(config.maxUploadBytes / 1024 ** 3) %> Go par fichier</p>
+        <h1 class="page-title">Upload</h1>
+        <p class="page-sub">mp4, mkv, mov, webm · limit <%= Math.round(config.maxUploadBytes / 1024 ** 3) %> GB per file</p>
       </div>
       <div class="topbar__actions">
-        <a class="btn" href="/library"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-film"></use></svg>Bibliothèque</a>
+        <a class="btn" href="/library"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-film"></use></svg>Library</a>
       </div>
     </header>
 
@@ -15,7 +15,7 @@
       <% if (error) { %>
       <div class="alert mb4" role="alert">
         <svg aria-hidden="true" focusable="false" class="ic"><use href="#i-alert"></use></svg>
-        <div><p><strong>Dépôt refusé</strong> — <%= error %></p></div>
+        <div><p><strong>Upload rejected</strong> — <%= error %></p></div>
       </div>
       <% } %>
 
@@ -24,26 +24,26 @@
 
         <div class="stack">
           <section>
-            <div class="rule-label"><span>Fichier</span></div>
+            <div class="rule-label"><span>File</span></div>
             <label class="drop" for="fichier">
               <svg aria-hidden="true" focusable="false" class="ic ic--lg"><use href="#i-upload"></use></svg>
-              <span class="section-title">Déposez un clip ou cliquez pour choisir</span>
-              <span class="dim">mp4, mkv, mov, webm — analysé avec ffprobe, miniature générée automatiquement</span>
+              <span class="section-title">Drop a clip or click to choose</span>
+              <span class="dim">mp4, mkv, mov, webm — probed with ffprobe, thumbnail generated automatically</span>
               <input id="fichier" class="sr-only" type="file" name="file" accept=".mp4,.mkv,.mov,.webm,video/*" required>
             </label>
           </section>
 
           <section>
-            <div class="rule-label"><span>Métadonnées</span></div>
+            <div class="rule-label"><span>Metadata</span></div>
             <div class="panel">
               <div class="field">
-                <label for="titre">Titre</label>
-                <input class="input" id="titre" type="text" name="title" maxlength="80" placeholder="Ace à l'Op — clutch 1v3 sur Ascent" required>
-                <span class="field__hint">80 caractères maximum</span>
+                <label for="titre">Title</label>
+                <input class="input" id="titre" type="text" name="title" maxlength="80" placeholder="Ace with the Op — 1v3 clutch on Ascent" required>
+                <span class="field__hint">80 characters maximum</span>
               </div>
               <div class="form-grid mt4">
                 <div class="field">
-                  <label for="jeu">Jeu</label>
+                  <label for="jeu">Game</label>
                   <input class="input" id="jeu" type="text" name="game" list="jeux" placeholder="VALORANT">
                   <datalist id="jeux">
                     <% games.forEach(function (game) { %><option value="<%= game.name %>"><% }); %>
@@ -52,19 +52,19 @@
                 <div class="field">
                   <label for="tags">Tags</label>
                   <input class="input" id="tags" type="text" name="tags" value="<%= settings.default_tags %>" placeholder="clutch, ace, ranked">
-                  <span class="field__hint">séparés par des virgules<% if (settings.default_tags) { %> — les tags par défaut de l'instance sont pré-remplis<% } %></span>
+                  <span class="field__hint">comma-separated<% if (settings.default_tags) { %> — the instance default tags are pre-filled<% } %></span>
                   <div class="tag-palette" data-tag-palette="tags">
                     <% tagPalette.forEach(function (tag) { %>
                     <button class="tag tag--chip" type="button" data-tag="<%= tag %>" aria-pressed="false"><%= tag %></button>
                     <% }); %>
-                    <button class="tag tag--chip tag--clear" type="button" data-clear="tags">Vider</button>
+                    <button class="tag tag--chip tag--clear" type="button" data-clear="tags">Clear</button>
                   </div>
 
                 </div>
               </div>
               <div class="field mt4">
                 <label for="description">Description</label>
-                <textarea class="textarea" id="description" name="description" rows="3" placeholder="Contexte du clip, manche, réglages…"></textarea>
+                <textarea class="textarea" id="description" name="description" rows="3" placeholder="Clip context, round, settings…"></textarea>
               </div>
             </div>
           </section>
@@ -72,39 +72,39 @@
 
         <div class="stack">
           <section>
-            <div class="rule-label"><span>Visibilité</span></div>
+            <div class="rule-label"><span>Visibility</span></div>
             <div class="panel">
               <div class="radio-list">
                 <label class="radio is-checked">
                   <input type="radio" name="visibility" value="link" checked>
                   <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-lock"></use></svg>
-                  <span>Accès par lien</span>
-                  <span class="num">défaut</span>
+                  <span>Link access</span>
+                  <span class="num">default</span>
                 </label>
                 <label class="radio">
                   <input type="radio" name="visibility" value="members">
                   <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-user"></use></svg>
-                  <span>Membres de l'instance</span>
+                  <span>Instance members</span>
                   <span class="num"><%= counting.members %></span>
                 </label>
                 <label class="radio">
                   <input type="radio" name="visibility" value="public">
                   <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-globe"></use></svg>
                   <span>Public</span>
-                  <span class="num">indexé</span>
+                  <span class="num">indexed</span>
                 </label>
               </div>
               <div class="row-actions mt5">
-                <button class="btn btn--primary" type="submit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-check"></use></svg>Déposer le clip</button>
+                <button class="btn btn--primary" type="submit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-check"></use></svg>Upload clip</button>
               </div>
             </div>
           </section>
 
           <section>
-            <div class="rule-label"><span>File d'attente — <%= jobs.length %> fichier<%= jobs.length > 1 ? 's' : '' %></span></div>
-            <div class="panel" aria-live="polite" aria-label="File d'attente des téléversements">
+            <div class="rule-label"><span>Queue — <%= jobs.length %> file<%= jobs.length > 1 ? 's' : '' %></span></div>
+            <div class="panel" aria-live="polite" aria-label="Upload queue">
               <% if (!jobs.length) { %>
-              <p class="dim">Aucun dépôt pour l'instant. Le premier clip apparaîtra ici avec sa progression.</p>
+              <p class="dim">No uploads yet. The first clip will appear here with its progress.</p>
               <% } %>
               <% jobs.forEach(function (job) { %>
               <div class="qitem">
@@ -112,10 +112,10 @@
                 <div>
                   <div class="flex flex--between">
                     <span class="qitem__name"><%= job.filename %></span>
-                    <span class="badge<%= job.state === 'done' ? ' badge--ok' : job.state === 'failed' ? ' badge--err' : job.state === 'running' ? ' badge--run' : '' %>"><%= job.state === 'done' ? 'Terminé' : job.state === 'failed' ? 'Échec' : job.state === 'running' ? 'En cours' : 'En attente' %></span>
+                    <span class="badge<%= job.state === 'done' ? ' badge--ok' : job.state === 'failed' ? ' badge--err' : job.state === 'running' ? ' badge--run' : '' %>"><%= job.state === 'done' ? 'Done' : job.state === 'failed' ? 'Failed' : job.state === 'running' ? 'Running' : 'Queued' %></span>
                   </div>
                   <div class="qitem__meta"><%= job.detail %></div>
-                  <div class="progress" role="progressbar" aria-valuenow="<%= job.pct %>" aria-valuemin="0" aria-valuemax="100" aria-label="Téléversement de <%= job.filename %> — <%= job.pct %> %"><div class="progress__bar<%= job.state === 'done' ? ' progress__bar--ok' : job.state === 'failed' ? ' progress__bar--err' : '' %>" style="width:<%= job.pct %>%"></div></div>
+                  <div class="progress" role="progressbar" aria-valuenow="<%= job.pct %>" aria-valuemin="0" aria-valuemax="100" aria-label="Uploading <%= job.filename %> — <%= job.pct %> %"><div class="progress__bar<%= job.state === 'done' ? ' progress__bar--ok' : job.state === 'failed' ? ' progress__bar--err' : '' %>" style="width:<%= job.pct %>%"></div></div>
                 </div>
               </div>
               <% }); %>

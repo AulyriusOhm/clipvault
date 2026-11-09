@@ -92,7 +92,7 @@ for (const row of rows) {
   );
 
   baked += 1;
-  console.log(`  #${String(row.code).padStart(4, "0")} ${videoName} — ${seconds} s, ${(size / 1024).toFixed(0)} Ko`);
+  console.log(`  #${String(row.code).padStart(4, "0")} ${videoName} — ${seconds} s, ${(size / 1024).toFixed(0)} KB`);
 }
 
-console.log(`${baked} clip(s) de démonstration rendus lisibles dans ${config.mediaDir}`);
+console.log(`${baked} demo clip(s) made playable in ${config.mediaDir}`);

@@ -6,7 +6,7 @@ import { extractThumbnail, probe } from "./media.ts";
 
 const source = process.argv[2];
 if (!source) {
-  console.error("usage : tsx src/import.ts <dossier-videos> [nom-joueur]");
+  console.error("usage: tsx src/import.ts <videos-folder> [player-name]");
   process.exit(1);
 }
 const uploaderName = process.argv[3] ?? "import";
@@ -60,7 +60,7 @@ const user = db.prepare("SELECT id, username FROM users WHERE username = ?").get
   | { id: number; username: string }
   | undefined;
 if (!user) {
-  console.error(`utilisateur « ${uploaderName} » inconnu — lancez db:seed ou choisissez un membre existant`);
+  console.error(`unknown user "${uploaderName}" — run db:seed or pick an existing member`);
   process.exit(1);
 }
 
@@ -78,7 +78,7 @@ function walk(dir: string): string[] {
 }
 
 const files = walk(source);
-console.log(`${files.length} fichier(s) vidéo dans ${source}`);
+console.log(`${files.length} video file(s) in ${source}`);
 
 const exists = db.prepare("SELECT 1 FROM clips WHERE source_path = ?");
 const insert = db.prepare(
@@ -118,7 +118,7 @@ for (const file of files) {
       slug,
       code,
       title,
-      `Importé depuis ${path.basename(source)}`,
+      `Imported from ${path.basename(source)}`,
       gameId,
       user.id,
       linkName,
@@ -136,13 +136,13 @@ for (const file of files) {
     const defaults = (getSettings().default_tags ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
     setTags(Number(info.lastInsertRowid), defaults);
     imported += 1;
-    console.log(`  + #${String(code).padStart(4, "0")} ${title} — ${Math.round(meta.duration_s)} s, ${(size / 1024 / 1024).toFixed(1)} Mo${game ? ` · ${game[1]}` : ""}`);
+    console.log(`  + #${String(code).padStart(4, "0")} ${title} — ${Math.round(meta.duration_s)} s, ${(size / 1024 / 1024).toFixed(1)} MB${game ? ` · ${game[1]}` : ""}`);
   } catch (error) {
-    failures.push(`${path.basename(file)} : ${error instanceof Error ? error.message : error}`);
+    failures.push(`${path.basename(file)}: ${error instanceof Error ? error.message : error}`);
   }
 }
 
-console.log(`\n${imported} importé(s) · ${skipped} déjà présent(s) · ${failures.length} échec(s)`);
+console.log(`\n${imported} imported · ${skipped} already present · ${failures.length} failed`);
 for (const failure of failures) {
   console.log("  ! " + failure);
 }

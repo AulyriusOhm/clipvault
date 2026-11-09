@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="<%= theme.key %>">
+<html lang="en" data-theme="<%= theme.key %>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,14 +9,14 @@
 </head>
 <body>
 
-<a class="skip" href="#contenu">Aller au contenu</a>
+<a class="skip" href="#contenu">Skip to content</a>
 
 <%- include('sprite') %>
 
 <div class="app">
 
   <aside class="sidebar">
-    <a class="brand" href="/" aria-label="Retour à l'accueil">
+    <a class="brand" href="/" aria-label="Back to home">
       <svg aria-hidden="true" focusable="false" class="brand__mark"><use href="#i-logo"></use></svg>
       <div>
         <div class="brand__name">CLIP<span>VAULT</span></div>
@@ -25,21 +25,21 @@
     </a>
 
     <nav class="nav">
-      <a class="nav__item<%= active === 'library' ? ' is-active' : '' %>"<%= active === 'library' ? ' aria-current="page"' : '' %> href="/library"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg><span>Bibliothèque</span></a>
-      <a class="nav__item<%= active === 'upload' ? ' is-active' : '' %>"<%= active === 'upload' ? ' aria-current="page"' : '' %> href="/upload"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-upload"></use></svg><span>Dépôt</span></a>
+      <a class="nav__item<%= active === 'library' ? ' is-active' : '' %>"<%= active === 'library' ? ' aria-current="page"' : '' %> href="/library"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-film"></use></svg><span>Library</span></a>
+      <a class="nav__item<%= active === 'upload' ? ' is-active' : '' %>"<%= active === 'upload' ? ' aria-current="page"' : '' %> href="/upload"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-upload"></use></svg><span>Upload</span></a>
       <% if (user && user.role === 'admin') { %>
-      <a class="nav__item<%= active === 'admin' ? ' is-active' : '' %>"<%= active === 'admin' ? ' aria-current="page"' : '' %> href="/admin"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-sliders"></use></svg><span>Réglages</span></a>
+      <a class="nav__item<%= active === 'admin' ? ' is-active' : '' %>"<%= active === 'admin' ? ' aria-current="page"' : '' %> href="/admin"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-sliders"></use></svg><span>Settings</span></a>
       <% } %>
     </nav>
 
     <div class="sidebar__section">
-      <div class="rule-label"><span>Jeux</span></div>
+      <div class="rule-label"><span>Games</span></div>
       <ul class="game-list">
         <% games.slice(0, 6).forEach(function (game) { %>
         <li><a href="/library?game=<%= game.slug %>"><span><%= game.name %></span><span class="num"><%= game.count %></span></a></li>
         <% }); %>
         <% if (games.length > 6) { %>
-        <li><a href="/library"><span class="faint">+ <%= games.length - 6 %> autres jeux</span><span class="num"><%= games.slice(6).reduce(function (n, g) { return n + g.count; }, 0) %></span></a></li>
+        <li><a href="/library"><span class="faint">+ <%= games.length - 6 %> more game<%= games.length - 6 > 1 ? 's' : '' %></span><span class="num"><%= games.slice(6).reduce(function (n, g) { return n + g.count; }, 0) %></span></a></li>
         <% } %>
       </ul>
     </div>
@@ -51,13 +51,13 @@
         <span class="name"><%= user.username %></span>
         <span class="num"><%= user.role %></span>
         <form method="post" action="/auth/logout">
-          <button class="btn btn--icon btn--sm btn--ghost" aria-label="Se déconnecter"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></button>
+          <button class="btn btn--icon btn--sm btn--ghost" aria-label="Sign out"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-x"></use></svg></button>
         </form>
       </div>
       <% } else { %>
       <a class="userchip" href="/login">
         <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-lock"></use></svg>
-        <span class="name">Se connecter</span>
+        <span class="name">Sign in</span>
         <span class="num">SSO</span>
       </a>
       <% } %>

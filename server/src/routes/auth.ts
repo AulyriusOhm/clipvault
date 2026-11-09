@@ -4,7 +4,7 @@ import { baseContext } from "../context.ts";
 import { getSettings, publicHighlights } from "../db.ts";
 import { config } from "../config.ts";
 
-/** Refuse tout ce qui n'est pas un chemin interne : bloque //evil.com et /\evil.com */
+/** Rejects anything that is not an internal path: blocks //evil.com and /\evil.com */
 function safeNext(value: string | undefined | null): string {
   if (!value) {
     return "/";
@@ -23,7 +23,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     const q = request.query as Record<string, string | undefined>;
     return reply.view("login.ejs", {
       ...baseContext(request),
-      title: "Connexion — ClipVault",
+      title: "Sign in — ClipVault",
       showcase: publicHighlights(3),
       next: q.next ?? "/",
       error: q.error ?? null,
@@ -37,7 +37,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     const { next } = request.body as { next?: string };
     await regenerateSession(request);
     const user = devSignIn(request);
-    request.log.info({ user: user.username }, "connexion dev");
+    request.log.info({ user: user.username }, "dev sign-in");
     return reply.redirect(safeNext(next));
   });
 
@@ -48,8 +48,8 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     const next = safeNext((request.query as Record<string, string | undefined>).next);
     const publicUrl = getSettings().public_url;
     if (publicUrl && new URL(publicUrl).host !== request.headers.host) {
-      // La session ouverte sur l'IP LAN (http, cookie Secure refusé) ne survit pas au
-      // retour sur l'URL publique : on renvoie d'abord le navigateur sur le domaine.
+      // a session opened on the LAN IP (http, Secure cookie refused) does not survive the
+      // return to the public URL: the browser is sent back to the domain first.
       const cible = new URL("/auth/start", publicUrl);
       if (next !== "/") {
         cible.searchParams.set("next", next);
@@ -68,11 +68,11 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       return reply.redirect(`/login?error=${encodeURIComponent(q.error_description ?? q.error)}`);
     }
     if (!q.code || !q.state) {
-      return reply.redirect("/login?error=callback%20incomplet");
+      return reply.redirect("/login?error=callback%20incomplete");
     }
     try {
-      // la régénération vide la session : les données OIDC doivent survivre,
-      // sinon completeLogin ne retrouve plus ni son state ni son code_verifier
+      // regeneration wipes the session: the OIDC data must survive,
+      // otherwise completeLogin no longer finds its state nor its code_verifier
       const carried = {
         returnTo: request.session.returnTo,
         oidcState: request.session.oidcState,
@@ -85,13 +85,13 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       request.session.oidcNonce = carried.oidcNonce;
       request.session.oidcVerifier = carried.oidcVerifier;
       const user = await completeLogin(request, q.code, q.state);
-      request.log.info({ user: user.username }, "connexion OIDC");
+      request.log.info({ user: user.username }, "OIDC sign-in");
       const target = safeNext(request.session.returnTo);
       delete request.session.returnTo;
       return reply.redirect(target);
     } catch (error) {
       request.log.error(error);
-      const message = error instanceof Error ? error.message : "échec de connexion";
+      const message = error instanceof Error ? error.message : "sign-in failed";
       return reply.redirect(`/login?error=${encodeURIComponent(message)}`);
     }
   });

@@ -385,7 +385,7 @@ export function ensureDir(dir: string): void {
   fs.mkdirSync(path.join(config.mediaDir, dir), { recursive: true });
 }
 
-/* ---------- réglages ---------- */
+/* ---------- settings ---------- */
 
 export const DEFAULT_SETTINGS = {
   instance_name: "",
@@ -423,7 +423,7 @@ export function saveSettings(patch: Partial<Record<SettingKey, string>>): void {
   }
 }
 
-/* ---------- membres ---------- */
+/* ---------- members ---------- */
 
 export interface Member extends User {
   clips: number;
@@ -444,7 +444,7 @@ export function setMemberRole(id: number, role: string): void {
   db.prepare("UPDATE users SET role = ? WHERE id = ?").run(role, id);
 }
 
-/* ---------- invitations ---------- */
+/* ---------- invites ---------- */
 
 export interface Invite {
   id: number;

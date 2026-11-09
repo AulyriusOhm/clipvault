@@ -4,23 +4,23 @@
            <% if (clip.thumb_path) { %>poster="/media/<%= clip.slug %>/thumb"<% } %>
            src="/media/<%= clip.slug %>/video"></video>
     <span class="player__tag"><%= fmt.resolution(clip.width, clip.height) %> · <%= Math.round(clip.fps) %> fps · <%= clip.codec || '—' %></span>
-    <button class="player__big" type="button" data-big aria-label="Lecture">
+    <button class="player__big" type="button" data-big aria-label="Play">
       <svg aria-hidden="true" focusable="false" class="ic ic--lg"><use href="#i-play-fill"></use></svg>
     </button>
   </div>
   <div class="player__bar">
-    <button class="player__btn" type="button" data-play aria-label="Lecture"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play"></use></svg></button>
+    <button class="player__btn" type="button" data-play aria-label="Play"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-play"></use></svg></button>
     <div class="player__vol">
-      <button class="player__btn" type="button" data-volume aria-label="Couper le son"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-volume"></use></svg></button>
+      <button class="player__btn" type="button" data-volume aria-label="Mute"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-volume"></use></svg></button>
       <div class="player__vol-panel">
         <input class="player__range" type="range" min="0" max="100" step="1" value="100" data-volume-range aria-label="Volume">
       </div>
     </div>
     <span class="player__time" data-time><%= fmt.duration(clip.duration_s) %> / <%= fmt.duration(clip.duration_s) %></span>
-    <div class="scrub" data-scrub role="slider" tabindex="0" aria-orientation="horizontal" aria-label="Progression" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+    <div class="scrub" data-scrub role="slider" tabindex="0" aria-orientation="horizontal" aria-label="Progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
       <div class="scrub__fill" data-fill></div>
     </div>
     <span class="chip chip--sq"><%= clip.height %>p<%= Math.round(clip.fps) %></span>
-    <button class="player__btn" type="button" data-fullscreen aria-label="Plein écran"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-expand"></use></svg></button>
+    <button class="player__btn" type="button" data-fullscreen aria-label="Fullscreen"><svg aria-hidden="true" focusable="false" class="ic"><use href="#i-expand"></use></svg></button>
   </div>
 </div>

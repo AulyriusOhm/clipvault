@@ -2,17 +2,17 @@
 
     <header class="topbar">
       <div>
-        <p class="micro"><a href="/library">Bibliothèque</a> · <%= clip.game_name || 'sans jeu' %><% if (clip.tags) { %> · <a href="/library?tag=<%= clip.tags.split(' ')[0] %>"><%= clip.tags.split(' ')[0] %></a><% } %></p>
+        <p class="micro"><a href="/library">Library</a> · <%= clip.game_name || 'no game' %><% if (clip.tags) { %> · <a href="/library?tag=<%= clip.tags.split(' ')[0] %>"><%= clip.tags.split(' ')[0] %></a><% } %></p>
         <h1 class="page-title mt2"><%= clip.title %></h1>
-        <p class="page-sub">#<%= String(clip.code).padStart(4, '0') %> — /c/<%= clip.slug %> · déposé par <%= clip.uploader || 'inconnu' %> <%= fmt.relative(clip.created_at) %></p>
+        <p class="page-sub">#<%= String(clip.code).padStart(4, '0') %> — /c/<%= clip.slug %> · uploaded by <%= clip.uploader || 'unknown' %> <%= fmt.relative(clip.created_at) %></p>
       </div>
       <div class="topbar__actions">
-        <button class="btn" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-link"></use></svg>Copier le lien</button>
+        <button class="btn" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-link"></use></svg>Copy link</button>
         <% if (user) { %>
-        <a class="btn" href="/media/<%= clip.slug %>/video?download=1" download><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-download"></use></svg>Télécharger</a>
+        <a class="btn" href="/media/<%= clip.slug %>/video?download=1" download><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-download"></use></svg>Download</a>
         <% } %>
         <% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %>
-        <a class="btn" href="/clips/<%= clip.slug %>/edit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-sliders"></use></svg>Modifier</a>
+        <a class="btn" href="/clips/<%= clip.slug %>/edit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-sliders"></use></svg>Edit</a>
         <% } %>
       </div>
     </header>
@@ -27,11 +27,11 @@
           </section>
 
           <section data-block="about">
-            <div class="rule-label"><span>À propos</span></div>
+            <div class="rule-label"><span>About</span></div>
             <% if (clip.description) { %>
             <p class="dim"><%= clip.description %></p>
             <% } else { %>
-            <p class="dim faint">Aucune description.<% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %> <a href="/clips/<%= clip.slug %>/edit">En ajouter une</a>.<% } %></p>
+            <p class="dim faint">No description.<% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %> <a href="/clips/<%= clip.slug %>/edit">Add one</a>.<% } %></p>
             <% } %>
             <% var tagList = clip.tags.split(' ').filter(Boolean); %>
             <% if (tagList.length) { %>
@@ -41,45 +41,45 @@
               <% }); %>
             </div>
             <% } else { %>
-            <p class="mono faint mt3">aucun tag<% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %> — <a href="/clips/<%= clip.slug %>/edit">en ajouter</a><% } %></p>
+            <p class="mono faint mt3">no tags<% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %> — <a href="/clips/<%= clip.slug %>/edit">add some</a><% } %></p>
             <% } %>
           </section>
 
           <section data-block="tech">
-            <div class="rule-label"><span>Détails techniques</span></div>
+            <div class="rule-label"><span>Technical details</span></div>
             <div class="dl">
-              <div><span class="dl__k">Jeu</span><span class="dl__v"><%= clip.game_name || '—' %></span></div>
-              <div><span class="dl__k">Joueur</span><span class="dl__v"><%= clip.uploader || '—' %></span></div>
-              <div><span class="dl__k">Déposé le</span><span class="dl__v"><%= fmt.dateLong(clip.created_at) %> · <%= fmt.clock(clip.created_at) %></span></div>
-              <div><span class="dl__k">Durée</span><span class="dl__v"><%= fmt.duration(clip.duration_s) %></span></div>
-              <div><span class="dl__k">Résolution</span><span class="dl__v"><%= fmt.resolution(clip.width, clip.height) %></span></div>
-              <div><span class="dl__k">Images/s</span><span class="dl__v"><%= Math.round(clip.fps) %> fps</span></div>
+              <div><span class="dl__k">Game</span><span class="dl__v"><%= clip.game_name || '—' %></span></div>
+              <div><span class="dl__k">Player</span><span class="dl__v"><%= clip.uploader || '—' %></span></div>
+              <div><span class="dl__k">Uploaded on</span><span class="dl__v"><%= fmt.dateLong(clip.created_at) %> · <%= fmt.clock(clip.created_at) %></span></div>
+              <div><span class="dl__k">Duration</span><span class="dl__v"><%= fmt.duration(clip.duration_s) %></span></div>
+              <div><span class="dl__k">Resolution</span><span class="dl__v"><%= fmt.resolution(clip.width, clip.height) %></span></div>
+              <div><span class="dl__k">Frame rate</span><span class="dl__v"><%= Math.round(clip.fps) %> fps</span></div>
               <div><span class="dl__k">Codec</span><span class="dl__v"><%= clip.codec || '—' %></span></div>
-              <div><span class="dl__k">Débit</span><span class="dl__v"><%= clip.bitrate_kbps ? fmt.bitrate(clip.bitrate_kbps) : '—' %></span></div>
-              <div><span class="dl__k">Taille</span><span class="dl__v"><%= fmt.bytes(clip.size_bytes) %></span></div>
-              <div><span class="dl__k">Source</span><span class="dl__v"><%= clip.source_path ? 'import' : 'dépôt direct' %></span></div>
+              <div><span class="dl__k">Bitrate</span><span class="dl__v"><%= clip.bitrate_kbps ? fmt.bitrate(clip.bitrate_kbps) : '—' %></span></div>
+              <div><span class="dl__k">Size</span><span class="dl__v"><%= fmt.bytes(clip.size_bytes) %></span></div>
+              <div><span class="dl__k">Source</span><span class="dl__v"><%= clip.source_path ? 'import' : 'direct upload' %></span></div>
             </div>
           </section>
 
           <section data-block="history">
-            <div class="rule-label"><span>Historique du fichier</span></div>
+            <div class="rule-label"><span>File history</span></div>
             <div class="panel">
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-upload"></use></svg>
-                <span class="grow"><%= clip.source_path ? 'Importé du disque' : 'Téléversé' %> par <strong><%= clip.uploader || 'inconnu' %></strong></span>
+                <span class="grow"><%= clip.source_path ? 'Imported from disk' : 'Uploaded' %> by <strong><%= clip.uploader || 'unknown' %></strong></span>
                 <span class="num"><%= fmt.relative(clip.created_at) %></span>
               </div>
               <% if (clip.updated_at) { %>
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-tag"></use></svg>
-                <span class="grow">Métadonnées modifiées</span>
+                <span class="grow">Metadata edited</span>
                 <span class="num"><%= fmt.relative(clip.updated_at) %></span>
               </div>
               <% } %>
               <div class="rowline">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm faint"><use href="#i-eye"></use></svg>
-                <span class="grow">Visibilité : <strong><%= clip.visibility === 'public' ? 'public' : clip.visibility === 'members' ? 'membres' : 'accès par lien' %></strong></span>
-                <span class="num"><%= clip.views %> vue<%= clip.views > 1 ? 's' : '' %></span>
+                <span class="grow">Visibility: <strong><%= clip.visibility === 'public' ? 'public' : clip.visibility === 'members' ? 'members' : 'link access' %></strong></span>
+                <span class="num"><%= clip.views %> view<%= clip.views > 1 ? 's' : '' %></span>
               </div>
             </div>
           </section>
@@ -89,26 +89,26 @@
         <div class="stack">
 
           <section class="panel" data-block="share">
-            <div class="rule-label"><span>Partage</span></div>
+            <div class="rule-label"><span>Share</span></div>
             <p class="mono"><%= baseUrl %>/c/<%= clip.slug %></p>
             <div class="flex mt3">
-              <button class="btn btn--primary btn--sm" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-copy"></use></svg>Copier</button>
+              <button class="btn btn--primary btn--sm" type="button" data-copy="<%= baseUrl %>/c/<%= clip.slug %>"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-copy"></use></svg>Copy</button>
               <span class="chip">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-<%= clip.visibility === 'public' ? 'globe' : clip.visibility === 'members' ? 'user' : 'lock' %>"></use></svg>
-                <%= clip.visibility === 'public' ? 'Public' : clip.visibility === 'members' ? 'Membres' : 'Accès par lien' %>
+                <%= clip.visibility === 'public' ? 'Public' : clip.visibility === 'members' ? 'Members' : 'Link access' %>
               </span>
             </div>
             <div class="flex mt4">
               <span class="mono">
                 <svg aria-hidden="true" focusable="false" class="ic ic--sm" style="vertical-align:-3px"><use href="#i-eye"></use></svg>
-                <%= clip.views %> vue<%= clip.views > 1 ? 's' : '' %><% if (clip.share_expires) { %> · expire le <%= fmt.dateShort(clip.share_expires) %><% } %>
+                <%= clip.views %> view<%= clip.views > 1 ? 's' : '' %><% if (clip.share_expires) { %> · expires <%= fmt.dateShort(clip.share_expires) %><% } %>
               </span>
             </div>
           </section>
 
           <% if (suggested.length) { %>
           <section data-block="next">
-            <div class="rule-label"><span>À suivre</span></div>
+            <div class="rule-label"><span>Up next</span></div>
             <a class="clip clip--wide" href="/watch/<%= suggested[0].slug %>">
               <div class="thumb thumb--sm<%= suggested[0].thumb_path ? '' : ' thumb--empty' %>">
                 <% if (suggested[0].thumb_path) { %><img class="thumb__img" src="/media/<%= suggested[0].slug %>/thumb" alt="" loading="lazy"><% } %>
@@ -116,7 +116,7 @@
               </div>
               <div class="clip__body">
                 <h2 class="clip__title"><%= suggested[0].title %></h2>
-                <p class="clip__meta"><%= suggested[0].game_name ? suggested[0].game_name + ' · ' : '' %><%= suggested[0].uploader || 'inconnu' %> · <%= fmt.bytes(suggested[0].size_bytes) %></p>
+                <p class="clip__meta"><%= suggested[0].game_name ? suggested[0].game_name + ' · ' : '' %><%= suggested[0].uploader || 'unknown' %> · <%= fmt.bytes(suggested[0].size_bytes) %></p>
               </div>
             </a>
           </section>
@@ -134,7 +134,7 @@
                 </div>
                 <div class="clip__body">
                   <h2 class="clip__title"><%= item.title %></h2>
-                  <p class="clip__meta"><%= item.game_name ? item.game_name + ' · ' : '' %><%= item.uploader || 'inconnu' %> · <%= fmt.bytes(item.size_bytes) %></p>
+                  <p class="clip__meta"><%= item.game_name ? item.game_name + ' · ' : '' %><%= item.uploader || 'unknown' %> · <%= fmt.bytes(item.size_bytes) %></p>
                 </div>
               </a>
               <% }); %>
@@ -144,10 +144,10 @@
 
           <% if (user && (user.role === 'admin' || user.id === clip.uploader_id)) { %>
           <section class="panel" data-block="delete">
-            <div class="rule-label"><span>Suppression</span></div>
-            <p class="dim">Le clip et sa miniature seront effacés du disque. Action réservée au déposant et aux administrateurs.</p>
-            <form method="post" action="/clips/<%= clip.slug %>/delete" onsubmit="return confirm('Supprimer définitivement ce clip et ses dérivés ?')">
-              <button class="btn btn--danger btn--block mt4" type="submit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-trash"></use></svg>Supprimer ce clip</button>
+            <div class="rule-label"><span>Delete</span></div>
+            <p class="dim">The clip and its thumbnail will be erased from disk. Restricted to the uploader and to administrators.</p>
+            <form method="post" action="/clips/<%= clip.slug %>/delete" onsubmit="return confirm('Permanently delete this clip and its derivatives?')">
+              <button class="btn btn--danger btn--block mt4" type="submit"><svg aria-hidden="true" focusable="false" class="ic ic--sm"><use href="#i-trash"></use></svg>Delete this clip</button>
             </form>
           </section>
           <% } %>

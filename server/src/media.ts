@@ -3,7 +3,7 @@ import { promisify } from "node:util";
 
 const run = promisify(execFile);
 
-/** Un fichier fourni par un membre ne doit jamais faire ouvrir d'URL à ffmpeg. */
+/** A file supplied by a member must never make ffmpeg open a URL. */
 const LIMITS = { timeout: 60_000, maxBuffer: 16 * 1024 * 1024 } as const;
 const SAFE_PROTOCOLS = "file,pipe,crypto,data";
 

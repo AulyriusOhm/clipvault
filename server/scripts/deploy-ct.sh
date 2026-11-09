@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Déploiement de ClipVault sur un CT Proxmox dédié (192.0.2.10).
-# Le code source est attendu dans /root/clipvault-src.tar.gz (avec /app/.env à côté).
+# Deploying ClipVault on a dedicated Proxmox CT (192.0.2.10).
+# The source archive is expected at /root/clipvault-src.tar.gz (with /app/.env next to it).
 #
-#   ./scripts/deploy-ct.sh              # construit, démarre, importe les vidéos existantes
+#   ./scripts/deploy-ct.sh              # build, start, import existing videos
 #   SKIP_IMPORT=1 ./scripts/deploy-ct.sh
 set -euo pipefail
 
@@ -12,36 +12,36 @@ MEDIA_SRC="${MEDIA_SRC:-/srv/fireshare/videos/uploads}"
 IMPORT_AS="${IMPORT_AS:-kael_}"
 PORT="${PORT:-8099}"
 
-echo "== extraction vers $APP_DIR"
+echo "== extracting to $APP_DIR"
 install -d -m 755 "$APP_DIR"
 tar -xzf "$SRC" -C "$APP_DIR" --strip-components=1
 
 cd "$APP_DIR"
-[ -f .env ] || { echo "fichier .env absent dans $APP_DIR — abandon"; exit 1; }
+[ -f .env ] || { echo "missing .env file in $APP_DIR — aborting"; exit 1; }
 
-echo "== construction de l'image"
+echo "== building the image"
 docker compose build
 
-echo "== démarrage"
+echo "== starting"
 docker compose up -d
 
-echo "== attente de l'application"
+echo "== waiting for the application"
 for _ in $(seq 1 40); do
   if curl -fsS -o /dev/null "http://127.0.0.1:${PORT}/library"; then
-    echo "   app prête"
+    echo "   app ready"
     break
   fi
   sleep 2
 done
 
-echo "== comptes (sans clips de démonstration)"
+echo "== accounts (no demo clips)"
 docker compose exec -T clipvault npx tsx src/seed.ts --users-only
 
 if [ "${SKIP_IMPORT:-0}" != "1" ]; then
-  echo "== import des vidéos de $MEDIA_SRC"
+  echo "== importing videos from $MEDIA_SRC"
   docker compose exec -T clipvault npx tsx src/import.ts /media-src "$IMPORT_AS" || true
 fi
 
-echo "== état"
+echo "== status"
 curl -s -o /dev/null -w "   /library : %{http_code}\n" "http://127.0.0.1:${PORT}/library"
 docker compose ps

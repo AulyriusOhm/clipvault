@@ -48,11 +48,11 @@ function requireAdmin(request: FastifyRequest, reply: FastifyReply, done: (err?:
     reply.code(403);
     reply.view("error.ejs", {
       ...baseContext(request),
-      title: "Accès refusé — ClipVault",
-      heading: "Réservé aux administrateurs",
+      title: "Access denied — ClipVault",
+      heading: "Administrators only",
       sub: "/admin — 403",
-      body: "Votre compte n'a pas le rôle administrateur sur cette instance.",
-      actions: [{ href: "/library", label: "Retour à la bibliothèque" }],
+      body: "Your account does not have the administrator role on this instance.",
+      actions: [{ href: "/library", label: "Back to the library" }],
     });
     return;
   }
@@ -72,13 +72,13 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
     const query = request.query as Record<string, string | undefined>;
     return reply.view("admin.ejs", {
       ...baseContext(request),
-      title: "Réglages — ClipVault",
+      title: "Settings — ClipVault",
       active: "admin",
       settings: getSettings(),
       storage: storageUsage(),
       members: listMembers(),
       invites: listInvites(),
-      flash: query.ok === "settings" ? "Réglages enregistrés." : query.ok === "invite" ? "Invitation créée." : query.ok === "revoke" ? "Invitation révoquée." : query.ok === "role" ? "Rôle mis à jour." : null,
+      flash: query.ok === "settings" ? "Settings saved." : query.ok === "invite" ? "Invitation created." : query.ok === "revoke" ? "Invitation revoked." : query.ok === "role" ? "Role updated." : null,
       error: query.error ?? null,
     });
   });
@@ -117,7 +117,7 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
     const id = Number((request.params as { id: string }).id);
     const role = body.role === "admin" ? "admin" : "member";
     if (request.user!.id === id && role !== "admin") {
-      return reply.redirect("/admin?error=" + encodeURIComponent("impossible de retirer son propre rôle administrateur"));
+      return reply.redirect("/admin?error=" + encodeURIComponent("cannot remove your own administrator role"));
     }
     setMemberRole(id, role);
     return reply.redirect("/admin?ok=role");
@@ -131,13 +131,13 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
       reply.code(410);
       return reply.view("error.ejs", {
         ...baseContext(request),
-        title: "Invitation invalide — ClipVault",
-        heading: known?.used_at ? "Cette invitation a déjà servi" : "Invitation invalide ou expirée",
+        title: "Invalid invitation — ClipVault",
+        heading: known?.used_at ? "This invitation has already been used" : "Invalid or expired invitation",
         sub: "/join — 410",
         body: known?.used_at
-          ? "Le lien a déjà été utilisé. Demandez-en un nouveau à un administrateur."
-          : "Le jeton n'existe pas ou a dépassé sa date limite.",
-        actions: [{ href: "/login", label: "Se connecter" }],
+          ? "The link has already been used. Ask an administrator for a new one."
+          : "The token does not exist or has passed its expiry date.",
+        actions: [{ href: "/login", label: "Sign in" }],
       });
     }
     request.session.inviteToken = token;

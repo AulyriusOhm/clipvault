@@ -5,13 +5,13 @@ import path from "node:path";
 try {
   process.loadEnvFile(path.resolve(import.meta.dirname, "..", ".env"));
 } catch {
-  /* pas de .env : tout vient de l'environnement */
+  /* no .env: everything comes from the environment */
 }
 
 function required(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new Error(`Variable d'environnement manquante : ${name}`);
+    throw new Error(`Missing environment variable: ${name}`);
   }
   return value;
 }
@@ -22,7 +22,7 @@ const dataDir = path.join(root, "data");
 function sessionSecret(): string {
   if (process.env.SESSION_SECRET) {
     if (process.env.SESSION_SECRET.length < 32) {
-      throw new Error("SESSION_SECRET doit faire au moins 32 caractères");
+      throw new Error("SESSION_SECRET must be at least 32 characters");
     }
     return process.env.SESSION_SECRET;
   }
@@ -38,22 +38,22 @@ function sessionSecret(): string {
 const authMode = (process.env.AUTH_MODE ?? "dev") as "dev" | "oidc";
 
 if (authMode !== "dev" && authMode !== "oidc") {
-  throw new Error(`AUTH_MODE invalide : ${authMode} (attendu dev | oidc)`);
+  throw new Error(`Invalid AUTH_MODE: ${authMode} (expected dev | oidc)`);
 }
 
 const production = process.env.NODE_ENV === "production";
 
 if (production && authMode === "dev") {
   throw new Error(
-    "AUTH_MODE=dev est refusé en production : quiconque atteindrait le serveur deviendrait administrateur. Renseignez OIDC_*.",
+    "AUTH_MODE=dev is refused in production: anyone reaching the server would become administrator. Set OIDC_*.",
   );
 }
 
 /**
- * true = fait confiance à toute la chaîne X-Forwarded-For, donc au client qui
- * peut la forger : la limitation de débit devient contournable. Un nombre =
- * nombre de proxys de confiance : seul le dernier maillon ajouté par le proxy
- * fait foi, les valeurs ajoutées par le client sont ignorées.
+ * true = trust the whole X-Forwarded-For chain, and therefore the client that
+ * can forge it: rate limiting becomes bypassable. A number = number of trusted
+ * proxies: only the last hop appended by the proxy is authoritative, the values
+ * appended by the client are ignored.
  */
 function trustProxy(): boolean | string | ((address: string, hop: number) => boolean) {
   const raw = (process.env.TRUST_PROXY ?? "false").trim();

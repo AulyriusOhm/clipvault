@@ -16,6 +16,6 @@
         <% cardTags.forEach(function (tag) { %><span class="tag tag--accent"><%= tag %></span><% }); %>
       </div>
       <% } %>
-    <div class="clip__foot"><span class="tag"><%= clip.uploader || 'inconnu' %></span><span class="num"><%= fmt.relative(clip.created_at) %></span></div>
+    <div class="clip__foot"><span class="tag"><%= clip.uploader || 'unknown' %></span><span class="num"><%= fmt.relative(clip.created_at) %></span></div>
   </div>
 </a>

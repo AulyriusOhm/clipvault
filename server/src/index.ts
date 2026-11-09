@@ -93,10 +93,10 @@ app.addHook("onRequest", async (request) => {
 });
 
 /**
- * SameSite=Lax arrête un POST venu d'un autre site, mais pas d'un autre
- * sous-domaine du même site : une page servie depuis *.lanro.eu posterait avec
- * le cookie de session. On refuse donc toute méthode qui écrit si l'origine
- * déclarée n'est pas celle de l'instance.
+ * SameSite=Lax stops a POST coming from another site, but not from another
+ * subdomain of the same site: a page served from *.lanro.eu would post along
+ * with the session cookie. We therefore refuse any writing method whose
+ * declared origin is not the instance's own.
  */
 app.addHook("onRequest", async (request, reply) => {
   if (request.method === "GET" || request.method === "HEAD" || request.method === "OPTIONS") {
@@ -110,12 +110,12 @@ app.addHook("onRequest", async (request, reply) => {
   try {
     hote = new URL(origine).host;
   } catch {
-    return reply.code(403).send({ error: "origine invalide" });
+    return reply.code(403).send({ error: "invalid origin" });
   }
   const attendu = new URL(getSettings().public_url || config.baseUrl).host;
   if (hote !== attendu) {
-    request.log.warn({ origine, attendu }, "requête d'écriture refusée : origine étrangère");
-    return reply.code(403).send({ error: "origine refusée" });
+    request.log.warn({ origine, attendu }, "write request refused: foreign origin");
+    return reply.code(403).send({ error: "origin refused" });
   }
 });
 
@@ -129,13 +129,13 @@ app.setNotFoundHandler(async (request, reply) => {
   reply.code(404);
   return reply.view("error.ejs", {
     ...baseContext(request),
-    title: "Page introuvable — ClipVault",
-    heading: "Cette page n'existe pas",
+    title: "Page not found — ClipVault",
+    heading: "This page does not exist",
     sub: `${request.url} — 404`,
-    body: "L'adresse demandée ne correspond à aucune page de l'instance.",
+    body: "The requested address does not match any page of this instance.",
     actions: [
-      { href: "/", label: "Voir la bibliothèque" },
-      { href: "/upload", label: "Déposer un clip" },
+      { href: "/", label: "View the library" },
+      { href: "/upload", label: "Upload a clip" },
     ],
   });
 });
@@ -146,13 +146,13 @@ app.setErrorHandler(async (error: FastifyError, request, reply) => {
   reply.code(status);
   return reply.view("error.ejs", {
     ...baseContext(request),
-    title: "Erreur — ClipVault",
-    heading: status === 404 ? "Cette page n'existe pas" : "Quelque chose a cassé",
+    title: "Error — ClipVault",
+    heading: status === 404 ? "This page does not exist" : "Something broke",
     sub: `${request.url} — ${status}`,
     body: error.message,
-    actions: [{ href: "/", label: "Voir la bibliothèque" }],
+    actions: [{ href: "/", label: "View the library" }],
   });
 });
 
 await app.listen({ host: config.host, port: config.port });
-app.log.info(`ClipVault prêt sur http://${config.host}:${config.port} · auth ${config.auth.mode}`);
+app.log.info(`ClipVault ready on http://${config.host}:${config.port} · auth ${config.auth.mode}`);

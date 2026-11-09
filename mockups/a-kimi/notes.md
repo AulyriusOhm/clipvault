@@ -1,22 +1,22 @@
-# ClipVault — variante a-kimi
+# ClipVault — a-kimi variant
 
-Le parti pris est celui d’une **régie d’archive** : un coffre technique et calme, pas un site de streaming grand public.
-La colonne latérale, les identifiants `CV–0248`, les filets fins et les libellés mono donnent une identité de catalogue indexé.
-Les miniatures utilisent des compositions SVG abstraites propres à chaque jeu, avec trame vidéo et repères de cadrage.
-Aucune ombre portée : les trois niveaux de surface sont distingués par la couleur et des bordures d’un pixel.
-Les angles restent presque droits ; seuls les avatars, indicateurs et commandes de lecture sont circulaires.
-La hiérarchie typographique est courte, les titres sont semi-gras et les métadonnées techniques passent en monospace.
-Les formulaires, survols, focus clavier, progression, succès, erreur et état vide ont des états visuels explicites.
-La grille est pensée pour 1440 px, se resserre à 1024 px puis replie navigation et contenu sur petit écran.
+The stance is that of an **archive registry**: a technical, quiet vault, not a consumer streaming site.
+The sidebar, the `CV–0248` identifiers, the thin rules and the mono labels give it the identity of an indexed catalogue.
+Thumbnails use abstract SVG compositions specific to each game, with a video grid and framing marks.
+No drop shadows: the three surface levels are told apart by colour and one-pixel borders.
+Angles stay almost square; only avatars, indicators and playback controls are circular.
+The type hierarchy is short, titles are semi-bold and technical metadata is set in monospace.
+Forms, hovers, keyboard focus, progress, success, error and empty state all have explicit visual states.
+The grid is designed for 1440 px, tightens at 1024 px, then folds navigation and content on small screens.
 
-**Ember** est le thème de référence : noir chaud, surfaces brunes très sombres et accent sable pour un usage nocturne.
-**Tide** conserve la faible luminance mais déplace toute la hiérarchie vers les ardoises froides et un cyan technique.
-**Moss** inverse réellement le contraste : fond vert grisé, surfaces blanches et accent végétal peu saturé.
-**Aurora** est clair et doux, avec des surfaces lavande neutres et un violet réservé aux actions et sélections.
-**Paper** adopte un fond gris chaud, des surfaces ivoire et un accent brun pour une lecture presque monochrome.
-Chaque thème redéfinit fond, deux surfaces, bordures, textes, accent, contraste d’accent et couleurs d’état.
-Le choix est appliqué sur `<html data-theme>` sans rechargement et conservé dans `localStorage` sur les quatre pages.
+**Ember** is the reference theme: warm black, very dark brown surfaces and a sand accent for night use.
+**Tide** keeps the low luminance but moves the whole hierarchy to cold slates and a technical cyan.
+**Moss** genuinely inverts the contrast: greyish green background, white surfaces and a low-saturation plant accent.
+**Aurora** is light and soft, with neutral lavender surfaces and purple reserved for actions and selections.
+**Paper** uses a warm grey background, ivory surfaces and a brown accent for an almost monochrome read.
+Each theme redefines background, two surfaces, borders, text, accent, accent contrast and state colours.
+The choice is applied on `<html data-theme>` without reload and kept in `localStorage` across the four pages.
 
-Sont volontairement écartés : glassmorphism, halos, ombres diffuses, emojis, illustration distante et animations décoratives.
-Le lecteur, les filtres et les actions sont des maquettes statiques ; seuls le sélecteur de thème et l’état vide dépliable sont actifs.
-Aucune dépendance, police, image ou requête réseau n’est nécessaire : chaque HTML fonctionne directement hors-ligne.
+Deliberately left out: glassmorphism, halos, diffuse shadows, emojis, remote illustration and decorative animations.
+The player, the filters and the actions are static mockups; only the theme selector and the expandable empty state are live.
+No dependency, font, image or network request is needed: each HTML file works directly offline.

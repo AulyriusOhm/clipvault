@@ -35,7 +35,7 @@ export async function pageRoutes(app: FastifyInstance): Promise<void> {
 
     return reply.view("library.ejs", {
       ...baseContext(request),
-      title: "Bibliothèque — ClipVault",
+      title: "Library — ClipVault",
       clips,
       total,
       pages,
@@ -53,13 +53,13 @@ export async function pageRoutes(app: FastifyInstance): Promise<void> {
       reply.code(404);
       return reply.view("error.ejs", {
         ...baseContext(request),
-        title: "Clip introuvable — ClipVault",
-        heading: "Ce clip n'est plus là",
+        title: "Clip not found — ClipVault",
+        heading: "This clip is gone",
         sub: `/watch/${slug} — 404`,
-        body: clip ? "Ce clip a été supprimé. Le fichier et ses dérivés ont été effacés du disque." : "Aucun clip ne porte cet identifiant sur l'instance.",
+        body: clip ? "This clip was deleted. The file and its derivatives were erased from disk." : "No clip carries this identifier on the instance.",
         actions: [
-          { href: "/", label: "Voir la bibliothèque" },
-          { href: "/upload", label: "Déposer un clip" },
+          { href: "/", label: "View the library" },
+          { href: "/upload", label: "Upload a clip" },
         ],
       });
     }
@@ -82,11 +82,11 @@ export async function pageRoutes(app: FastifyInstance): Promise<void> {
       reply.code(404);
       return reply.view("error.ejs", {
         ...baseContext(request),
-        title: "Lien invalide — ClipVault",
-        heading: "Ce lien ne mène plus nulle part",
+        title: "Invalid link — ClipVault",
+        heading: "This link leads nowhere",
         sub: `/c/${slug} — 404`,
-        body: "Le clip a été supprimé ou le lien a été révoqué par son auteur.",
-        actions: [{ href: "/login", label: "Se connecter" }],
+        body: "The clip was deleted or the link was revoked by its author.",
+        actions: [{ href: "/login", label: "Sign in" }],
       });
     }
     if (clip.visibility === "members" && !request.user) {
@@ -96,11 +96,11 @@ export async function pageRoutes(app: FastifyInstance): Promise<void> {
       reply.code(410);
       return reply.view("error.ejs", {
         ...baseContext(request),
-        title: "Lien expiré — ClipVault",
-        heading: "Ce lien de partage a expiré",
+        title: "Expired link — ClipVault",
+        heading: "This share link has expired",
         sub: `/c/${slug} — 410`,
-        body: "La durée de partage définie par l'auteur est dépassée. Demandez-lui un nouveau lien.",
-        actions: [{ href: "/library", label: "Voir la bibliothèque" }],
+        body: "The share duration set by the author has passed. Ask them for a new link.",
+        actions: [{ href: "/library", label: "View the library" }],
       });
     }
     incrementViews(clip.id);
@@ -115,7 +115,7 @@ export async function pageRoutes(app: FastifyInstance): Promise<void> {
   app.get("/upload", { preHandler: requireUser }, async (request, reply) => {
     return reply.view("upload.ejs", {
       ...baseContext(request),
-      title: "Dépôt — ClipVault",
+      title: "Upload — ClipVault",
       jobs: listJobs(request.user!),
       error: (request.query as Record<string, string | undefined>).error,
     });

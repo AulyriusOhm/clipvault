@@ -1,4 +1,4 @@
-/** Tags proposés d'emblée dans les formulaires de dépôt et d'édition. */
+/** Tags offered up front in the upload and edit forms. */
 export const COMMON_TAGS = [
   "fps",
   "ace",
@@ -18,7 +18,7 @@ export const COMMON_TAGS = [
   "tuto",
 ];
 
-/** Fusionne les tags déjà utilisés par l'instance avec la liste de base. */
+/** Merges the tags already used by the instance with the base list. */
 export function tagSuggestions(existing: string[], configured = "", limit = 24): string[] {
   const base = configured
     .split(",")
