@@ -1,277 +1,277 @@
-# ClipVault — serveur
+# ClipVault — server
 
-Remplaçant auto-hébergé de FireShare : dépôt et partage de clips de jeux vidéo.
-Node 22 + TypeScript + Fastify + SQLite (`better-sqlite3`) + EJS rendu serveur,
-métadonnées et miniatures via `ffprobe`/`ffmpeg`.
+Self-hosted replacement for FireShare: hosting and sharing for game clips.
+Node 22 + TypeScript + Fastify + SQLite (`better-sqlite3`) + server-rendered
+EJS, metadata and thumbnails through `ffprobe`/`ffmpeg`.
 
-Le design de référence (7 écrans, 5 thèmes) est dans `../design/`.
+The reference design (7 screens, 5 themes) lives in `../design/`.
 
-## Démarrer
+## Getting started
 
 ```bash
 npm install
-npm run db:seed        # base de démonstration : 5 comptes, 14 clips
+npm run db:seed        # demo database: 5 accounts, 14 clips
 npm start              # http://localhost:8099
 ```
 
-En développement : `npm run dev` (rechargement à chaud).
-`npm run build` fait un `tsc --noEmit` complet.
+For development: `npm run dev` (hot reload).
+`npm run build` runs a full `tsc --noEmit`.
 
 ## Configuration
 
-Tout passe par des variables d'environnement (voir `.env.example`).
+Everything goes through environment variables (see `.env.example`).
 
-| Variable | Défaut | Rôle |
+| Variable | Default | Role |
 | --- | --- | --- |
-| `PORT` / `HOST` | `8099` / `0.0.0.0` | écoute |
-| `INSTANCE_NAME` | `La Tanière` | nom affiché |
-| `AUTH_MODE` | `dev` | `dev` (bouton local) ou `oidc` (Authentik) |
-| `SESSION_SECRET` | généré | ≥ 32 caractères ; sinon écrit dans `data/.session-secret` |
-| `MAX_UPLOAD_GB` | `4` | taille maximale d'un dépôt |
-| `OIDC_*` | — | obligatoires si `AUTH_MODE=oidc` ; `OIDC_REDIRECT_URI` facultatif (déduit de l'en-tête `Host` si absent) |
+| `PORT` / `HOST` | `8099` / `0.0.0.0` | listen address |
+| `INSTANCE_NAME` | `La Tanière` | displayed name |
+| `AUTH_MODE` | `dev` | `dev` (local button) or `oidc` (Authentik) |
+| `SESSION_SECRET` | generated | ≥ 32 characters; otherwise written to `data/.session-secret` |
+| `MAX_UPLOAD_GB` | `4` | maximum size of a single upload |
+| `OIDC_*` | — | required when `AUTH_MODE=oidc`; `OIDC_REDIRECT_URI` optional (derived from the `Host` header when absent) |
 
 ## Authentik (SSO)
 
-Le provider OIDC et l'application `ClipVault` existent dans Authentik
-(`auth.lanro.eu`, provider `ClipVault`, application slug `clipvault`), avec
-`clipvault-admins` comme groupe administrateur.
+The OIDC provider and the `ClipVault` application live in Authentik
+(`auth.lanro.eu`, provider `ClipVault`, application slug `clipvault`), with
+`clipvault-admins` as the administrator group.
 
-- `AUTH_MODE=oidc` : l'app fait sa propre découverte OIDC, PKCE S256, `state` et
-  `nonce`, échange le code avec `client_secret_basic`, lit `userinfo`.
-- Le rôle vient du groupe : membre de `clipvault-admins` → `admin`, sinon `member`.
-  Il est réévalué à chaque connexion.
-- URI de retour enregistrées : `https://clip.lanro.eu/auth/callback` (et
-  `http://127.0.0.1:8099/auth/callback` pour les essais locaux). **La première URI
-  de la liste devient l'URL de lancement de la tuile dans Authentik** : si une
-  adresse interne y traîne en tête, l'interface du SSO renvoie le navigateur sur
-  cette IP. L'application fixe aussi `meta_launch_url` à `https://clip.lanro.eu`.
-- Une connexion entamée sur une autre adresse que l'URL publique (IP LAN en
-  `http`) est renvoyée sur le domaine par `/auth/start` : le cookie `Secure` n'y
-  serait pas posé et la session serait perdue au retour d'Authentik.
+- `AUTH_MODE=oidc`: the app does its own OIDC discovery, PKCE S256, `state` and
+  `nonce`, exchanges the code with `client_secret_basic`, reads `userinfo`.
+- The role comes from the group: member of `clipvault-admins` → `admin`,
+  otherwise `member`. It is re-evaluated on every sign-in.
+- Registered redirect URIs: `https://clip.lanro.eu/auth/callback` (and
+  `http://127.0.0.1:8099/auth/callback` for local trials). **The first URI in
+  the list becomes the launch URL of the tile in Authentik**: if an internal
+  address sits at the top, the SSO interface sends the browser to that IP. The
+  application also pins `meta_launch_url` to `https://clip.lanro.eu`.
+- A sign-in started on any address other than the public URL (a LAN IP over
+  `http`) is redirected to the domain by `/auth/start`: the `Secure` cookie
+  would not be set there and the session would be lost on the way back from
+  Authentik.
 
-Vérification automatisée de bout en bout : le script déroule le flow
-d'authentification d'Authentik sans navigateur, dépose le code sur
-`/auth/callback` et contrôle que la session est ouverte. Il faut un compte de
-test **avec mot de passe, créé à la main le temps du contrôle puis supprimé** :
-aucun compte de test n'est conservé sur l'IdP.
+End-to-end automated check: the script walks Authentik's authentication flow
+without a browser, posts the code to `/auth/callback` and checks that the
+session is opened. It needs a test account **with a password, created by hand
+for the duration of the check and then deleted**: no test account is kept on
+the IdP.
 
 ```bash
 CLIPVAULT_TEST_PASSWORD=… python3 scripts/oidc-login-check.py --verbose
-# CLIPVAULT_TEST_USER (défaut clipvault-test), CLIPVAULT_APP, CLIPVAULT_ISSUER
+# CLIPVAULT_TEST_USER (default clipvault-test), CLIPVAULT_APP, CLIPVAULT_ISSUER
 ```
-
-
 
 ## Administration
 
-`/admin`, réservé au rôle `admin` : nom d'instance, **thème de l'instance**,
-visibilité par défaut des dépôts, expiration des liens publics, taille maximale,
-mode « sur invitation », liste des membres avec promotion/rétrogradation, et
-jetons d'invitation.
+`/admin`, restricted to the `admin` role: instance name, **instance theme**,
+default visibility for uploads, public link expiry, maximum size,
+"invite only" mode, member list with promotion/demotion, and invite tokens.
 
-### Thème
+### Theme
 
-Le thème est un réglage **d'instance**, pas une préférence par utilisateur : il
-est choisi dans `/admin`, stocké en base (`settings.theme`) et rendu par le
-serveur dans `<html data-theme>` et `<meta name="theme-color">`. Il n'y a plus
-de sélecteur dans l'interface, ni de `localStorage` : cinq thèmes disponibles
-(Ember, Tide, Moss, Aurora, Paper) qui s'appliquent aussi à la page de connexion
-et aux liens partagés.
-Un jeton s'utilise une fois via `/join/<jeton>`, qui ouvre la connexion SSO ;
-le compte est créé au premier login si `invite_only` est actif.
+The theme is an **instance** setting, not a per-user preference: it is chosen
+in `/admin`, stored in the database (`settings.theme`) and rendered by the
+server in `<html data-theme>` and `<meta name="theme-color">`. There is no
+longer a selector in the interface, nor any `localStorage`: five themes
+(Ember, Tide, Moss, Aurora, Paper) that also apply to the login page and to
+shared links.
+
+### Invites
+
+A token is used once through `/join/<token>`, which opens the SSO sign-in; the
+account is created on first login when `invite_only` is active.
 
 ## Routes
 
-| Route | Accès |
+| Route | Access |
 | --- | --- |
-| `GET /library` | public (clips visibles selon la session) |
-| `GET /watch/:slug` | selon visibilité du clip |
-| `GET /c/:slug` | lien public, sans compte |
-| `GET /upload` | connecté |
-| `POST /upload` | connecté, `multipart/form-data` |
-| `GET /media/:slug/video` | `Range` supporté, 206 |
+| `GET /library` | public (clips visible according to the session) |
+| `GET /watch/:slug` | according to the clip's visibility |
+| `GET /c/:slug` | public link, no account |
+| `GET /upload` | signed in |
+| `POST /upload` | signed in, `multipart/form-data` |
+| `GET /media/:slug/video` | `Range` supported, 206 |
 | `GET /media/:slug/thumb` | JPEG |
-| `POST /clips/:slug/delete` | auteur ou admin |
+| `POST /clips/:slug/delete` | author or admin |
 | `GET /login`, `GET /auth/start`, `GET /auth/callback`, `POST /auth/logout` | — |
-| `GET /api/jobs` | JSON, file d'attente |
+| `GET /api/jobs` | JSON, upload queue |
 | `GET /admin` | admin |
 | `POST /admin/settings`, `POST /admin/invites`, `POST /admin/invites/:id/revoke`, `POST /admin/members/:id/role` | admin |
-| `GET /join/:token` | public (jeton à usage unique) |
+| `GET /join/:token` | public (single-use token) |
 
-## Visibilité
+## Visibility
 
-- `public` — listé et lisible par tout le monde
-- `members` — réservé aux comptes connectés
-- `link` — non listé, lisible par quiconque a l'URL (`/c/:slug`)
+- `public` — listed and readable by anyone
+- `members` — restricted to signed-in accounts
+- `link` — unlisted, readable by anyone with the URL (`/c/:slug`)
 
-## Données
+## Data
 
-Tout est dans `data/` (ignoré par git) : `clipvault.db`, `media/`, `.session-secret`.
-Sauvegarde = copier ce dossier.
+Everything lives in `data/` (ignored by git): `clipvault.db`, `media/`,
+`.session-secret`. Backup = copy that folder.
 
-## Déploiement (production)
+## Deployment (production)
 
-L'instance publique tourne dans un conteneur LXC Proxmox, à la place de
-FireShare, sur le domaine **https://clip.lanro.eu**. Les adresses ci-dessous
-sont des placeholders (`192.0.2.0/24` = documentation RFC 5737).
+The public instance runs in a Proxmox LXC container, in place of FireShare, on
+the domain **https://clip.lanro.eu**. Addresses below are placeholders
+(`192.0.2.0/24` = RFC 5737 documentation range).
 
-| Élément | Valeur |
+| Item | Value |
 | --- | --- |
 | Code | `/opt/clipvault` |
-| Conteneur | `clipvault` (image `clipvault:latest`, policy `unless-stopped`) |
-| Port | `8099`, atteint par le WAF ; le CT n'est **pas** exposé directement |
-| Données | `/opt/clipvault/data` (`clipvault.db`, `.session-secret`) |
-| Médias | `/srv/fireshare/clipvault/media` monté sur `/media` (`MEDIA_DIR=/media`) |
-| Quota du volume | **150 Go** (`refquota` ZFS de `POOL/subvol-<vmid>-disk-0`) |
-| Entrée publique | `clip.lanro.eu` → WAF BunkerWeb → `192.0.2.10:8099` |
-| Certificat | wildcard `*.lanro.eu` (Let's Encrypt), terminé par le WAF |
-| Authentification | Authentik OIDC (`https://auth.lanro.eu/application/o/clipvault/`), groupe admin `clipvault-admins` |
-| Accès LAN | `http://192.0.2.10:8099` sur le réseau local, ou par redirection depuis un autre site |
+| Container | `clipvault` (image `clipvault:latest`, policy `unless-stopped`) |
+| Port | `8099`, reached through the WAF; the container is **not** exposed directly |
+| Data | `/opt/clipvault/data` (`clipvault.db`, `.session-secret`) |
+| Media | `/srv/fireshare/clipvault/media` mounted on `/media` (`MEDIA_DIR=/media`) |
+| Volume quota | **150 GB** (ZFS `refquota` of `POOL/subvol-<vmid>-disk-0`) |
+| Public entry point | `clip.lanro.eu` → BunkerWeb WAF → `192.0.2.10:8099` |
+| Certificate | wildcard `*.lanro.eu` (Let's Encrypt), terminated by the WAF |
+| Authentication | Authentik OIDC (`https://auth.lanro.eu/application/o/clipvault/`), admin group `clipvault-admins` |
+| LAN access | `http://192.0.2.10:8099` on the local network, or through a redirect from another site |
 
-Derrière un proxy qui termine le TLS, trois variables sont obligatoires :
-`BASE_URL=https://clip.lanro.eu`, `COOKIE_SECURE=true`, et `TRUST_PROXY=1`
-(nombre de proxys de confiance — voir ci-dessous).
+Behind a TLS-terminating proxy, three variables are mandatory:
+`BASE_URL=https://clip.lanro.eu`, `COOKIE_SECURE=true`, and `TRUST_PROXY=1`
+(number of trusted proxies — see below).
 
-### TRUST_PROXY : un nombre, jamais `true`
+### TRUST_PROXY: a number, never `true`
 
-`TRUST_PROXY=true` fait confiance à toute la chaîne `X-Forwarded-For`, donc à la
-valeur que le client a pu y mettre : la limitation de débit devient contournable
-(un `X-Forwarded-For` différent par requête suffit). `TRUST_PROXY=1` ne retient
-que le dernier maillon, celui ajouté par le WAF, et ignore le reste.
+`TRUST_PROXY=true` trusts the whole `X-Forwarded-For` chain, and therefore
+whatever value the client put in it: rate limiting becomes bypassable (a
+different `X-Forwarded-For` per request is enough). `TRUST_PROXY=1` only keeps
+the last hop, the one added by the WAF, and ignores the rest.
 
-Attention : `@fastify/session` n'émet **aucun** cookie quand `COOKIE_SECURE=true`
-et que la requête n'est pas reconnue comme HTTPS. Sans `X-Forwarded-Proto` côté
-proxy (ou avec `TRUST_PROXY` mal lu), la connexion échoue en « state OIDC
-invalide » au retour d'Authentik — le symptôme n'a l'air de rien, la cause est
-là.
+Careful: `@fastify/session` emits **no** cookie when `COOKIE_SECURE=true` and
+the request is not recognised as HTTPS. Without `X-Forwarded-Proto` on the
+proxy side (or with `TRUST_PROXY` misread), the sign-in fails with "invalid
+OIDC state" on the way back from Authentik — the symptom looks harmless, the
+cause is right there.
 
-### Durcissement du conteneur
+### Container hardening
 
-Racine en lecture seule (`/tmp` en tmpfs), `mem_limit 2g`, `pids_limit 256`,
-toutes les capabilities retirées, `no-new-privileges`, journaux plafonnés à
-3 × 10 Mo, processus en uid 1000. `ffmpeg` traite des fichiers fournis par les
-membres : ces limites sont ce qui empêche un fichier piégé ou une rafale de
-dépôts de mettre le CT à genoux.
+Read-only root (`/tmp` on tmpfs), `mem_limit 2g`, `pids_limit 256`, every
+capability dropped, `no-new-privileges`, logs capped at 3 × 10 MB, process
+running as uid 1000. `ffmpeg` processes files supplied by members: these
+limits are what stops a crafted file or a burst of uploads from bringing the
+container to its knees.
 
-### Contrôle après déploiement
+### Post-deployment check
 
 ```bash
 ssh root@192.0.2.10 'sh /opt/clipvault/scripts/verifier-deploiement.sh'
 ```
 
-Il vérifie ce qui a déjà cassé une fois : code réellement embarqué dans l'image
-(un `docker compose up` sans `--build` laisse l'ancien), cookie de session émis
-derrière le proxy, volume monté sur `/media`, durcissement effectif. **Rebuilder
-avec `--no-cache` quand un fichier source change** et relancer ce script.
+It checks what has already broken once: code actually baked into the image (a
+`docker compose up` without `--build` keeps the old one), session cookie
+emitted behind the proxy, volume mounted on `/media`, hardening in effect.
+**Rebuild with `--no-cache` when a source file changes** and run this script
+again.
 
-### Mise à jour
+### Updating
 
 ```bash
-# depuis le poste de dev
+# from the dev machine
 cd server
 tar -czf /tmp/clipvault-src.tar.gz --exclude=node_modules --exclude=data --exclude=.env .
 scp /tmp/clipvault-src.tar.gz root@192.0.2.10:/root/
 ssh root@192.0.2.10 'cd /opt/clipvault && tar -xzf /root/clipvault-src.tar.gz --strip-components=1 && docker compose up -d --build'
 ```
 
-### Stockage et quota
+### Storage and quota
 
-Les vidéos vivent sur le volume du CT, pas sur le disque système (24 Go). Le
-quota est un `refquota` ZFS, posé côté hôte :
+Videos live on the container's volume, not on the system disk (24 GB). The
+quota is a ZFS `refquota`, set on the host:
 
 ```bash
 pct set <vmid> -mp0 POOL:subvol-<vmid>-disk-0,mp=/srv/fireshare,size=150G
-zfs set refquota=150G POOL/subvol-<vmid>-disk-0   # pct set ne touche pas au refquota
+zfs set refquota=150G POOL/subvol-<vmid>-disk-0   # pct set does not touch refquota
 ```
 
-`/admin` affiche l'espace libre réel du volume. Le dépôt est refusé avec un
-message explicite quand l'espace libre tombe sous `MAX_UPLOAD_GB`, pour éviter
-un `ENOSPC` en cours d'écriture.
+`/admin` shows the real free space of the volume. An upload is refused with an
+explicit message when free space drops below `MAX_UPLOAD_GB`, to avoid an
+`ENOSPC` in the middle of a write.
 
-### Import des vidéos existantes
+### Importing existing videos
 
-`src/import.ts` parcourt un dossier, sonde chaque fichier avec `ffprobe`,
-extrait une miniature, devine le jeu d'après le nom et crée un **lien
-symbolique** vers la source. Sur ce déploiement les neuf clips importés ont été
-remplacés par de vraies copies dans le volume (les liens pointaient vers le
-montage `/media-src` de FireShare, supprimé depuis) ; vérifiées identiques à
-l'octet près par `cmp` avant bascule.
+`src/import.ts` walks a folder, probes each file with `ffprobe`, extracts a
+thumbnail, guesses the game from the filename and creates a **symlink** to the
+source. On this deployment the nine imported clips were replaced by real copies
+on the volume (the links pointed at FireShare's `/media-src` mount, removed
+since); verified byte-identical with `cmp` before switching over.
 
 ```bash
-docker compose exec -T clipvault npx tsx src/import.ts /media <membre>
+docker compose exec -T clipvault npx tsx src/import.ts /media <member>
 ```
 
-### Ancien FireShare
+### Former FireShare
 
-Retiré le 07/11/2026 : conteneurs `fireshare`, `fireshare-caddy` et `wud`
-supprimés, `/opt/fireshare` archivé dans `/root/fireshare-config-*.tar.gz`,
-application et provider proxy retirés d'Authentik. Les fichiers d'origine
-restent dans `/srv/fireshare/videos/uploads` (5 Go, doublons des copies
-vérifiées) : les supprimer rend 5 Go quand on le souhaite.
+Removed on 2026-11-07: the `fireshare`, `fireshare-caddy` and `wud` containers
+were deleted, `/opt/fireshare` archived to `/root/fireshare-config-*.tar.gz`,
+the application and proxy provider removed from Authentik. The original files
+remain in `/srv/fireshare/videos/uploads` (5 GB, duplicates of the verified
+copies): deleting them frees 5 GB whenever you like.
 
-### Limites connues sur ce déploiement
+### Known limits of this deployment
 
-- un seul fichier source par clip, pas de transcodage : le clip de 71 min / 4,3 Go
-  est servi tel quel (lecture par `Range`, donc pas de téléchargement complet)
-- les titres importés viennent des noms de fichiers (`IMG 1090`,
-  `2025.08.27 — 23.14`) : il n'existe pas encore d'édition de métadonnées
-- pas de sauvegarde automatisée de `clipvault.db` (le CT n'est pas dans un job
-  PBS pour l'instant)
+- one source file per clip, no transcoding: the 71 min / 4.3 GB clip is served
+  as is (playback through `Range`, so no full download)
+- imported titles come from filenames (`IMG 1090`, `2025.08.27 — 23.14`): there
+  is no metadata editing yet
+- no automated backup of `clipvault.db` (the container is not in a PBS job yet)
 
-## CSRF : ce qui protège, et ce qui protège pas
+## CSRF: what protects you, and what does not
 
-Deux couches, vérifiées par l'expérience le 07/11/2026 (page hostile servie
-depuis une autre origine, formulaire auto-soumis vers `/admin/invites`) :
+Two layers, verified by experiment on 2026-11-07 (hostile page served from
+another origin, auto-submitted form to `/admin/invites`):
 
-| Origine de la page hostile | Cookie envoyé | Effet |
+| Origin of the hostile page | Cookie sent | Effect |
 | --- | --- | --- |
-| `attaquant.example` | non (`SameSite=Lax`) | aucun |
-| `autre.lanro.eu` | **oui** (même site) | écriture acceptée avant correctif |
+| `attacker.example` | no (`SameSite=Lax`) | none |
+| `other.lanro.eu` | **yes** (same site) | write accepted before the fix |
 
-`SameSite` raisonne sur le **site** (eTLD+1), donc tout sous-domaine de
-`lanro.eu` est de confiance. Un `onRequest` refuse désormais toute méthode qui
-écrit si l'en-tête `Origin` ne correspond pas à l'hôte de `public_url` /
-`BASE_URL` — une dizaine de lignes, aucun jeton, aucun formulaire à modifier.
+`SameSite` reasons on the **site** (eTLD+1), so every subdomain of `lanro.eu`
+is trusted. An `onRequest` hook now rejects any writing method when the
+`Origin` header does not match the host of `public_url` / `BASE_URL` — about
+ten lines, no token, no form to modify.
 
-Sans en-tête `Origin` (clients qui n'en envoient pas), la requête passe : c'est
-`SameSite` qui couvre ce cas. Ne pas remplacer ce contrôle par des jetons CSRF :
-ils n'empêcheraient pas le scénario « même site » ci-dessus et obligeraient à
-toucher les neuf formulaires, dépôt multipart compris.
+Without an `Origin` header (clients that do not send one), the request goes
+through: `SameSite` covers that case. Do not replace this check with CSRF
+tokens: they would not prevent the "same site" scenario above and would force
+changes to all nine forms, the multipart upload included.
 
-Les seules routes `GET` qui écrivent sont `/watch/:slug` et `/c/:slug`
-(compteur de vues, via `incrementViews`) et `/join/:token` (mémorise le jeton
-d'invitation dans la session, consommé uniquement à la création d'un compte
-quand `invite_only` est actif). Aucune action destructrice ne passe par un `GET`.
+The only `GET` routes that write are `/watch/:slug` and `/c/:slug` (view
+counter, through `incrementViews`) and `/join/:token` (stores the invite token
+in the session, consumed only when an account is created while `invite_only` is
+active). No destructive action goes through a `GET`.
 
-## Sécurité
+## Security
 
-Mesures en place : `@fastify/static` à jour (CVE de traversée de chemin corrigée),
-en-têtes CSP / nosniff / X-Frame-Options / Referrer-Policy / Permissions-Policy,
-limitation de débit sur connexion, dépôt et invitations, `/api/jobs` et
-téléchargement réservés aux membres, redirections `next` validées en liste
-blanche, propriété des clips comparée par identifiant, sessions régénérées à la
-connexion, filtre de visibilité appliqué aux compteurs, ffmpeg borné en temps et
-restreint aux protocoles locaux, conteneur non privilégié sans capacités.
+Measures in place: `@fastify/static` up to date (path traversal CVE fixed),
+CSP / nosniff / X-Frame-Options / Referrer-Policy / Permissions-Policy headers,
+rate limiting on sign-in, upload and invites, `/api/jobs` and downloads
+restricted to members, `next` redirects validated against an allow-list, clip
+ownership compared by identifier, sessions regenerated on sign-in, visibility
+filter applied to counters, `ffmpeg` time-boxed and restricted to local
+protocols, unprivileged container without capabilities.
 
-### Avant une exposition sur Internet
+### Before exposing it to the Internet
 
-1. **TLS obligatoire.** Terminer TLS sur un proxy inverse, puis :
-   `COOKIE_SECURE=true`, `TRUST_PROXY=true`, et renseigner `public_url` dans
-   `/admin` avec l'URL `https://`. Sans cela le cookie de session — 30 jours,
-   valable pour l'admin — circule en clair.
-2. **Ne pas publier le port 8099** au-delà du proxy : le conteneur doit être
-   joignable seulement depuis le réseau du proxy.
-3. `AUTH_MODE=dev` est refusé dès que `NODE_ENV=production` ; vérifier que
-   `OIDC_*` est bien renseigné avant de basculer.
-4. Sauvegarder `/opt/clipvault/data` (base + médias + secret de session).
-5. Restent ouverts, à trancher selon l'exposition : pas de jeton CSRF (compensé
-   par `sameSite=lax`), sessions en mémoire, limitation de débit par processus,
-   pas de quota par membre, et ffmpeg qui traite des fichiers fournis par les
-   membres (à isoler dans un conteneur dédié si l'exposition est large).
+1. **TLS is mandatory.** Terminate TLS on a reverse proxy, then:
+   `COOKIE_SECURE=true`, `TRUST_PROXY=1`, and set `public_url` in `/admin` to
+   the `https://` URL. Without that, the session cookie — 30 days, valid for
+   the admin — travels in clear text.
+2. **Do not publish port 8099** beyond the proxy: the container must only be
+   reachable from the proxy's network.
+3. `AUTH_MODE=dev` is refused as soon as `NODE_ENV=production`; check that
+   `OIDC_*` is filled in before switching.
+4. Back up `/opt/clipvault/data` (database + media + session secret).
+5. Still open, to be decided according to exposure: no CSRF token (offset by
+   `sameSite=lax`), in-memory sessions, per-process rate limiting, no
+   per-member quota, and `ffmpeg` processing member-supplied files (isolate it
+   in a dedicated container if exposure grows).
 
-## Reste à faire
+## To do
 
-- Transcodage (aujourd'hui : un seul fichier source + miniature)
-- Purge automatique des `link` expirés et des fichiers orphelins
-- Profil joueur et page « mes clips »
-- Tests automatisés du parcours d'upload
+- Transcoding (today: a single source file + thumbnail)
+- Automatic purge of expired `link` clips and orphaned files
+- Player profile and a "my clips" page
+- Automated tests for the upload flow
